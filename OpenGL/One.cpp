@@ -69,9 +69,9 @@ int one_main(void) {
      *  three point triangle.
      */
     float points_triangle_one[] = {
-        0.0f, 0.5f, 0.0f,   // starting at the top
-        0.5f, -0.5f, 0.0f,  // moving clockwise next
-        -0.5f, -0.5f, 0.0f  // finishing up triangle.
+        0.0f, 1.0f, 0.0f,   // starting at the top
+        0.5f, 0.0f, 0.0f,  // moving clockwise next
+        -0.5f, 0.0f, 0.0f  // finishing up triangle.
     };
     float points_triangle_two[] = {
         0.0f, 0.0f, 0.0f,   // starting at the top
@@ -104,12 +104,12 @@ int one_main(void) {
      *  first value.
      *
      */
-    GLuint vbo = 0;
+    GLuint vbo;
     glGenBuffers(1, &vbo);
     glBindBuffer(GL_ARRAY_BUFFER, vbo);
     glBufferData(GL_ARRAY_BUFFER, 9 * sizeof(float), points_triangle_one, GL_STATIC_DRAW);
     
-    GLuint vbo_two = 0;
+    GLuint vbo_two;
     glGenBuffers(1, &vbo_two);
     glBindBuffer(GL_ARRAY_BUFFER, vbo_two);
     glBufferData(GL_ARRAY_BUFFER, 9 * sizeof(float), points_triangle_two, GL_STATIC_DRAW);
@@ -134,11 +134,21 @@ int one_main(void) {
      *  3n ints to make the vertex. The shader takes in a vec3 variable and 
      *  the floats in the points array are seemingly converted to GL_FLOATs.
      */
-    GLuint vao = 0;
+    GLuint vao;
     glGenVertexArrays(1, &vao);
     glBindVertexArray(vao);
     glEnableVertexAttribArray(0);
     glBindBuffer(GL_ARRAY_BUFFER, vbo);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, NULL);
+    
+    /**
+     *  Repeat the above to create a triangle in another mesh?
+     */
+    GLuint vao_two;
+    glGenVertexArrays(1, &vao_two);
+    glBindVertexArray(vao_two);
+    glEnableVertexAttribArray(0);
+    glBindBuffer(GL_ARRAY_BUFFER, vbo_two);
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, NULL);
     
     /**
@@ -204,6 +214,13 @@ int one_main(void) {
          *  we declared earlier and draw them.
          */
         glBindVertexArray(vao);
+        glDrawArrays(GL_TRIANGLES, 0, 3);
+        
+        /**
+         *  Repeat the above for another triangle?
+         *  Note: We need to call glDrawArrays twice!
+         */
+        glBindVertexArray(vao_two);
         glDrawArrays(GL_TRIANGLES, 0, 3);
         
         /**
