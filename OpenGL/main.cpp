@@ -1,0 +1,14 @@
+//
+//  main.cpp
+//  OpenGL
+//
+//  Created by Matt Finucane on 04/01/2017.
+//  Copyright © 2017 Matt Finucane. All rights reserved.
+//
+
+#include "One.hpp"
+#include "Detect.hpp"
+
+int main(int argc, const char * argv[]) {
+    return one_main();
+}
