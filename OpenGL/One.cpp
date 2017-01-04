@@ -69,9 +69,9 @@ int one_main(void) {
      *  three point triangle.
      */
     float points[] = {
-        0.0f, 1.0f, 0.0f,   // starting at the top
-        2.0f, -1.0f, 0.0f,  // moving clockwise next
-        -2.0f, -1.0f, 0.0f  // finishing up
+        0.0f, 0.5f, 0.0f,   // starting at the top
+        0.5f, -0.5f, 0.0f,  // moving clockwise next
+        -0.5f, -0.5f, 0.0f  // finishing up
     };
     
     /**
@@ -120,9 +120,81 @@ int one_main(void) {
     glBindBuffer(GL_ARRAY_BUFFER, vbo);
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, NULL);
     
+    /**
+     *  Now we need to load the shaders starting.
+     */
     ShaderLoader loader;
-    cout << loader.load("one.vertex") << endl;
+    const string vertex_shader_str = loader.load("one.vertex");
+    const string fragment_shader_str = loader.load("one.fragment");
+    const char *vertex_shader = vertex_shader_str.c_str();
+    const char *fragment_shader = fragment_shader_str.c_str();
     
+    /**
+     *  Compiling the vertex shader first:
+     *      - call glCreateShader to tee up a new shader.
+     *      - set the source of the vertex shader - passed by reference.
+     *      - then compile.
+     */
+    GLuint vs = glCreateShader(GL_VERTEX_SHADER);
+    glShaderSource(vs, 1, &vertex_shader, NULL);
+    glCompileShader(vs);
+    
+    /**
+     *  Then we move on to the fragment shader:
+     */
+    GLuint fs = glCreateShader(GL_FRAGMENT_SHADER);
+    glShaderSource(fs, 1, &fragment_shader, NULL);
+    glCompileShader(fs);
+    
+    /**
+     *  Now we need to compile the shaders into a single 
+     *  program that can be executed on the GPU.
+     *  
+     *      - shader_program will be teed up
+     *      - we attach the two compiled shaders. 
+     *        In this case, vs and fs are now pointing
+     *        to the compiled shaders.
+     *      - we then link the compiled programs.
+     *
+     */
+    GLuint shader_program = glCreateProgram();
+    glAttachShader(shader_program, vs);
+    glAttachShader(shader_program, fs);
+    glLinkProgram(shader_program);
+    
+    /**
+     *  To draw, we keep the GLFW window open until it 
+     *  should close, to ve met by some condition later.
+     */
+    while(!glfwWindowShouldClose(window)) {
+        /**
+         *  Clear the drawing surface.
+         */
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        
+        /**
+         *  Use the program that we built from the compiled
+         *  shaders.
+         */
+        glUseProgram(shader_program);
+        
+        /**
+         *  Passing in the VAO and binding with the points
+         *  we declared earlier and draw them.
+         */
+        glBindVertexArray(vao);
+        glDrawArrays(GL_TRIANGLES, 0, 3);
+        
+        /**
+         *  Poll for input handling.
+         */
+        glfwPollEvents();
+        
+        /**
+         *  Place what was drawn/painted into the window.
+         */
+        glfwSwapBuffers(window);
+    }
     
     /**
      *  ---------------------------------------
