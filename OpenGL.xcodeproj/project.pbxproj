@@ -12,6 +12,9 @@
 		58B8F0A41E1CED04005C5C5F /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 58B8F0A31E1CED04005C5C5F /* OpenGL.framework */; };
 		58B8F0A71E1CEF0F005C5C5F /* Detect.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 58B8F0A51E1CEF0F005C5C5F /* Detect.cpp */; };
 		58B8F0AC1E1D088B005C5C5F /* libglfw.3.3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 58B8F0AB1E1D088B005C5C5F /* libglfw.3.3.dylib */; };
+		58B8F0B41E1D311C005C5C5F /* ShaderLoader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 58B8F0B21E1D311C005C5C5F /* ShaderLoader.cpp */; };
+		58B8F0B61E1D36F5005C5C5F /* one.vertex in CopyFiles */ = {isa = PBXBuildFile; fileRef = 58B8F0B01E1D2E42005C5C5F /* one.vertex */; };
+		58B8F0B71E1D36F5005C5C5F /* one.fragment in CopyFiles */ = {isa = PBXBuildFile; fileRef = 58B8F0B11E1D2EC1005C5C5F /* one.fragment */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -23,6 +26,17 @@
 			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 1;
+		};
+		58B8F0B51E1D36C0005C5C5F /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 16;
+			files = (
+				58B8F0B61E1D36F5005C5C5F /* one.vertex in CopyFiles */,
+				58B8F0B71E1D36F5005C5C5F /* one.fragment in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXCopyFilesBuildPhase section */
 
@@ -36,6 +50,10 @@
 		58B8F0A61E1CEF0F005C5C5F /* Detect.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Detect.hpp; sourceTree = "<group>"; };
 		58B8F0A81E1CFEC2005C5C5F /* libglfw3.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libglfw3.a; path = ../../../../../usr/local/lib/libglfw3.a; sourceTree = "<group>"; };
 		58B8F0AB1E1D088B005C5C5F /* libglfw.3.3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libglfw.3.3.dylib; path = ../../../../../usr/local/lib/libglfw.3.3.dylib; sourceTree = "<group>"; };
+		58B8F0B01E1D2E42005C5C5F /* one.vertex */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = one.vertex; sourceTree = "<group>"; };
+		58B8F0B11E1D2EC1005C5C5F /* one.fragment */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = one.fragment; sourceTree = "<group>"; };
+		58B8F0B21E1D311C005C5C5F /* ShaderLoader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ShaderLoader.cpp; sourceTree = "<group>"; };
+		58B8F0B31E1D311C005C5C5F /* ShaderLoader.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ShaderLoader.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -71,11 +89,14 @@
 		58B8F0971E1CE8D1005C5C5F /* OpenGL */ = {
 			isa = PBXGroup;
 			children = (
+				58B8F0AD1E1D2C50005C5C5F /* shaders */,
 				58B8F0981E1CE8D1005C5C5F /* main.cpp */,
 				58B8F09F1E1CE92B005C5C5F /* One.cpp */,
 				58B8F0A01E1CE92B005C5C5F /* One.hpp */,
 				58B8F0A51E1CEF0F005C5C5F /* Detect.cpp */,
 				58B8F0A61E1CEF0F005C5C5F /* Detect.hpp */,
+				58B8F0B21E1D311C005C5C5F /* ShaderLoader.cpp */,
+				58B8F0B31E1D311C005C5C5F /* ShaderLoader.hpp */,
 			);
 			path = OpenGL;
 			sourceTree = "<group>";
@@ -90,6 +111,15 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		58B8F0AD1E1D2C50005C5C5F /* shaders */ = {
+			isa = PBXGroup;
+			children = (
+				58B8F0B01E1D2E42005C5C5F /* one.vertex */,
+				58B8F0B11E1D2EC1005C5C5F /* one.fragment */,
+			);
+			name = shaders;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -100,6 +130,7 @@
 				58B8F0911E1CE8D1005C5C5F /* Sources */,
 				58B8F0921E1CE8D1005C5C5F /* Frameworks */,
 				58B8F0931E1CE8D1005C5C5F /* CopyFiles */,
+				58B8F0B51E1D36C0005C5C5F /* CopyFiles */,
 			);
 			buildRules = (
 			);
@@ -150,6 +181,7 @@
 				58B8F0A11E1CE92B005C5C5F /* One.cpp in Sources */,
 				58B8F0A71E1CEF0F005C5C5F /* Detect.cpp in Sources */,
 				58B8F0991E1CE8D1005C5C5F /* main.cpp in Sources */,
+				58B8F0B41E1D311C005C5C5F /* ShaderLoader.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
