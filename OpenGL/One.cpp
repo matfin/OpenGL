@@ -68,50 +68,71 @@ int one_main(void) {
      *  of a point. These are the coordinates for a 
      *  three point triangle.
      */
-    float points[] = {
+    float points_triangle_one[] = {
         0.0f, 0.5f, 0.0f,   // starting at the top
         0.5f, -0.5f, 0.0f,  // moving clockwise next
-        -0.5f, -0.5f, 0.0f  // finishing up
+        -0.5f, -0.5f, 0.0f  // finishing up triangle.
+    };
+    float points_triangle_two[] = {
+        0.0f, 0.0f, 0.0f,   // starting at the top
+        0.5f, -1.0f, 0.0f,  // moving clockwise next
+        -0.5f, -1.0f, 0.0f  // finishing up triangle.
+    };
+    
+    /**
+     *  Colours (r,g,b,a)
+     */
+    float colours[] = {
+        0.5f, 0.0f, 0.5f, 1.0f
     };
     
     /**
      *  We need to copy these points into the video card
      *  memory in a unit called a VBO (vertex buffer object).
      *  
-     *  We will set this up now.
-     *      - we set the initial value of the vbo to be 0.
-     *      - we generate buffers passing in the vbp by reference.
-     *      - we call glBindBuffer with an enum for array buffer.
-     *        and specify that it is an array.
-     *      - we then buffer the data, setting the buffer size to be 
-     *        the size of the hardcoded array times the size of a float,
-     *        while passing in the float array of points, finishing off
-     *        with an enum called GL_STATIC_DRAW.
+     *  First, we create a VBO so we can tee up an empty buffer,
+     *  doing this with the glGenBuffers function by passing in 
+     *  a reference to vbo.
      *
+     *  The glBindBuffer function will then set this as the current
+     *  buffer in the OpenGL state.
+     *
+     *  We then fill that buffer with vertices by passing in the points,
+     *  setting the size of the buffer and stating GL_STATIC_DRAW.
+     *  
+     *  Note: the points variable passed in is the address of the 
+     *  first value.
      *
      */
     GLuint vbo = 0;
     glGenBuffers(1, &vbo);
     glBindBuffer(GL_ARRAY_BUFFER, vbo);
-    glBufferData(GL_ARRAY_BUFFER, 9 * sizeof(float), points, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, 9 * sizeof(float), points_triangle_one, GL_STATIC_DRAW);
+    
+    GLuint vbo_two = 0;
+    glGenBuffers(1, &vbo_two);
+    glBindBuffer(GL_ARRAY_BUFFER, vbo_two);
+    glBufferData(GL_ARRAY_BUFFER, 9 * sizeof(float), points_triangle_two, GL_STATIC_DRAW);
     
     /**
-     *  Since most meshes will have an array of VBOs,
-     *  we will use something called a VAO (vertex array object).
-     *  This will make it easier to map all the vertex buffers 
-     *  like the one above without too much overhead.
+     *  Next, we will use a VAO (vertex array object) which is used 
+     *  to track references to one or more VBOs. It stores the memory
+     *  layout for each of these. We have one of these for each mesh
+     *  and then use it when we want to draw.
+     *
+     *  Here wr are generating a new VAO with an unsigned integer so 
+     *  we can identify it later.By binding it, we are bringing it 
+     *  into the focus of the OpenGL state.
+     *
+     *  This allows us to enable the first attribute which is 0. When using 
+     *  a single vertex buffer, we know it will be at location 0.
+     *
+     *  The glVertexAttribPointer function defines the layout of our first 
+     *  vertex buffer; "0" means define the layout for attribute number 0.
      *  
-     *  We will set this up now and then use it when we want to 
-     *  draw.
-     *      - we create an initial value of vao set to 0.
-     *      - we call to generate vertex arrays passing in vao by reference.
-     *      - we bind the vertex arrays passing in vao by value.
-     *      - we enable the vertex attrib array.
-     *      - we call glBindBuffer again with vbo.
-     *      - glertexAttribPointer will take 0 as the first parameter,
-     *        means that we define the layout for attribute number 0.
-     *        Using 3 means we are dealing with vec3, meaning we are 
-     *        using three floats of type GL_FLOAT for a point.
+     *  Secondly, we pass in 3 as an int which means it should read every
+     *  3n ints to make the vertex. The shader takes in a vec3 variable and 
+     *  the floats in the points array are seemingly converted to GL_FLOATs.
      */
     GLuint vao = 0;
     glGenVertexArrays(1, &vao);
@@ -124,8 +145,8 @@ int one_main(void) {
      *  Now we need to load the shaders starting.
      */
     ShaderLoader loader;
-    const string vertex_shader_str = loader.load("one.vertex");
-    const string fragment_shader_str = loader.load("one.fragment");
+    const string vertex_shader_str = loader.load("one_vs.glsl");
+    const string fragment_shader_str = loader.load("one_fs.glsl");
     const char *vertex_shader = vertex_shader_str.c_str();
     const char *fragment_shader = fragment_shader_str.c_str();
     

@@ -13,8 +13,8 @@
 		58B8F0A71E1CEF0F005C5C5F /* Detect.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 58B8F0A51E1CEF0F005C5C5F /* Detect.cpp */; };
 		58B8F0AC1E1D088B005C5C5F /* libglfw.3.3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 58B8F0AB1E1D088B005C5C5F /* libglfw.3.3.dylib */; };
 		58B8F0B41E1D311C005C5C5F /* ShaderLoader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 58B8F0B21E1D311C005C5C5F /* ShaderLoader.cpp */; };
-		58B8F0B61E1D36F5005C5C5F /* one.vertex in CopyFiles */ = {isa = PBXBuildFile; fileRef = 58B8F0B01E1D2E42005C5C5F /* one.vertex */; };
-		58B8F0B71E1D36F5005C5C5F /* one.fragment in CopyFiles */ = {isa = PBXBuildFile; fileRef = 58B8F0B11E1D2EC1005C5C5F /* one.fragment */; };
+		58B8F0B61E1D36F5005C5C5F /* one_vs.glsl in CopyFiles */ = {isa = PBXBuildFile; fileRef = 58B8F0B01E1D2E42005C5C5F /* one_vs.glsl */; };
+		58B8F0B71E1D36F5005C5C5F /* one_fs.glsl in CopyFiles */ = {isa = PBXBuildFile; fileRef = 58B8F0B11E1D2EC1005C5C5F /* one_fs.glsl */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -33,8 +33,8 @@
 			dstPath = "";
 			dstSubfolderSpec = 16;
 			files = (
-				58B8F0B61E1D36F5005C5C5F /* one.vertex in CopyFiles */,
-				58B8F0B71E1D36F5005C5C5F /* one.fragment in CopyFiles */,
+				58B8F0B61E1D36F5005C5C5F /* one_vs.glsl in CopyFiles */,
+				58B8F0B71E1D36F5005C5C5F /* one_fs.glsl in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -50,8 +50,8 @@
 		58B8F0A61E1CEF0F005C5C5F /* Detect.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Detect.hpp; sourceTree = "<group>"; };
 		58B8F0A81E1CFEC2005C5C5F /* libglfw3.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libglfw3.a; path = ../../../../../usr/local/lib/libglfw3.a; sourceTree = "<group>"; };
 		58B8F0AB1E1D088B005C5C5F /* libglfw.3.3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libglfw.3.3.dylib; path = ../../../../../usr/local/lib/libglfw.3.3.dylib; sourceTree = "<group>"; };
-		58B8F0B01E1D2E42005C5C5F /* one.vertex */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = one.vertex; sourceTree = "<group>"; };
-		58B8F0B11E1D2EC1005C5C5F /* one.fragment */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = one.fragment; sourceTree = "<group>"; };
+		58B8F0B01E1D2E42005C5C5F /* one_vs.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = one_vs.glsl; sourceTree = "<group>"; };
+		58B8F0B11E1D2EC1005C5C5F /* one_fs.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = one_fs.glsl; sourceTree = "<group>"; };
 		58B8F0B21E1D311C005C5C5F /* ShaderLoader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ShaderLoader.cpp; sourceTree = "<group>"; };
 		58B8F0B31E1D311C005C5C5F /* ShaderLoader.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ShaderLoader.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -114,8 +114,8 @@
 		58B8F0AD1E1D2C50005C5C5F /* shaders */ = {
 			isa = PBXGroup;
 			children = (
-				58B8F0B01E1D2E42005C5C5F /* one.vertex */,
-				58B8F0B11E1D2EC1005C5C5F /* one.fragment */,
+				58B8F0B01E1D2E42005C5C5F /* one_vs.glsl */,
+				58B8F0B11E1D2EC1005C5C5F /* one_fs.glsl */,
 			);
 			name = shaders;
 			sourceTree = "<group>";
