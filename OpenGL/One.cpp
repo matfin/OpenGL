@@ -14,6 +14,69 @@
 
 using namespace std;
 
+/**
+ *  This function returns a VAO for a line strip so that 
+ *  this can be used in the draw function.
+ */
+GLuint setupLineStrip(const float *points) {
+    /**
+     *  Setting up the VBO.
+     */
+    GLuint vbo;
+    glGenBuffers(1, &vbo);
+    glBindBuffer(GL_ARRAY_BUFFER, vbo);
+    glBufferData(GL_ARRAY_BUFFER, 15 * sizeof(float), points, GL_STATIC_DRAW);
+    
+    /**
+     *  Setting up the VAO
+     */
+    GLuint vao;
+    glGenVertexArrays(1, &vao);
+    glBindVertexArray(vao);
+    glEnableVertexAttribArray(0);
+    glBindBuffer(GL_ARRAY_BUFFER, vbo);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, NULL);
+    
+    return vao;
+}
+
+/**
+ *  This function also tees up a VAO for drawing a triangle.
+ */
+GLuint setupTriangle(const float *points) {
+    /**
+     *  Setting up the VBO.
+     */
+    GLuint vbo;
+    glGenBuffers(1, &vbo);
+    glBindBuffer(GL_ARRAY_BUFFER, vbo);
+    glBufferData(GL_ARRAY_BUFFER, 9 * sizeof(float), points, GL_STATIC_DRAW);
+    
+    /**
+     *  Setting up the VAO
+     */
+    GLuint vao;
+    glGenVertexArrays(1, &vao);
+    glBindVertexArray(vao);
+    glEnableVertexAttribArray(0);
+    glBindBuffer(GL_ARRAY_BUFFER, vbo);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, NULL);
+    
+    return vao;
+}
+
+/**
+ *  Takes a VAO and draws it using a shader_program.
+ */
+void drawItem(const GLuint vao, const int gl_which, const int items, const GLuint shader_program) {
+    /**
+     *  Use the shader program, bind the vertex array and then draw.
+     */
+    glUseProgram(shader_program);
+    glBindVertexArray(vao);
+    glDrawArrays(gl_which, 0, items);
+}
+
 int one_main(void) {
     
     /**
@@ -93,100 +156,31 @@ int one_main(void) {
     };
     
     /**
+     *  Triangle strip points.
+     */
+    float line_points[] = {
+        0.5f, 0.0f, 0.0f,
+        1.0f, -1.0f, 0.0f,
+        0.0f, -1.0f, 0.0f,
+        0.0f, -0.5f, 0.0f,
+        0.5f, 0.0f, 0.0f
+    };
+    
+    /**
+     *  Setting up our shapes using the functions above.
+     */
+    GLuint vao_triangle_one = setupTriangle(points_triangle_one);
+    GLuint vao_triangle_two = setupTriangle(points_triangle_two);
+    GLuint vao_square_one = setupTriangle(points_square_one);
+    GLuint vao_square_two = setupTriangle(points_square_two);
+    GLuint vao_line_strip = setupLineStrip(line_points);
+    
+    /**
      *  Colours (r,g,b,a)
      */
     float colours[] = {
         0.5f, 0.0f, 0.5f, 1.0f
     };
-    
-    /**
-     *  We need to copy these points into the video card
-     *  memory in a unit called a VBO (vertex buffer object).
-     *  
-     *  First, we create a VBO so we can tee up an empty buffer,
-     *  doing this with the glGenBuffers function by passing in 
-     *  a reference to vbo.
-     *
-     *  The glBindBuffer function will then set this as the current
-     *  buffer in the OpenGL state.
-     *
-     *  We then fill that buffer with vertices by passing in the points,
-     *  setting the size of the buffer and stating GL_STATIC_DRAW.
-     *  
-     *  Note: the points variable passed in is the address of the 
-     *  first value.
-     *
-     */
-    GLuint vbo;
-    glGenBuffers(1, &vbo);
-    glBindBuffer(GL_ARRAY_BUFFER, vbo);
-    glBufferData(GL_ARRAY_BUFFER, 9 * sizeof(float), points_triangle_one, GL_STATIC_DRAW);
-    
-    GLuint vbo_two;
-    glGenBuffers(1, &vbo_two);
-    glBindBuffer(GL_ARRAY_BUFFER, vbo_two);
-    glBufferData(GL_ARRAY_BUFFER, 9 * sizeof(float), points_triangle_two, GL_STATIC_DRAW);
-    
-    GLuint vbo_square_one;
-    glGenBuffers(1, &vbo_square_one);
-    glBindBuffer(GL_ARRAY_BUFFER, vbo_square_one);
-    glBufferData(GL_ARRAY_BUFFER, 9 * sizeof(float), points_square_one, GL_STATIC_DRAW);
-    
-    GLuint vbo_square_two;
-    glGenBuffers(1, &vbo_square_two);
-    glBindBuffer(GL_ARRAY_BUFFER, vbo_square_two);
-    glBufferData(GL_ARRAY_BUFFER, 9 * sizeof(float), points_square_two, GL_STATIC_DRAW);
-    
-    /**
-     *  Next, we will use a VAO (vertex array object) which is used 
-     *  to track references to one or more VBOs. It stores the memory
-     *  layout for each of these. We have one of these for each mesh
-     *  and then use it when we want to draw.
-     *
-     *  Here wr are generating a new VAO with an unsigned integer so 
-     *  we can identify it later.By binding it, we are bringing it 
-     *  into the focus of the OpenGL state.
-     *
-     *  This allows us to enable the first attribute which is 0. When using 
-     *  a single vertex buffer, we know it will be at location 0.
-     *
-     *  The glVertexAttribPointer function defines the layout of our first 
-     *  vertex buffer; "0" means define the layout for attribute number 0.
-     *  
-     *  Secondly, we pass in 3 as an int which means it should read every
-     *  3n ints to make the vertex. The shader takes in a vec3 variable and 
-     *  the floats in the points array are seemingly converted to GL_FLOATs.
-     */
-    GLuint vao;
-    glGenVertexArrays(1, &vao);
-    glBindVertexArray(vao);
-    glEnableVertexAttribArray(0);
-    glBindBuffer(GL_ARRAY_BUFFER, vbo);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, NULL);
-    
-    /**
-     *  Repeat the above to create a triangle in another mesh?
-     */
-    GLuint vao_two;
-    glGenVertexArrays(1, &vao_two);
-    glBindVertexArray(vao_two);
-    glEnableVertexAttribArray(0);
-    glBindBuffer(GL_ARRAY_BUFFER, vbo_two);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, NULL);
-    
-    GLuint vao_square_one;
-    glGenVertexArrays(1, &vao_square_one);
-    glBindVertexArray(vao_square_one);
-    glEnableVertexAttribArray(0);
-    glBindBuffer(GL_ARRAY_BUFFER, vbo_square_one);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, NULL);
-    
-    GLuint vao_square_two;
-    glGenVertexArrays(1, &vao_square_two);
-    glBindVertexArray(vao_square_two);
-    glEnableVertexAttribArray(0);
-    glBindBuffer(GL_ARRAY_BUFFER, vbo_square_two);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, NULL);
     
     /**
      *  Now we need to load the shaders starting.
@@ -258,44 +252,15 @@ int one_main(void) {
          *  Set the background colour
          */
         glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
-        
+
         /**
-         *  Use the program that we built from the compiled
-         *  shaders.
+         *  Draw the line strip and triangles
          */
-        glUseProgram(shader_program);
-        
-        /**
-         *  Passing in the VAO and binding with the points
-         *  we declared earlier and draw them.
-         */
-        glBindVertexArray(vao);
-        glDrawArrays(GL_TRIANGLES, 0, 3);
-        
-        /**
-         *  Repeat the above for another triangle?
-         *  Note: We need to call glDrawArrays twice!
-         */
-        glBindVertexArray(vao_two);
-        glDrawArrays(GL_TRIANGLES, 0, 3);
-        
-        /**
-         *  Attempting to change the colour of the square being rendered
-         *  by using a different program.
-         */
-        glUseProgram(shader_program_alt);
-        
-        /**
-         *  Binding and drawing for triangle one for the square
-         */
-        glBindVertexArray(vao_square_one);
-        glDrawArrays(GL_TRIANGLES, 0, 3);
-        
-        /**
-         *  Binding and drawing for triangle two for the square
-         */
-        glBindVertexArray(vao_square_two);
-        glDrawArrays(GL_TRIANGLES, 0, 3);
+        drawItem(vao_line_strip, GL_LINE_STRIP, 5, shader_program);
+        drawItem(vao_triangle_one, GL_TRIANGLES, 3, shader_program);
+        drawItem(vao_triangle_two, GL_TRIANGLES, 3, shader_program_alt);
+        drawItem(vao_square_one, GL_TRIANGLES, 3, shader_program);
+        drawItem(vao_square_two, GL_TRIANGLES, 3, shader_program);
         
         /**
          *  Poll for input handling.

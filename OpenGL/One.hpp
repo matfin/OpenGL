@@ -10,5 +10,6 @@
 #define One_hpp
 
 int one_main(void);
+void draw_line(void);
 
 #endif /* One_hpp */
