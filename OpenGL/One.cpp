@@ -194,8 +194,10 @@ int one_main(void) {
     ShaderLoader loader;
     const string vertex_shader_str = loader.load("one_vs.glsl");
     const string fragment_shader_str = loader.load("one_fs.glsl");
+    const string fragment_shader_alt_str = loader.load("one_fs_alt.glsl");
     const char *vertex_shader = vertex_shader_str.c_str();
     const char *fragment_shader = fragment_shader_str.c_str();
+    const char *fragment_shader_alt = fragment_shader_alt_str.c_str();
     
     /**
      *  Compiling the vertex shader first:
@@ -215,6 +217,13 @@ int one_main(void) {
     glCompileShader(fs);
     
     /**
+     *  Creating the alernative fragment shader
+     */
+    GLuint fs_alt = glCreateShader(GL_FRAGMENT_SHADER);
+    glShaderSource(fs_alt, 1, &fragment_shader_alt, NULL);
+    glCompileShader(fs_alt);
+    
+    /**
      *  Now we need to compile the shaders into a single 
      *  program that can be executed on the GPU.
      *  
@@ -230,6 +239,11 @@ int one_main(void) {
     glAttachShader(shader_program, fs);
     glLinkProgram(shader_program);
     
+    GLuint shader_program_alt = glCreateProgram();
+    glAttachShader(shader_program_alt, vs);
+    glAttachShader(shader_program_alt, fs_alt);
+    glLinkProgram(shader_program_alt);
+    
     /**
      *  To draw, we keep the GLFW window open until it 
      *  should close, to ve met by some condition later.
@@ -239,6 +253,11 @@ int one_main(void) {
          *  Clear the drawing surface.
          */
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        
+        /**
+         *  Set the background colour
+         */
+        glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
         
         /**
          *  Use the program that we built from the compiled
@@ -259,6 +278,12 @@ int one_main(void) {
          */
         glBindVertexArray(vao_two);
         glDrawArrays(GL_TRIANGLES, 0, 3);
+        
+        /**
+         *  Attempting to change the colour of the square being rendered
+         *  by using a different program.
+         */
+        glUseProgram(shader_program_alt);
         
         /**
          *  Binding and drawing for triangle one for the square

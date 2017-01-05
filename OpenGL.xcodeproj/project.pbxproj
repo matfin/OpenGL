@@ -15,6 +15,7 @@
 		58B8F0B41E1D311C005C5C5F /* ShaderLoader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 58B8F0B21E1D311C005C5C5F /* ShaderLoader.cpp */; };
 		58B8F0B61E1D36F5005C5C5F /* one_vs.glsl in CopyFiles */ = {isa = PBXBuildFile; fileRef = 58B8F0B01E1D2E42005C5C5F /* one_vs.glsl */; };
 		58B8F0B71E1D36F5005C5C5F /* one_fs.glsl in CopyFiles */ = {isa = PBXBuildFile; fileRef = 58B8F0B11E1D2EC1005C5C5F /* one_fs.glsl */; };
+		58B8F0B91E1E6DE3005C5C5F /* one_fs_alt.glsl in CopyFiles */ = {isa = PBXBuildFile; fileRef = 58B8F0B81E1E6811005C5C5F /* one_fs_alt.glsl */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -33,6 +34,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 16;
 			files = (
+				58B8F0B91E1E6DE3005C5C5F /* one_fs_alt.glsl in CopyFiles */,
 				58B8F0B61E1D36F5005C5C5F /* one_vs.glsl in CopyFiles */,
 				58B8F0B71E1D36F5005C5C5F /* one_fs.glsl in CopyFiles */,
 			);
@@ -54,6 +56,7 @@
 		58B8F0B11E1D2EC1005C5C5F /* one_fs.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = one_fs.glsl; sourceTree = "<group>"; };
 		58B8F0B21E1D311C005C5C5F /* ShaderLoader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ShaderLoader.cpp; sourceTree = "<group>"; };
 		58B8F0B31E1D311C005C5C5F /* ShaderLoader.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ShaderLoader.hpp; sourceTree = "<group>"; };
+		58B8F0B81E1E6811005C5C5F /* one_fs_alt.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = one_fs_alt.glsl; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -116,6 +119,7 @@
 			children = (
 				58B8F0B01E1D2E42005C5C5F /* one_vs.glsl */,
 				58B8F0B11E1D2EC1005C5C5F /* one_fs.glsl */,
+				58B8F0B81E1E6811005C5C5F /* one_fs_alt.glsl */,
 			);
 			name = shaders;
 			sourceTree = "<group>";
