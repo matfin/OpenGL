@@ -16,6 +16,8 @@
 using namespace std;
 
 Logger logger;
+const int w_width = 1280;
+const int w_height = 720;
 
 /**
  *  GLFW error callback function
@@ -91,6 +93,24 @@ void drawItem(const GLuint vao, const int gl_which, const int items, const GLuin
     glBindVertexArray(0);
 }
 
+/**
+ *  Setting up a window and context and priming video mode.
+ */
+GLFWwindow* setupWindowAndContext(bool fullscreen) {
+    GLFWmonitor *monitor = glfwGetPrimaryMonitor();
+    const GLFWvidmode *vmode = glfwGetVideoMode(monitor);
+    GLFWwindow *window;
+    
+    if(fullscreen) {
+        window = glfwCreateWindow(vmode->width, vmode->height , "One", monitor, NULL);
+    }
+    else {
+        window = glfwCreateWindow(w_width, w_height , "One", NULL, NULL);
+    }
+    
+    return window;
+}
+
 int one_main(void) {
     
     /**
@@ -115,14 +135,10 @@ int one_main(void) {
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     
     /**
-     *  Anti aliasing hint.
+     *  Create the window and prime the video mode using 
+     *  the function declared to do this above.
      */
-    glfwWindowHint(GLFW_SAMPLES, 16);
-    
-    /**
-     *  Create the window, check it worked and then assign as context.
-     */
-    GLFWwindow *window = glfwCreateWindow(640, 480, "One", NULL, NULL);
+    GLFWwindow *window = setupWindowAndContext(true);
     
     if(!window) {
         cout << "Unable to create a GLFW window." << endl;
@@ -297,6 +313,13 @@ int one_main(void) {
          *  Place what was drawn/painted into the window.
          */
         glfwSwapBuffers(window);
+        
+        /**
+         *  Break out on press of 'ESC'
+         */
+        if(GLFW_PRESS == glfwGetKey(window, GLFW_KEY_ESCAPE)) {
+            glfwSetWindowShouldClose(window, 1);
+        }
     }
     
     /**
