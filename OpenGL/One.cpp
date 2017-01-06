@@ -11,6 +11,7 @@
 #include <GLFW/glfw3.h>
 #include <iostream>
 #include "ShaderLoader.hpp"
+#include "Logger.hpp"
 
 using namespace std;
 
@@ -33,8 +34,8 @@ GLuint setupLineStrip(const float *points) {
     GLuint vao;
     glGenVertexArrays(1, &vao);
     glBindVertexArray(vao);
-    glEnableVertexAttribArray(0);
     glBindBuffer(GL_ARRAY_BUFFER, vbo);
+    glEnableVertexAttribArray(0);
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, NULL);
     
     return vao;
@@ -58,8 +59,8 @@ GLuint setupTriangle(const float *points) {
     GLuint vao;
     glGenVertexArrays(1, &vao);
     glBindVertexArray(vao);
-    glEnableVertexAttribArray(0);
     glBindBuffer(GL_ARRAY_BUFFER, vbo);
+    glEnableVertexAttribArray(0);
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, NULL);
     
     return vao;
@@ -75,6 +76,10 @@ void drawItem(const GLuint vao, const int gl_which, const int items, const GLuin
     glUseProgram(shader_program);
     glBindVertexArray(vao);
     glDrawArrays(gl_which, 0, items);
+    /**
+     *  Then clear the vertex array.
+     */
+    glBindVertexArray(0);
 }
 
 int one_main(void) {
@@ -159,11 +164,11 @@ int one_main(void) {
      *  Triangle strip points.
      */
     float line_points[] = {
-        0.5f, 0.0f, 0.0f,
+        0.5f, -0.125f, 0.0f,
         1.0f, -1.0f, 0.0f,
         0.0f, -1.0f, 0.0f,
         0.0f, -0.5f, 0.0f,
-        0.5f, 0.0f, 0.0f
+        0.5f, -0.125f, 0.0f
     };
     
     /**
@@ -237,6 +242,9 @@ int one_main(void) {
     glAttachShader(shader_program_alt, vs);
     glAttachShader(shader_program_alt, fs_alt);
     glLinkProgram(shader_program_alt);
+    
+    Logger logger;
+    logger.write("Test");
     
     /**
      *  To draw, we keep the GLFW window open until it 
