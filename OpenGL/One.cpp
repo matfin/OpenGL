@@ -15,6 +15,15 @@
 
 using namespace std;
 
+Logger logger;
+
+/**
+ *  GLFW error callback function
+ */
+void glfw_error_callback(int error, const char *description) {
+    logger.write_err("GLFW Error code: %i, message: %s", error, description);
+}
+
 /**
  *  This function returns a VAO for a line strip so that 
  *  this can be used in the draw function.
@@ -85,10 +94,15 @@ void drawItem(const GLuint vao, const int gl_which, const int items, const GLuin
 int one_main(void) {
     
     /**
+     *  Set the error callback
+     */
+    glfwSetErrorCallback(glfw_error_callback);
+    
+    /**
      *  Check to see if we can initialise GLFW.
      */
     if(!glfwInit()) {
-        cout << "Unable to initialise GLFW3." << endl;
+        logger.write_err("Unable to initialise GLFW.");
         return -1;
     }
     
@@ -99,7 +113,12 @@ int one_main(void) {
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-        
+    
+    /**
+     *  Anti aliasing hint.
+     */
+    glfwWindowHint(GLFW_SAMPLES, 16);
+    
     /**
      *  Create the window, check it worked and then assign as context.
      */
@@ -115,10 +134,12 @@ int one_main(void) {
     /**
      *  Get the version info.
      */
-    const GLubyte *renderer = glGetString(GL_RENDERER);
-    const GLubyte *version = glGetString(GL_VERSION);
-    cout << "Renderer: " << renderer << endl;
-    cout << "Version: " << version << endl;
+    logger.write("Starting GLFW\n%s\n", glfwGetVersionString());
+    
+//    const GLubyte *renderer = glGetString(GL_RENDERER);
+//    const GLubyte *version = glGetString(GL_VERSION);
+//    cout << "Renderer: " << renderer << endl;
+//    cout << "Version: " << version << endl;
     
     /**
      *  Instruct GL to draw a pixel if it is closer to the viewer.
@@ -242,9 +263,6 @@ int one_main(void) {
     glAttachShader(shader_program_alt, vs);
     glAttachShader(shader_program_alt, fs_alt);
     glLinkProgram(shader_program_alt);
-    
-    Logger logger;
-    logger.write("Test");
     
     /**
      *  To draw, we keep the GLFW window open until it 
