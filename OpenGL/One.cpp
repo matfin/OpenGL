@@ -44,7 +44,7 @@ GLuint setupLineStrip(const float *points) {
     glBufferData(GL_ARRAY_BUFFER, 15 * sizeof(float), points, GL_STATIC_DRAW);
     
     /**
-     *  Setting up the VAO
+     *  Setting up the VAO.
      */
     GLuint vao;
     glGenVertexArrays(1, &vao);
@@ -67,6 +67,31 @@ GLuint setupTriangle(const float *points) {
     glGenBuffers(1, &vbo);
     glBindBuffer(GL_ARRAY_BUFFER, vbo);
     glBufferData(GL_ARRAY_BUFFER, 9 * sizeof(float), points, GL_STATIC_DRAW);
+    
+    /**
+     *  Setting up the VAO.
+     */
+    GLuint vao;
+    glGenVertexArrays(1, &vao);
+    glBindVertexArray(vao);
+    glBindBuffer(GL_ARRAY_BUFFER, vbo);
+    glEnableVertexAttribArray(0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, NULL);
+    
+    return vao;
+}
+
+/**
+ *  Make an attempt to draw a square
+ */
+GLuint setupSquare(const float *points) {
+    /**
+     *  Setting up the VBO.
+     */
+    GLuint vbo;
+    glGenBuffers(1, &vbo);
+    glBindBuffer(GL_ARRAY_BUFFER, vbo);
+    glBufferData(GL_ARRAY_BUFFER, 18 * sizeof(float), points, GL_STATIC_DRAW);
     
     /**
      *  Setting up the VAO
@@ -219,6 +244,20 @@ int one_main(void) {
     };
     
     /**
+     *  Full square points using the coordinates 
+     *  for two triangles joined to make a square.
+     */
+    float full_square_points[] = {
+        -0.5f, 0.5f, 0.0f,
+        0.5f, 0.5f, 0.0f,
+        0.5f, -0.5f, 0.0f,
+        
+        -0.5f, 0.5f, 0.0f,
+        0.5f, -0.5f, 0.0f,
+        -0.5f, -0.5f, 0.0f
+    };
+    
+    /**
      *  Setting up our shapes using the functions above.
      */
     GLuint vao_triangle_one = setupTriangle(points_triangle_one);
@@ -226,6 +265,7 @@ int one_main(void) {
     GLuint vao_square_one = setupTriangle(points_square_one);
     GLuint vao_square_two = setupTriangle(points_square_two);
     GLuint vao_line_strip = setupLineStrip(line_points);
+    GLuint vao_full_square = setupSquare(full_square_points);
     
     /**
      *  Colours (r,g,b,a)
@@ -317,13 +357,14 @@ int one_main(void) {
         glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 
         /**
-         *  Draw the line strip and triangles
+         *  Draw the line strip, triangles and then a full square.
          */
         drawItem(vao_line_strip, GL_LINE_STRIP, 5, shader_program);
         drawItem(vao_triangle_one, GL_TRIANGLES, 3, shader_program);
         drawItem(vao_triangle_two, GL_TRIANGLES, 3, shader_program_alt);
         drawItem(vao_square_one, GL_TRIANGLES, 3, shader_program);
         drawItem(vao_square_two, GL_TRIANGLES, 3, shader_program);
+        drawItem(vao_full_square, GL_TRIANGLES, 6, shader_program);
         
         /**
          *  Poll for input handling.
