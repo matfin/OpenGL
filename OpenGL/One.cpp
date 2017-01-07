@@ -295,6 +295,12 @@ int one_main(void) {
      *  should close, to ve met by some condition later.
      */
     while(!glfwWindowShouldClose(window)) {
+        
+        /**
+         *  Logging fps to the window title.
+         */
+        glparams.updateWindowFPSCounter(window);
+        
         /**
          *  Clear the drawing surface.
          */

@@ -7,8 +7,6 @@
 //
 
 #include "GLParams.hpp"
-#include <OpenGL/gl3.h>
-#include <GLFW/glfw3.h>
 #include <sstream>
 #include <iostream>
 #include "Logger.hpp"
@@ -64,4 +62,23 @@ void GLParams::logGLParams(vector<string> params) const {
     for(auto &i : params) {
         logger.write(i.c_str());
     }
+}
+
+void GLParams::updateWindowFPSCounter(GLFWwindow *window) {
+    static double previous_seconds = glfwGetTime();
+    static int frame_count;
+    double current_seconds = glfwGetTime();
+    double elapsed_seconds = current_seconds - previous_seconds;
+    
+    if(elapsed_seconds > 0.25) {
+        previous_seconds = current_seconds;
+        double fps = (double)frame_count / elapsed_seconds;
+        ostringstream os;
+        os << "One - fps: " << fps;
+        string out = os.str();
+        const char *fps_string = out.c_str();
+        glfwSetWindowTitle(window, fps_string);
+        frame_count = 0;
+    }
+    frame_count++;
 }
