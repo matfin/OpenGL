@@ -17,6 +17,7 @@
 		58B8F0B71E1D36F5005C5C5F /* one_fs.glsl in CopyFiles */ = {isa = PBXBuildFile; fileRef = 58B8F0B11E1D2EC1005C5C5F /* one_fs.glsl */; };
 		58B8F0B91E1E6DE3005C5C5F /* one_fs_alt.glsl in CopyFiles */ = {isa = PBXBuildFile; fileRef = 58B8F0B81E1E6811005C5C5F /* one_fs_alt.glsl */; };
 		58B8F0BC1E1FA61F005C5C5F /* Logger.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 58B8F0BA1E1FA61F005C5C5F /* Logger.cpp */; };
+		58B8F0BF1E20F2A7005C5C5F /* GLParams.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 58B8F0BD1E20F2A7005C5C5F /* GLParams.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -60,6 +61,8 @@
 		58B8F0B81E1E6811005C5C5F /* one_fs_alt.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = one_fs_alt.glsl; sourceTree = "<group>"; };
 		58B8F0BA1E1FA61F005C5C5F /* Logger.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Logger.cpp; sourceTree = "<group>"; };
 		58B8F0BB1E1FA61F005C5C5F /* Logger.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Logger.hpp; sourceTree = "<group>"; };
+		58B8F0BD1E20F2A7005C5C5F /* GLParams.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLParams.cpp; sourceTree = "<group>"; };
+		58B8F0BE1E20F2A7005C5C5F /* GLParams.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GLParams.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -105,6 +108,8 @@
 				58B8F0B31E1D311C005C5C5F /* ShaderLoader.hpp */,
 				58B8F0BA1E1FA61F005C5C5F /* Logger.cpp */,
 				58B8F0BB1E1FA61F005C5C5F /* Logger.hpp */,
+				58B8F0BD1E20F2A7005C5C5F /* GLParams.cpp */,
+				58B8F0BE1E20F2A7005C5C5F /* GLParams.hpp */,
 			);
 			path = OpenGL;
 			sourceTree = "<group>";
@@ -191,6 +196,7 @@
 				58B8F0BC1E1FA61F005C5C5F /* Logger.cpp in Sources */,
 				58B8F0A71E1CEF0F005C5C5F /* Detect.cpp in Sources */,
 				58B8F0991E1CE8D1005C5C5F /* main.cpp in Sources */,
+				58B8F0BF1E20F2A7005C5C5F /* GLParams.cpp in Sources */,
 				58B8F0B41E1D311C005C5C5F /* ShaderLoader.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

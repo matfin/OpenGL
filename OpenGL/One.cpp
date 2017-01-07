@@ -10,14 +10,18 @@
 #include <OpenGL/gl3.h>
 #include <GLFW/glfw3.h>
 #include <iostream>
+#include <vector>
+#include <string>
 #include "ShaderLoader.hpp"
 #include "Logger.hpp"
+#include "GLParams.hpp"
 
 using namespace std;
 
 Logger logger;
+GLParams glparams;
 const int w_width = 1280;
-const int w_height = 720;
+const int w_height = 960;
 
 /**
  *  GLFW error callback function
@@ -138,7 +142,7 @@ int one_main(void) {
      *  Create the window and prime the video mode using 
      *  the function declared to do this above.
      */
-    GLFWwindow *window = setupWindowAndContext(true);
+    GLFWwindow *window = setupWindowAndContext(false);
     
     if(!window) {
         cout << "Unable to create a GLFW window." << endl;
@@ -151,6 +155,12 @@ int one_main(void) {
      *  Get the version info.
      */
     logger.write("Starting GLFW\n%s\n", glfwGetVersionString());
+    
+    /**
+     *  Get the OpenGL Context params using GLFW and then log them.
+     */
+    vector<string> gl_params = glparams.getGLParams();
+    glparams.logGLParams(gl_params);
     
 //    const GLubyte *renderer = glGetString(GL_RENDERER);
 //    const GLubyte *version = glGetString(GL_VERSION);
@@ -289,6 +299,11 @@ int one_main(void) {
          *  Clear the drawing surface.
          */
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        
+        /**
+         *  Setting the GL Viewport
+         */
+        glViewport(0, 0, w_width, w_height);
         
         /**
          *  Set the background colour
