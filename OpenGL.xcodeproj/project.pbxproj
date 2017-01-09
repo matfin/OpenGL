@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		58B8F0991E1CE8D1005C5C5F /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 58B8F0981E1CE8D1005C5C5F /* main.cpp */; };
-		58B8F0A11E1CE92B005C5C5F /* One.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 58B8F09F1E1CE92B005C5C5F /* One.cpp */; };
+		58B8F0A11E1CE92B005C5C5F /* Shapes.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 58B8F09F1E1CE92B005C5C5F /* Shapes.cpp */; };
 		58B8F0A41E1CED04005C5C5F /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 58B8F0A31E1CED04005C5C5F /* OpenGL.framework */; };
 		58B8F0A71E1CEF0F005C5C5F /* Detect.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 58B8F0A51E1CEF0F005C5C5F /* Detect.cpp */; };
 		58B8F0AC1E1D088B005C5C5F /* libglfw.3.3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 58B8F0AB1E1D088B005C5C5F /* libglfw.3.3.dylib */; };
@@ -18,6 +18,9 @@
 		58B8F0B91E1E6DE3005C5C5F /* one_fs_alt.glsl in CopyFiles */ = {isa = PBXBuildFile; fileRef = 58B8F0B81E1E6811005C5C5F /* one_fs_alt.glsl */; };
 		58B8F0BC1E1FA61F005C5C5F /* Logger.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 58B8F0BA1E1FA61F005C5C5F /* Logger.cpp */; };
 		58B8F0BF1E20F2A7005C5C5F /* GLParams.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 58B8F0BD1E20F2A7005C5C5F /* GLParams.cpp */; };
+		58B8F0C21E212D6A005C5C5F /* Shaders.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 58B8F0C01E212D6A005C5C5F /* Shaders.cpp */; };
+		58B8F0C51E23A6F2005C5C5F /* shaders.vert in CopyFiles */ = {isa = PBXBuildFile; fileRef = 58B8F0C31E21570C005C5C5F /* shaders.vert */; };
+		58B8F0C61E23A6F2005C5C5F /* shaders.frag in CopyFiles */ = {isa = PBXBuildFile; fileRef = 58B8F0C41E215757005C5C5F /* shaders.frag */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -36,6 +39,8 @@
 			dstPath = "";
 			dstSubfolderSpec = 16;
 			files = (
+				58B8F0C51E23A6F2005C5C5F /* shaders.vert in CopyFiles */,
+				58B8F0C61E23A6F2005C5C5F /* shaders.frag in CopyFiles */,
 				58B8F0B91E1E6DE3005C5C5F /* one_fs_alt.glsl in CopyFiles */,
 				58B8F0B61E1D36F5005C5C5F /* one_vs.glsl in CopyFiles */,
 				58B8F0B71E1D36F5005C5C5F /* one_fs.glsl in CopyFiles */,
@@ -47,8 +52,8 @@
 /* Begin PBXFileReference section */
 		58B8F0951E1CE8D1005C5C5F /* OpenGL */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = OpenGL; sourceTree = BUILT_PRODUCTS_DIR; };
 		58B8F0981E1CE8D1005C5C5F /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
-		58B8F09F1E1CE92B005C5C5F /* One.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = One.cpp; sourceTree = "<group>"; };
-		58B8F0A01E1CE92B005C5C5F /* One.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = One.hpp; sourceTree = "<group>"; };
+		58B8F09F1E1CE92B005C5C5F /* Shapes.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Shapes.cpp; sourceTree = "<group>"; };
+		58B8F0A01E1CE92B005C5C5F /* Shapes.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Shapes.hpp; sourceTree = "<group>"; };
 		58B8F0A31E1CED04005C5C5F /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
 		58B8F0A51E1CEF0F005C5C5F /* Detect.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Detect.cpp; sourceTree = "<group>"; };
 		58B8F0A61E1CEF0F005C5C5F /* Detect.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Detect.hpp; sourceTree = "<group>"; };
@@ -63,6 +68,10 @@
 		58B8F0BB1E1FA61F005C5C5F /* Logger.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Logger.hpp; sourceTree = "<group>"; };
 		58B8F0BD1E20F2A7005C5C5F /* GLParams.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLParams.cpp; sourceTree = "<group>"; };
 		58B8F0BE1E20F2A7005C5C5F /* GLParams.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GLParams.hpp; sourceTree = "<group>"; };
+		58B8F0C01E212D6A005C5C5F /* Shaders.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Shaders.cpp; sourceTree = "<group>"; };
+		58B8F0C11E212D6A005C5C5F /* Shaders.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Shaders.hpp; sourceTree = "<group>"; };
+		58B8F0C31E21570C005C5C5F /* shaders.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = shaders.vert; sourceTree = "<group>"; };
+		58B8F0C41E215757005C5C5F /* shaders.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = shaders.frag; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -100,8 +109,8 @@
 			children = (
 				58B8F0AD1E1D2C50005C5C5F /* shaders */,
 				58B8F0981E1CE8D1005C5C5F /* main.cpp */,
-				58B8F09F1E1CE92B005C5C5F /* One.cpp */,
-				58B8F0A01E1CE92B005C5C5F /* One.hpp */,
+				58B8F09F1E1CE92B005C5C5F /* Shapes.cpp */,
+				58B8F0A01E1CE92B005C5C5F /* Shapes.hpp */,
 				58B8F0A51E1CEF0F005C5C5F /* Detect.cpp */,
 				58B8F0A61E1CEF0F005C5C5F /* Detect.hpp */,
 				58B8F0B21E1D311C005C5C5F /* ShaderLoader.cpp */,
@@ -110,6 +119,8 @@
 				58B8F0BB1E1FA61F005C5C5F /* Logger.hpp */,
 				58B8F0BD1E20F2A7005C5C5F /* GLParams.cpp */,
 				58B8F0BE1E20F2A7005C5C5F /* GLParams.hpp */,
+				58B8F0C01E212D6A005C5C5F /* Shaders.cpp */,
+				58B8F0C11E212D6A005C5C5F /* Shaders.hpp */,
 			);
 			path = OpenGL;
 			sourceTree = "<group>";
@@ -130,6 +141,8 @@
 				58B8F0B01E1D2E42005C5C5F /* one_vs.glsl */,
 				58B8F0B11E1D2EC1005C5C5F /* one_fs.glsl */,
 				58B8F0B81E1E6811005C5C5F /* one_fs_alt.glsl */,
+				58B8F0C31E21570C005C5C5F /* shaders.vert */,
+				58B8F0C41E215757005C5C5F /* shaders.frag */,
 			);
 			name = shaders;
 			sourceTree = "<group>";
@@ -192,9 +205,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				58B8F0A11E1CE92B005C5C5F /* One.cpp in Sources */,
+				58B8F0A11E1CE92B005C5C5F /* Shapes.cpp in Sources */,
 				58B8F0BC1E1FA61F005C5C5F /* Logger.cpp in Sources */,
 				58B8F0A71E1CEF0F005C5C5F /* Detect.cpp in Sources */,
+				58B8F0C21E212D6A005C5C5F /* Shaders.cpp in Sources */,
 				58B8F0991E1CE8D1005C5C5F /* main.cpp in Sources */,
 				58B8F0BF1E20F2A7005C5C5F /* GLParams.cpp in Sources */,
 				58B8F0B41E1D311C005C5C5F /* ShaderLoader.cpp in Sources */,

@@ -1,13 +1,12 @@
 //
-//  One.cpp
+//  Shapes.cpp
 //  OpenGL
 //
 //  Created by Matt Finucane on 04/01/2017.
 //  Copyright © 2017 Matt Finucane. All rights reserved.
 //
 
-#include "One.hpp"
-#include <OpenGL/gl3.h>
+#include "Shapes.hpp"
 #include <GLFW/glfw3.h>
 #include <iostream>
 #include <vector>
@@ -140,7 +139,7 @@ GLFWwindow* setupWindowAndContext(bool fullscreen) {
     return window;
 }
 
-int one_main(void) {
+int shapes_main(void) {
     
     /**
      *  Set the error callback
@@ -260,11 +259,11 @@ int one_main(void) {
     /**
      *  Setting up our shapes using the functions above.
      */
-    GLuint vao_triangle_one = setupTriangle(points_triangle_one);
-    GLuint vao_triangle_two = setupTriangle(points_triangle_two);
-    GLuint vao_square_one = setupTriangle(points_square_one);
-    GLuint vao_square_two = setupTriangle(points_square_two);
-    GLuint vao_line_strip = setupLineStrip(line_points);
+//    GLuint vao_triangle_one = setupTriangle(points_triangle_one);
+//    GLuint vao_triangle_two = setupTriangle(points_triangle_two);
+//    GLuint vao_square_one = setupTriangle(points_square_one);
+//    GLuint vao_square_two = setupTriangle(points_square_two);
+//    GLuint vao_line_strip = setupLineStrip(line_points);
     GLuint vao_full_square = setupSquare(full_square_points);
     
     /**
@@ -359,11 +358,11 @@ int one_main(void) {
         /**
          *  Draw the line strip, triangles and then a full square.
          */
-        drawItem(vao_line_strip, GL_LINE_STRIP, 5, shader_program);
-        drawItem(vao_triangle_one, GL_TRIANGLES, 3, shader_program);
-        drawItem(vao_triangle_two, GL_TRIANGLES, 3, shader_program_alt);
-        drawItem(vao_square_one, GL_TRIANGLES, 3, shader_program);
-        drawItem(vao_square_two, GL_TRIANGLES, 3, shader_program);
+//        drawItem(vao_line_strip, GL_LINE_STRIP, 5, shader_program);
+//        drawItem(vao_triangle_one, GL_TRIANGLES, 3, shader_program);
+//        drawItem(vao_triangle_two, GL_TRIANGLES, 3, shader_program_alt);
+//        drawItem(vao_square_one, GL_TRIANGLES, 3, shader_program);
+//        drawItem(vao_square_two, GL_TRIANGLES, 3, shader_program);
         drawItem(vao_full_square, GL_TRIANGLES, 6, shader_program);
         
         /**

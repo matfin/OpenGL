@@ -6,9 +6,10 @@
 //  Copyright © 2017 Matt Finucane. All rights reserved.
 //
 
-#include "One.hpp"
-#include "Detect.hpp"
+#include "Shapes.hpp"
+#include "Shaders.hpp"
 
 int main(int argc, const char * argv[]) {
-    return one_main();
+//    return shapes_main();
+    return shaders_main();
 }
