@@ -8,11 +8,28 @@
 
 #include "Shaders.hpp"
 #include <iostream>
+#include <stdio.h>
 #include <OpenGL/gl3.h>
 #include <GLFW/glfw3.h>
 #include "ShaderLoader.hpp"
 
 using namespace std;
+
+void print_shader_log(GLuint shader_index) {
+    int max_length = 2048;
+    int actual_length = 0;
+    char log[max_length];
+    glGetShaderInfoLog(shader_index, max_length, &actual_length, log);
+    printf("Shader info log for GL index %u:\n%s\n", shader_index, log);
+}
+
+void print_program_info_log(GLuint program) {
+    int max_length = 2048;
+    int actual_length = 0;
+    char log[max_length];
+    glGetProgramInfoLog(program, max_length, &actual_length, log);
+    printf("Program info log for GL index %u:\n%s", program, log);
+}
 
 GLFWwindow *prepareWindow() {
     /**
@@ -80,6 +97,16 @@ GLuint createShader(const char *source, const GLenum type) {
     GLuint shader = glCreateShader(type);
     glShaderSource(shader, 1, &source, NULL);
     glCompileShader(shader);
+    /**
+     *  Some shader compile error checking
+     */
+    int params;
+    glGetShaderiv(shader, GL_COMPILE_STATUS, &params);
+    if(GL_TRUE != params) {
+        fprintf(stderr, "Error: GL Shader index %i did not compile.\n", shader);
+        print_shader_log(shader);
+        return false;
+    }
     return shader;
 }
 
@@ -92,6 +119,18 @@ GLuint linkProgram(const GLuint vert, const GLuint frag) {
     glAttachShader(program, vert);
     glAttachShader(program, frag);
     glLinkProgram(program);
+    
+    /**
+     *  Some program link error checking
+     */
+    int params;
+    glGetProgramiv(program, GL_LINK_STATUS, &params);
+    if(GL_TRUE != params) {
+        fprintf(stderr, "Error: could not link the program at GL index %u\n", program);
+        print_program_info_log(program);
+        return false;
+    }
+    
     /**
      *  Delete the shaders when they are no longer needed.
      */
@@ -104,9 +143,9 @@ GLuint linkProgram(const GLuint vert, const GLuint frag) {
 static float _r = 0.0f;
 static float _g = 0.0f;
 static float _b = 0.0f;
-static float _diff = 0.005f;
+static float _diff = 0.0005f;
 
-void drawingLoop(GLFWwindow *window, GLuint program, GLuint vao) {
+void drawingLoop(GLFWwindow *window, GLuint program, GLuint vao, GLint colour_uniform_location) {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glViewport(0, 0, 1280, 960);
     glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
@@ -114,18 +153,12 @@ void drawingLoop(GLFWwindow *window, GLuint program, GLuint vao) {
     glUseProgram(program);
     
     /**
-     *  Attempt to assign the colour from within here
-     *  as opposed to within the fragment shader itself.
-     *  Calling glGetUniformLocation will somehow return
-     *  a pointer to the fragment shaders uniform vec4 colour.
-     *
      *  We then create a glIUniform4f (note the 4) to pass in the
      *  uniform location and then thencolour we want as an
      *  rgba value (0 - 255 = 0.0f to 1.0f).
      *
      *  Note: It's important to call these two after glUseProgram
      */
-    GLint colour_uniform_location = glGetUniformLocation(program, "inputColour");
     glUniform4f(colour_uniform_location, _r, _g, _b, 1.0f);
     
     glBindVertexArray(vao);
@@ -135,13 +168,15 @@ void drawingLoop(GLFWwindow *window, GLuint program, GLuint vao) {
     glfwSwapBuffers(window);
     
     if(_r >= 1.0f) {
-        _diff = -0.005f;
+        _diff = -0.0005f;
     }
     else if(_r <= 0.0f) {
-        _diff = 0.005f;
+        _diff = 0.0005f;
     }
     
     _r += _diff;
+    _g += _diff;
+    _b += _diff;
 }
 
 int shaders_main(void) {
@@ -171,8 +206,10 @@ int shaders_main(void) {
         GLuint program = linkProgram(vert_shader, frag_shader);
         GLuint vao = prepareTriangle(0.0f, 0.0f, 1.0f, 1.5f);
         
+        GLint colour_uniform_location = glGetUniformLocation(program, "inputColour");
+        
         while(!glfwWindowShouldClose(window)) {
-            drawingLoop(window, program, vao);
+            drawingLoop(window, program, vao, colour_uniform_location);
         }
     }
     catch(exception &e) {
