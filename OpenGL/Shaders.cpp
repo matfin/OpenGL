@@ -8,6 +8,7 @@
 
 #include "Shaders.hpp"
 #include <iostream>
+#include <vector>
 #include <stdio.h>
 #include <OpenGL/gl3.h>
 #include <GLFW/glfw3.h>
@@ -17,6 +18,24 @@
 using namespace std;
 
 GLParams shaders_gl_params;
+
+/**
+ *  This stores a reference to the shapes colour.
+ */
+struct ColourStruct {
+    float r;
+    float g;
+    float b;
+    float a;
+};
+
+/**
+ *  This stores a reference to both the VAO and colour.
+ */
+struct VaoAndColour {
+    GLuint vao;
+    ColourStruct colour;
+};
 
 GLFWwindow *prepareWindow() {
     /**
@@ -127,12 +146,7 @@ GLuint linkProgram(const GLuint vert, const GLuint frag) {
     return program;
 }
 
-static float _r = 0.0f;
-static float _g = 0.0f;
-static float _b = 0.0f;
-static float _diff = 0.0005f;
-
-void drawingLoop(GLFWwindow *window, GLuint program, GLuint vao, GLint colour_uniform_location) {
+void drawingLoop(GLFWwindow *window, GLuint program, vector<VaoAndColour> shapes_colours, GLint colour_uniform_location) {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glViewport(0, 0, 1280, 960);
     glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
@@ -140,30 +154,23 @@ void drawingLoop(GLFWwindow *window, GLuint program, GLuint vao, GLint colour_un
     glUseProgram(program);
     
     /**
-     *  We then create a glIUniform4f (note the 4) to pass in the
-     *  uniform location and then thencolour we want as an
-     *  rgba value (0 - 255 = 0.0f to 1.0f).
-     *
-     *  Note: It's important to call these two after glUseProgram
+     *  Loop through the array of triangle vaos.
      */
-    glUniform4f(colour_uniform_location, _r, _g, _b, 1.0f);
-    
-    glBindVertexArray(vao);
-    glDrawArrays(GL_TRIANGLES, 0, 3);
-    
+    for(auto const &i : shapes_colours) {
+        
+        /**
+         *  We then create a glIUniform4f (note the 4) to pass in the
+         *  uniform location and the colour we want as an
+         *  rgba value (0 - 255 = 0.0f to 1.0f).
+         *
+         *  Note: It's important to call this after glUseProgram
+         */
+        glUniform4f(colour_uniform_location, i.colour.r, i.colour.g, i.colour.b, i.colour.a);
+        glBindVertexArray(i.vao);
+        glDrawArrays(GL_TRIANGLES, 0, 3);
+    }
     glfwPollEvents();
     glfwSwapBuffers(window);
-    
-    if(_r >= 1.0f) {
-        _diff = -0.0005f;
-    }
-    else if(_r <= 0.0f) {
-        _diff = 0.0005f;
-    }
-    
-    _r += _diff;
-    _g += _diff;
-    _b += _diff;
 }
 
 int shaders_main(void) {
@@ -191,12 +198,21 @@ int shaders_main(void) {
         GLuint vert_shader = createShader(vert_shader_src, GL_VERTEX_SHADER);
         GLuint frag_shader = createShader(frag_shader_src, GL_FRAGMENT_SHADER);
         GLuint program = linkProgram(vert_shader, frag_shader);
-        GLuint vao = prepareTriangle(0.0f, 0.0f, 1.0f, 1.5f);
+        
+        /**
+         *  Create 4 shapes with their accompanying colour.
+         */
+        vector<VaoAndColour> shapes_colours = {
+            VaoAndColour{prepareTriangle(-0.5f, 0.5f, 0.8f, 0.8f), {1.0f, 0.0f, 0.0f, 0.0f}},
+            VaoAndColour{prepareTriangle(0.5f, 0.5f, 0.8f, 0.8f), {0.0f, 1.0f, 0.0f, 0.0f}},
+            VaoAndColour{prepareTriangle(-0.5f, -0.5f, 0.8f, 0.8f), {0.0f, 0.0f, 1.0f, 0.0f}},
+            VaoAndColour{prepareTriangle(0.5f, -0.5f, 0.8f, 0.8f), {1.0f, 1.0f, 0.0f, 0.0f}}
+        };
         
         GLint colour_uniform_location = glGetUniformLocation(program, "inputColour");
         
         while(!glfwWindowShouldClose(window)) {
-            drawingLoop(window, program, vao, colour_uniform_location);
+            drawingLoop(window, program, shapes_colours, colour_uniform_location);
         }
     }
     catch(exception &e) {
