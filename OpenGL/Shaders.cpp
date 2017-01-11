@@ -12,24 +12,11 @@
 #include <OpenGL/gl3.h>
 #include <GLFW/glfw3.h>
 #include "ShaderLoader.hpp"
+#include "GLParams.hpp"
 
 using namespace std;
 
-void print_shader_log(GLuint shader_index) {
-    int max_length = 2048;
-    int actual_length = 0;
-    char log[max_length];
-    glGetShaderInfoLog(shader_index, max_length, &actual_length, log);
-    printf("Shader info log for GL index %u:\n%s\n", shader_index, log);
-}
-
-void print_program_info_log(GLuint program) {
-    int max_length = 2048;
-    int actual_length = 0;
-    char log[max_length];
-    glGetProgramInfoLog(program, max_length, &actual_length, log);
-    printf("Program info log for GL index %u:\n%s", program, log);
-}
+GLParams shaders_gl_params;
 
 GLFWwindow *prepareWindow() {
     /**
@@ -104,7 +91,7 @@ GLuint createShader(const char *source, const GLenum type) {
     glGetShaderiv(shader, GL_COMPILE_STATUS, &params);
     if(GL_TRUE != params) {
         fprintf(stderr, "Error: GL Shader index %i did not compile.\n", shader);
-        print_shader_log(shader);
+        shaders_gl_params.print_shader_log(shader);
         return false;
     }
     return shader;
@@ -127,7 +114,7 @@ GLuint linkProgram(const GLuint vert, const GLuint frag) {
     glGetProgramiv(program, GL_LINK_STATUS, &params);
     if(GL_TRUE != params) {
         fprintf(stderr, "Error: could not link the program at GL index %u\n", program);
-        print_program_info_log(program);
+        shaders_gl_params.print_program_info_log(program);
         return false;
     }
     
