@@ -112,9 +112,8 @@ GLuint prepareTriangle(const float pos_x, const float pos_y, const float width, 
     GLuint vao;
     glGenVertexArrays(1, &vao);
     glBindVertexArray(vao);
-    glEnableVertexAttribArray(0);
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, NULL);
-    
+    glEnableVertexAttribArray(0);
     return vao;
 }
 
@@ -295,7 +294,7 @@ int shaders_main(void) {
             VaoAndColour{
                 prepareTriangle(0.5f, -0.5f, 0.8f, 0.8f),
                 {1.0f, 1.0f, 0.0f, 0.0f},
-                GL_POINTS
+                GL_LINE_LOOP
             }
         };
         

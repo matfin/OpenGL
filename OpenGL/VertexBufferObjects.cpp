@@ -108,27 +108,12 @@ void keyListeningLoopForVBO(GLFWwindow *window) {
 }
 
 /**
- *  The main draw loop
- *
- *  @param      {GLFWwindow*}
- *  @return     {void}
+ *  Assigns two VBO (Vertex Buffer Objects) 
+ *  to a single VAO (Vertex Array Object) which
+ *  will then be returned. 
+ *  This creates a simple triangle with two buffers.
  */
-void drawloopForVBO(GLFWwindow *window) {
-    /**
-     *  Standard pre-draw tasks
-     */
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    glViewport(0, 0, 1080, 810);
-    glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
-    
-    /**
-     *  Poll for events and swap buffers into the window.
-     */
-    glfwPollEvents();
-    glfwSwapBuffers(window);
-}
-
-void x() {
+GLuint prepareTriangleItem() {
     
     /**
      *  Array of GLfloats for points
@@ -160,6 +145,84 @@ void x() {
     glGenBuffers(1, &colours_vbo);
     glBindBuffer(GL_ARRAY_BUFFER, colours_vbo);
     glBufferData(GL_ARRAY_BUFFER, sizeof(colours), colours, GL_STATIC_DRAW);
+    
+    /**
+     *  Setting up the vao.
+     */
+    GLuint vao;
+    glGenVertexArrays(1, &vao);
+    glBindVertexArray(vao);
+    
+    /**
+     *  We bind the buffer of type GL_ARRAY_BUFFER
+     *  for the points_vbo which was taken care of above.
+     *  
+     *  We then call glVertexAttribPointer with the params:
+     *
+     *  - first we set the index number to 0.
+     *  - we then specify the number of components per generic vertex attribute (3 in this case for x, y, z).
+     *  - we specify the data type of each component of the array, in this case GL_FLOAT.
+     *  - defines whether fixed point values should be normalised, false in this case so GL_FALSE.
+     *  - stride specifies the byte offset between consecutive vertex attributes, set to 0 in this case.
+     *  - pointer specfies the offset of the first component of the first generic vertex attribute, 0 in this case.
+     */
+    glBindBuffer(GL_ARRAY_BUFFER, points_vbo);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, NULL);
+    
+    glBindBuffer(GL_ARRAY_BUFFER, colours_vbo);
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, NULL);
+    
+    /**
+     *  We now need to set up the vertex attribute pointers to point 
+     *  to what we created above. In this case that will be 0 for the 
+     *  points and 1 for the colours.
+     */
+    glEnableVertexAttribArray(0);
+    glEnableVertexAttribArray(1);
+    
+    return vao;
+}
+
+/**
+ *  The main draw loop
+ *
+ *  @param      {GLFWwindow*}   - the window
+ *  @param      {GLuint*}       - the shader program
+ *  @return     {void}
+ */
+void drawloopForVBO(GLFWwindow *window, GLuint program, GLuint vao) {
+    /**
+     *  Standard pre-draw tasks
+     */
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glViewport(0, 0, 1080, 810);
+    glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+    
+    /**
+     *  Use the program we passed in.
+     */
+    glUseProgram(program);
+    
+    /**
+     *  Check the program is ready
+     */
+    int ready;
+    glGetProgramiv(program, GL_LINK_STATUS, &ready);
+    
+    if(GL_TRUE == ready) {
+        /**
+         *  Then prepare and draw the VAO we passed in
+         */
+        glBindVertexArray(vao);
+        glDrawArrays(GL_TRIANGLES, 0, 3);
+
+    }
+    
+    /**
+     *  Poll for events and swap buffers into the window.
+     */
+    glfwPollEvents();
+    glfwSwapBuffers(window);
 }
 
 /**
@@ -185,11 +248,34 @@ int vertex_buffer_objects_main(void) {
         GLFWwindow *window = prepareWindowForVBO();
         glfwMakeContextCurrent(window);
         
+        /**
+         *  Other setup: TODO explain.
+         */
         glEnable(GL_DEPTH_TEST);
         glDepthFunc(GL_LESS);
         
+        /**
+         *  Let's grab the shaders and compile them in to a program,
+         *  printing the program details along the way.
+         */
+        string vertex_shader_string = shader_loader_vbo.load("vertex_buffer_objects.vert");
+        string fragment_shader_string = shader_loader_vbo.load("vertex_buffer_objects.frag");
+        const char *vertex_shader_source = vertex_shader_string.c_str();
+        const char *fragment_shader_source = fragment_shader_string.c_str();
+        
+        GLuint vertex_shader = createShaderForVBO(vertex_shader_source, GL_VERTEX_SHADER);
+        GLuint fragment_shader = createShaderForVBO(fragment_shader_source, GL_FRAGMENT_SHADER);
+        GLuint program = compileProgramForVBO(vertex_shader, fragment_shader);
+        
+//        gl_params_vbo.print_verbose(program);
+        
+        /**
+         *  Then we create a reference to our VAO
+         */
+        GLuint vao = prepareTriangleItem();
+        
         while(!glfwWindowShouldClose(window)) {
-            drawloopForVBO(window);
+            drawloopForVBO(window, program, vao);
             keyListeningLoopForVBO(window);
         }
     }
