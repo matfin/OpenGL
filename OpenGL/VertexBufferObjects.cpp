@@ -183,6 +183,35 @@ GLuint prepareTriangleItem() {
     return vao;
 }
 
+void applyTransformationMatrix(const GLuint program) {
+    /**
+     *  Declare a matrix via an array of floats.
+     *  This will move the triangle 0.5 units to
+     *  the right.
+     *  Note: This takes the form column-major
+     */
+    float matrix[] = {
+        1.0f, 0.0f, 0.0f, 0.0f, // first column
+        0.0f, 1.0f, 0.0f, 0.0f, // second column
+        0.0f, 0.0f, 1.0f, 0.0f, // third column
+        0.5f, 0.0f, 0.0f, 1.0f  // fourth column 
+    };
+    
+    /**
+     *  Find the reference to the "matrix" variable 
+     *  inside the compiled GL Program.
+     *  Then apply the above array of floats to it 
+     *  so we can pass that value in.
+     */
+    int matrix_location = glGetUniformLocation(program, "matrix");
+    if(GL_TRUE != matrix_location) {
+        glUniformMatrix4fv(matrix_location, 1, GL_FALSE, matrix);
+    }
+    else {
+        cout << "Matrix transformation could not be applied." << endl;
+    }
+}
+
 /**
  *  The main draw loop
  *
@@ -201,7 +230,7 @@ void drawloopForVBO(GLFWwindow *window, GLuint program, GLuint vao) {
     /**
      *  Use the program we passed in.
      */
-    glUseProgram(program);
+//    glUseProgram(program);
     
     /**
      *  Check the program is ready
@@ -215,7 +244,6 @@ void drawloopForVBO(GLFWwindow *window, GLuint program, GLuint vao) {
          */
         glBindVertexArray(vao);
         glDrawArrays(GL_TRIANGLES, 0, 3);
-
     }
     
     /**
@@ -255,6 +283,13 @@ int vertex_buffer_objects_main(void) {
         glDepthFunc(GL_LESS);
         
         /**
+         *  Exploring back face culling
+         */
+        glEnable(GL_CULL_FACE);
+        glCullFace(GL_BACK);
+        glFrontFace(GL_CW);
+        
+        /**
          *  Let's grab the shaders and compile them in to a program,
          *  printing the program details along the way.
          */
@@ -267,12 +302,28 @@ int vertex_buffer_objects_main(void) {
         GLuint fragment_shader = createShaderForVBO(fragment_shader_source, GL_FRAGMENT_SHADER);
         GLuint program = compileProgramForVBO(vertex_shader, fragment_shader);
         
-//        gl_params_vbo.print_verbose(program);
+        gl_params_vbo.print_verbose(program);
         
         /**
          *  Then we create a reference to our VAO
          */
         GLuint vao = prepareTriangleItem();
+        
+        /**
+         *  We need to pass in the matrix location 
+         *  to the program.
+         */
+//        int matrix_location = glGetUniformLocation(program, "matrix");
+        /**
+         *  Make a call to use the program
+         */
+        glUseProgram(program);
+        
+        /**
+         *  Then make a call to one of our functions to 
+         *  set the matrix (floats).
+         */
+        applyTransformationMatrix(program);
         
         while(!glfwWindowShouldClose(window)) {
             drawloopForVBO(window, program, vao);

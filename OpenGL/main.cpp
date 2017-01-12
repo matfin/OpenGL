@@ -6,8 +6,8 @@
 //  Copyright © 2017 Matt Finucane. All rights reserved.
 //
 
-//#include "Shapes.hpp"
-//#include "Shaders.hpp"
+#include "Shapes.hpp"
+#include "Shaders.hpp"
 #include "VertexBufferObjects.hpp"
 
 int main(int argc, const char * argv[]) {
