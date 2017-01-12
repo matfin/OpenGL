@@ -139,10 +139,6 @@ GLuint createShader(const char *source, const GLenum type) {
     return shader;
 }
 
-bool validateGLProgram() {
-    return true;
-}
-
 GLuint linkProgram(const GLuint vert, const GLuint frag) {
     GLuint program = glCreateProgram();
     glAttachShader(program, vert);
