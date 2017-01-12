@@ -42,6 +42,7 @@ struct ColourStruct {
 struct VaoAndColour {
     GLuint vao;
     ColourStruct colour;
+    GLenum render_mode;
 };
 
 enum Adjustment {
@@ -111,7 +112,6 @@ GLuint prepareTriangle(const float pos_x, const float pos_y, const float width, 
     GLuint vao;
     glGenVertexArrays(1, &vao);
     glBindVertexArray(vao);
-    glBindBuffer(GL_ARRAY_BUFFER, vbo);
     glEnableVertexAttribArray(0);
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, NULL);
     
@@ -210,7 +210,7 @@ void drawingLoop(GLFWwindow *window, GLuint program, vector<VaoAndColour> shapes
             i.colour.a
         );
         glBindVertexArray(i.vao);
-        glDrawArrays(GL_TRIANGLES, 0, 3);
+        glDrawArrays(i.render_mode, 0, 3);
     }
     glfwPollEvents();
     glfwSwapBuffers(window);
@@ -283,19 +283,23 @@ int shaders_main(void) {
         vector<VaoAndColour> shapes_colours = {
             VaoAndColour{
                 prepareTriangle(-0.5f, 0.5f, 0.8f, 0.8f),
-                {1.0f, 0.0f, 0.0f, 0.0f}
+                {1.0f, 0.0f, 0.0f, 0.0f},
+                GL_TRIANGLES
             },
             VaoAndColour{
                 prepareTriangle(0.5f, 0.5f, 0.8f, 0.8f),
-                {0.0f, 1.0f, 0.0f, 0.0f}
+                {0.0f, 1.0f, 0.0f, 0.0f},
+                GL_LINE_LOOP
             },
             VaoAndColour{
                 prepareTriangle(-0.5f, -0.5f, 0.8f, 0.8f),
-                {0.0f, 0.0f, 1.0f, 0.0f}
+                {0.0f, 0.0f, 1.0f, 0.0f},
+                GL_TRIANGLE_STRIP
             },
             VaoAndColour{
                 prepareTriangle(0.5f, -0.5f, 0.8f, 0.8f),
-                {1.0f, 1.0f, 0.0f, 0.0f}
+                {1.0f, 1.0f, 0.0f, 0.0f},
+                GL_POINTS
             }
         };
         
