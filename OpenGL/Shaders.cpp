@@ -20,7 +20,14 @@ using namespace std;
 GLParams shaders_gl_params;
 
 /**
- *  This stores a reference to the shapes colour.
+ *  This stores a reference to the shapes colour using
+ *  r: red
+ *  g: green
+ *  b: blue
+ *  a: alpha
+ *  dr: difference red
+ *  dg: difference green
+ *  db: difference blue
  */
 struct ColourStruct {
     float r;
@@ -35,6 +42,22 @@ struct ColourStruct {
 struct VaoAndColour {
     GLuint vao;
     ColourStruct colour;
+};
+
+enum Adjustment {
+    UP,
+    DOWN
+};
+
+enum KeyAction {
+    ACTION_NONE,
+    ACTION_QUIT,
+    ACTION_COLOUR_UP,
+    ACTION_COLOUR_DOWN,
+    ACTION_POSITION_UP,
+    ACTION_POSITION_DOWN,
+    ACTION_POSITION_LEFT,
+    ACTION_POSITION_RIGHT,
 };
 
 GLFWwindow *prepareWindow() {
@@ -146,6 +169,21 @@ GLuint linkProgram(const GLuint vert, const GLuint frag) {
     return program;
 }
 
+void adjustColourWithBounds(float &colour, Adjustment adjustment) {
+    switch(adjustment) {
+        case UP: {
+            if(colour >= 1.0f) colour = 1.0f;
+            else colour += 0.05f;
+            break;
+        }
+        case DOWN: {
+            if(colour <= 0.0f) colour = 0.0f;
+            else colour -= 0.05f;
+            break;
+        }
+    }
+}
+
 void drawingLoop(GLFWwindow *window, GLuint program, vector<VaoAndColour> shapes_colours, GLint colour_uniform_location) {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glViewport(0, 0, 1280, 960);
@@ -154,10 +192,9 @@ void drawingLoop(GLFWwindow *window, GLuint program, vector<VaoAndColour> shapes
     glUseProgram(program);
     
     /**
-     *  Loop through the array of triangle vaos.
+     *  Loop through the array of VaoAndColour.
      */
     for(auto const &i : shapes_colours) {
-        
         /**
          *  We then create a glIUniform4f (note the 4) to pass in the
          *  uniform location and the colour we want as an
@@ -165,12 +202,53 @@ void drawingLoop(GLFWwindow *window, GLuint program, vector<VaoAndColour> shapes
          *
          *  Note: It's important to call this after glUseProgram
          */
-        glUniform4f(colour_uniform_location, i.colour.r, i.colour.g, i.colour.b, i.colour.a);
+        glUniform4f(
+            colour_uniform_location,
+            i.colour.r,
+            i.colour.g,
+            i.colour.b,
+            i.colour.a
+        );
         glBindVertexArray(i.vao);
         glDrawArrays(GL_TRIANGLES, 0, 3);
     }
     glfwPollEvents();
     glfwSwapBuffers(window);
+}
+
+void adjustColour(VaoAndColour &i, Adjustment adjustment) {    
+    adjustColourWithBounds(i.colour.r, adjustment);
+    adjustColourWithBounds(i.colour.g, adjustment);
+    adjustColourWithBounds(i.colour.b, adjustment);
+}
+
+/**
+ *  Takes our window, listens for the key press 
+ *  and returns
+ */
+KeyAction keyListeningLoop(GLFWwindow *window) {
+    if(GLFW_PRESS == glfwGetKey(window, GLFW_KEY_ESCAPE)) {
+        return ACTION_QUIT;
+    }
+    if(GLFW_PRESS == glfwGetKey(window, GLFW_KEY_UP)) {
+        return ACTION_POSITION_UP;
+    }
+    if(GLFW_PRESS == glfwGetKey(window, GLFW_KEY_DOWN)) {
+        return ACTION_POSITION_DOWN;
+    }
+    if(GLFW_PRESS == glfwGetKey(window, GLFW_KEY_LEFT)) {
+        return ACTION_POSITION_LEFT;
+    }
+    if(GLFW_PRESS == glfwGetKey(window, GLFW_KEY_RIGHT)) {
+        return ACTION_POSITION_RIGHT;
+    }
+    if(GLFW_PRESS == glfwGetKey(window, GLFW_KEY_W)) {
+        return ACTION_COLOUR_UP;
+    }
+    if(GLFW_PRESS == glfwGetKey(window, GLFW_KEY_S)) {
+        return ACTION_COLOUR_DOWN;
+    }
+    return ACTION_NONE;
 }
 
 int shaders_main(void) {
@@ -203,16 +281,60 @@ int shaders_main(void) {
          *  Create 4 shapes with their accompanying colour.
          */
         vector<VaoAndColour> shapes_colours = {
-            VaoAndColour{prepareTriangle(-0.5f, 0.5f, 0.8f, 0.8f), {1.0f, 0.0f, 0.0f, 0.0f}},
-            VaoAndColour{prepareTriangle(0.5f, 0.5f, 0.8f, 0.8f), {0.0f, 1.0f, 0.0f, 0.0f}},
-            VaoAndColour{prepareTriangle(-0.5f, -0.5f, 0.8f, 0.8f), {0.0f, 0.0f, 1.0f, 0.0f}},
-            VaoAndColour{prepareTriangle(0.5f, -0.5f, 0.8f, 0.8f), {1.0f, 1.0f, 0.0f, 0.0f}}
+            VaoAndColour{
+                prepareTriangle(-0.5f, 0.5f, 0.8f, 0.8f),
+                {1.0f, 0.0f, 0.0f, 0.0f}
+            },
+            VaoAndColour{
+                prepareTriangle(0.5f, 0.5f, 0.8f, 0.8f),
+                {0.0f, 1.0f, 0.0f, 0.0f}
+            },
+            VaoAndColour{
+                prepareTriangle(-0.5f, -0.5f, 0.8f, 0.8f),
+                {0.0f, 0.0f, 1.0f, 0.0f}
+            },
+            VaoAndColour{
+                prepareTriangle(0.5f, -0.5f, 0.8f, 0.8f),
+                {1.0f, 1.0f, 0.0f, 0.0f}
+            }
         };
         
         GLint colour_uniform_location = glGetUniformLocation(program, "inputColour");
         
         while(!glfwWindowShouldClose(window)) {
+            
             drawingLoop(window, program, shapes_colours, colour_uniform_location);
+            
+            switch(keyListeningLoop(window)) {
+                case ACTION_QUIT: {
+                    glfwSetWindowShouldClose(window, 1);
+                    break;
+                }
+                case ACTION_POSITION_UP: {
+                    break;
+                }
+                case ACTION_POSITION_DOWN: {
+                    break;
+                }
+                case ACTION_POSITION_LEFT: {
+                    break;
+                }
+                case ACTION_POSITION_RIGHT: {
+                    break;
+                }
+                case ACTION_COLOUR_UP: {
+                    for(auto &i : shapes_colours) {
+                        adjustColour(i, UP);
+                    }
+                    break;
+                }
+                case ACTION_COLOUR_DOWN: {
+                    for(auto &i : shapes_colours) {
+                        adjustColour(i, DOWN);
+                    }
+                    break;
+                }
+            }
         }
     }
     catch(exception &e) {
