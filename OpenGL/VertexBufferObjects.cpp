@@ -169,18 +169,48 @@ GLuint prepareTriangleItem(const GLfloat *points, const GLfloat *colours) {
     return vao;
 }
 
-void applyTransformationMatrix(const GLuint program, const float move_x) {
+void applyTransformationMatrix(const GLuint program, const float move, const float rotate) {
     /**
-     *  Declare a matrix via an array of floats.
-     *  This will move the triangle 0.5 units to
-     *  the right.
+     *  Declare a translation matrix via an array 
+     *  of floats.
+     *  This will move the triangle along the x
+     *  axis (where move is specified)
      *  Note: This takes the form column-major
      */
-    float matrix[] = {
+    float translation_matrix[] = {
         1.0f, 0.0f, 0.0f, 0.0f, // first column
         0.0f, 1.0f, 0.0f, 0.0f, // second column
         0.0f, 0.0f, 1.0f, 0.0f, // third column
-        (0.0f + move_x), 0.0f, 0.0f, 1.0f  // fourth column
+        (0.0f + move), 0.0f, 0.0f, 1.0f  // fourth column
+    };
+    
+    /**
+     *  Declaring a 2d rotation matrices array
+     *  of floats. Here we have:
+     *  
+     *  - x axis rotation matrix
+     *  - y axis rotation matrix
+     *  - z axis rotation matrix
+     */
+    float rotation_matrices[3][16] = {
+        {
+            1.0f, 0.0f, 0.0f, 0.0f,
+            0.0f, cosf(rotate), sinf(rotate), 0.0f,
+            0.0f, -sinf(rotate), cosf(rotate), 0.0f,
+            0.0f, 0.0f, 0.0f, 1.0f
+        },
+        {
+            cosf(move), 0.0f, -sinf(move), 0.0f,
+            0.0f, 1.0f, 0.0f, 0.0f,
+            sinf(move), 0.0f, cosf(move), 0.0f,
+            0.0f, 0.0f, 0.0f, 1.0f
+        },
+        {
+            cosf(move), sinf(move), 0.0f, 0.0f,
+            -sinf(move), cosf(move), 0.0f, 0.0f,
+            0.0f, 0.0f, 1.0f, 0.0f,
+            0.0f, 0.0f, 0.0f, 1.0f
+        }
     };
     
     /**
@@ -192,7 +222,16 @@ void applyTransformationMatrix(const GLuint program, const float move_x) {
     int matrix_location = glGetUniformLocation(program, "matrix");
     
     if(GL_TRUE != matrix_location) {
-        glUniformMatrix4fv(matrix_location, 1, GL_FALSE, matrix);
+        /**
+         *  Translation matrix
+         */
+        //glUniformMatrix4fv(matrix_location, 1, GL_FALSE, translation_matrix);
+        /**
+         *  Calling the rotation matrix (x, y, z)
+         */
+        glUniformMatrix4fv(matrix_location, 1, GL_FALSE, rotation_matrices[0]);
+//        glUniformMatrix4fv(matrix_location, 1, GL_FALSE, rotation_matrices[1]);
+//        glUniformMatrix4fv(matrix_location, 1, GL_FALSE, rotation_matrices[2]);
     }
     else {
         cout << "Matrix transformation could not be applied." << endl;
@@ -314,9 +353,10 @@ int vertex_buffer_objects_main(void) {
         /**
          *  To be used for animating the transformation matrix.
          */
-        float speed = 0.3f;
+        float speed = 1.0f;
         float last_x_position = 0.0f;
         float move_x = 0.0f;
+        float rotate_x = 0.0f;
         
         while(!glfwWindowShouldClose(window)) {
             
@@ -326,18 +366,18 @@ int vertex_buffer_objects_main(void) {
             previous_seconds = current_seconds;
             float t = fabs(last_x_position);
             
-            if(t >= 0.5f) {
+            if(t >= 1.0f) {
                 speed = -speed;
             }
             
-            move_x = (elapsed_seconds * speed) + last_x_position;
+            move_x = rotate_x = (elapsed_seconds * speed) + last_x_position;
             last_x_position = move_x;
             
             /**
              *  Then make a call to one of our functions to
              *  set the matrix (floats).
              */
-            applyTransformationMatrix(program, move_x);
+            applyTransformationMatrix(program, move_x, rotate_x);
 
             /**
              *  Then draw and poll for key presses.
