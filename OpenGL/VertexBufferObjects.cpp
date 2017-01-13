@@ -12,6 +12,7 @@
 #include <stdio.h>
 #include <OpenGL/gl3.h>
 #include <GLFW/glfw3.h>
+#include <math.h>
 #include "ShaderLoader.hpp"
 #include "GLParams.hpp"
 
@@ -113,22 +114,7 @@ void keyListeningLoopForVBO(GLFWwindow *window) {
  *  will then be returned. 
  *  This creates a simple triangle with two buffers.
  */
-GLuint prepareTriangleItem() {
-    
-    /**
-     *  Array of GLfloats for points
-     *  and colours.
-     */
-    GLfloat points[] = {
-        0.0f, 0.5f, 0.0f,
-        0.5f, -0.5f, 0.0f,
-        -0.5f, -0.5f, 0.0f
-    };
-    GLfloat colours[] = {
-        1.0f, 0.0f, 0.0f,
-        0.0f, 1.0f, 0.0f,
-        0.0f, 0.0f, 1.0f
-    };
+GLuint prepareTriangleItem(const GLfloat *points, const GLfloat *colours) {
     
     /**
      *  Buffer for points.
@@ -136,7 +122,7 @@ GLuint prepareTriangleItem() {
     GLuint points_vbo;
     glGenBuffers(1, &points_vbo);
     glBindBuffer(GL_ARRAY_BUFFER, points_vbo);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(points), points, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, 12 * sizeof(points), points, GL_STATIC_DRAW);
     
     /**
      *  Buffer for colours.
@@ -144,7 +130,7 @@ GLuint prepareTriangleItem() {
     GLuint colours_vbo;
     glGenBuffers(1, &colours_vbo);
     glBindBuffer(GL_ARRAY_BUFFER, colours_vbo);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(colours), colours, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, 12 * sizeof(colours), colours, GL_STATIC_DRAW);
     
     /**
      *  Setting up the vao.
@@ -183,7 +169,7 @@ GLuint prepareTriangleItem() {
     return vao;
 }
 
-void applyTransformationMatrix(const GLuint program) {
+void applyTransformationMatrix(const GLuint program, const float move_x) {
     /**
      *  Declare a matrix via an array of floats.
      *  This will move the triangle 0.5 units to
@@ -194,7 +180,7 @@ void applyTransformationMatrix(const GLuint program) {
         1.0f, 0.0f, 0.0f, 0.0f, // first column
         0.0f, 1.0f, 0.0f, 0.0f, // second column
         0.0f, 0.0f, 1.0f, 0.0f, // third column
-        0.5f, 0.0f, 0.0f, 1.0f  // fourth column 
+        (0.0f + move_x), 0.0f, 0.0f, 1.0f  // fourth column
     };
     
     /**
@@ -204,6 +190,7 @@ void applyTransformationMatrix(const GLuint program) {
      *  so we can pass that value in.
      */
     int matrix_location = glGetUniformLocation(program, "matrix");
+    
     if(GL_TRUE != matrix_location) {
         glUniformMatrix4fv(matrix_location, 1, GL_FALSE, matrix);
     }
@@ -226,11 +213,6 @@ void drawloopForVBO(GLFWwindow *window, GLuint program, GLuint vao) {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glViewport(0, 0, 1080, 810);
     glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
-    
-    /**
-     *  Use the program we passed in.
-     */
-//    glUseProgram(program);
     
     /**
      *  Check the program is ready
@@ -305,27 +287,61 @@ int vertex_buffer_objects_main(void) {
         gl_params_vbo.print_verbose(program);
         
         /**
-         *  Then we create a reference to our VAO
+         *  Array of GLfloats for points
+         *  and colours.
          */
-        GLuint vao = prepareTriangleItem();
+        GLfloat points[] = {
+            0.0f, 0.5f, 0.0f,
+            0.5f, -0.5f, 0.0f,
+            -0.5f, -0.5f, 0.0f
+        };
+        GLfloat colours[] = {
+            1.0f, 0.0f, 0.0f,
+            0.0f, 1.0f, 0.0f,
+            0.0f, 0.0f, 1.0f
+        };
         
         /**
-         *  We need to pass in the matrix location 
-         *  to the program.
+         *  Then we create a reference to our VAO
          */
-//        int matrix_location = glGetUniformLocation(program, "matrix");
+        GLuint vao = prepareTriangleItem(points, colours);
+        
         /**
          *  Make a call to use the program
          */
         glUseProgram(program);
         
         /**
-         *  Then make a call to one of our functions to 
-         *  set the matrix (floats).
+         *  To be used for animating the transformation matrix.
          */
-        applyTransformationMatrix(program);
+        float speed = 0.3f;
+        float last_x_position = 0.0f;
+        float move_x = 0.0f;
         
         while(!glfwWindowShouldClose(window)) {
+            
+            static double previous_seconds = glfwGetTime();
+            double current_seconds = glfwGetTime();
+            double elapsed_seconds = current_seconds - previous_seconds;
+            previous_seconds = current_seconds;
+            float t = fabs(last_x_position);
+            
+            if(t >= 0.5f) {
+                speed = -speed;
+            }
+            
+            move_x = (elapsed_seconds * speed) + last_x_position;
+            last_x_position = move_x;
+            
+            /**
+             *  Then make a call to one of our functions to
+             *  set the matrix (floats).
+             */
+            applyTransformationMatrix(program, move_x);
+
+            /**
+             *  Then draw and poll for key presses.
+             */
             drawloopForVBO(window, program, vao);
             keyListeningLoopForVBO(window);
         }
