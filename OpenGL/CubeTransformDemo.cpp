@@ -272,7 +272,6 @@ void CubeTransformDemo::drawLoop(GLuint vao) {
 
 void CubeTransformDemo::applyTransformationMatrix(void) {
     int matrix_location = glGetUniformLocation(program, "matrix");
-    Matrices m;
     if(GL_TRUE != matrix_location) {
         glUniformMatrix4fv(matrix_location, 1, GL_FALSE, m.translation);
     }
@@ -303,29 +302,42 @@ void CubeTransformDemo::keyActionListener(void) {
          */
         glfwSetWindowShouldClose(window, 1);
     }
-}
-
-void CubeTransformDemo::rotateX(float rotation) {
     
-}
-
-void CubeTransformDemo::rotateY(float rotation) {
+    if(GLFW_PRESS == glfwGetKey(window, GLFW_KEY_LEFT)) {
+        translateX(LEFT);
+    }
     
-}
-
-void CubeTransformDemo::rotateZ(float rotation) {
+    if(GLFW_PRESS == glfwGetKey(window, GLFW_KEY_RIGHT)) {
+        translateX(RIGHT);
+    }
     
-}
-
-void CubeTransformDemo::translateX(float translation) {
+    if(GLFW_PRESS == glfwGetKey(window, GLFW_KEY_UP)) {
+        translateY(UP);
+    }
     
+    if(GLFW_PRESS == glfwGetKey(window, GLFW_KEY_DOWN)) {
+        translateY(DOWN);
+    }
 }
 
-void CubeTransformDemo::translateY(float translation) {
-    
+void CubeTransformDemo::rotateX(Direction direction) {
 }
 
-void CubeTransformDemo::translateZ(float translation) {
+void CubeTransformDemo::rotateY(float rotation, Direction direction) {
+}
+
+void CubeTransformDemo::rotateZ(float rotation, Direction direction) {
+}
+
+void CubeTransformDemo::translateX(Direction direction) {
+    m.translateX(direction);
+}
+
+void CubeTransformDemo::translateY(Direction direction) {
+    m.translateY(direction);
+}
+
+void CubeTransformDemo::translateZ(float translation, Direction direction) {
     
 }
 

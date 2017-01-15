@@ -9,7 +9,7 @@
 #ifndef CubeTransformDemo_hpp
 #define CubeTransformDemo_hpp
 
-#include <OpenGL/gl3.h>
+//#include <OpenGL/gl3.h>
 #include <GLFW/glfw3.h>
 #include <string>
 #include <vector>
@@ -17,38 +17,79 @@
 #include "ShaderLoader.hpp"
 #include "GLParams.hpp"
 
+enum Direction {
+    LEFT,
+    RIGHT,
+    UP,
+    DOWN
+};
+
 struct Matrices {
-    
-    float rotate = 0.0f;
-    float move = 0.0f;
-    
-    float rotation[3][16] = {
-        {
-            1.0f, 0.0f, 0.0f, 0.0f,
-            0.0f, cosf(rotate), sinf(rotate), 0.0f,
-            0.0f, -sinf(rotate), cosf(rotate), 0.0f,
-            0.0f, 0.0f, 0.0f, 1.0f
-        },
-        {
-            cosf(move), 0.0f, -sinf(move), 0.0f,
-            0.0f, 1.0f, 0.0f, 0.0f,
-            sinf(move), 0.0f, cosf(move), 0.0f,
-            0.0f, 0.0f, 0.0f, 1.0f
-        },
-        {
-            cosf(move), sinf(move), 0.0f, 0.0f,
-            -sinf(move), cosf(move), 0.0f, 0.0f,
-            0.0f, 0.0f, 1.0f, 0.0f,
-            0.0f, 0.0f, 0.0f, 1.0f
-        }
+private:
+    float rotate_x = 0.0f;
+    float rotate_y = 0.0f;
+    float rotate_z = 0.0f;
+    float move_x = 0.0f;
+    float move_y = 0.0f;
+
+public:
+    float rotation_x[16] = {
+        1.0f, 0.0f, 0.0f, 0.0f,
+        0.0f, cosf(rotate_x), sinf(rotate_x), 0.0f,
+        0.0f, -sinf(rotate_x), cosf(rotate_x), 0.0f,
+        0.0f, 0.0f, 0.0f, 1.0f
     };
+    
+    float rotation_y[16] = {
+        cosf(rotate_y), 0.0f, -sinf(rotate_y), 0.0f,
+        0.0f, 1.0f, 0.0f, 0.0f,
+        sinf(rotate_y), 0.0f, cosf(rotate_y), 0.0f,
+        0.0f, 0.0f, 0.0f, 1.0f
+    };
+    
+    float rotation_z[16] = {
+        cosf(rotate_z), sinf(rotate_z), 0.0f, 0.0f,
+        -sinf(rotate_z), cosf(rotate_z), 0.0f, 0.0f,
+        0.0f, 0.0f, 1.0f, 0.0f,
+        0.0f, 0.0f, 0.0f, 1.0f
+    };
+    
     float translation[16] = {
         1.0f, 0.0f, 0.0f, 0.0f,
         0.0f, 1.0f, 0.0f, 0.0f,
         0.0f, 0.0f, 1.0f, 0.0f,
-        (0.0f + move), 0.0f, 0.0f, 1.0f
+        move_x, move_y, 0.0f, 1.0f
     };
+    
     float scale[16] = {};
+    
+    void translateX(Direction direction) {
+        switch(direction) {
+            case LEFT: {
+                move_x -= 0.005f;
+                break;
+            }
+            case RIGHT: {
+                move_x += 0.005f;
+                break;
+            }
+        }
+        translation[12] = move_x;
+    }
+    
+    void translateY(Direction direction) {
+        switch(direction) {
+            case UP: {
+                move_y += 0.005f;
+                break;
+            }
+            case DOWN: {
+                move_y -= 0.005f;
+                break;
+            }
+        }
+        translation[13] = move_y;
+    }
 };
 
 class CubeTransformDemo {
@@ -68,6 +109,11 @@ private:
     ShaderLoader shader_loader;
     GLParams gl_params;
     
+    /**
+     *  Matrices for transformation and rotation.
+     */
+    Matrices m;
+    
     /** 
      *  private functions
      */
@@ -78,19 +124,24 @@ private:
     void drawLoop(GLuint vao);
     void applyTransformationMatrix(void);
     void keyActionListener(void);
+    
+    /**
+     *  private transformation functions
+     */
+    void rotateX(Direction direction);
+    void rotateY(float rotation, Direction direction);
+    void rotateZ(float rotation, Direction direction);
+    void translateX(Direction direction);
+    void translateY(Direction direction);
+    void translateZ(float translation, Direction direction);
+    void scale(float scale);
+
 public:
     /**  
      *  public functions
      */
     CubeTransformDemo(std::vector<GLfloat> _vertex_floats, std::vector<GLfloat> _colour_floats);
     ~CubeTransformDemo();
-    void rotateX(float rotation);
-    void rotateY(float rotation);
-    void rotateZ(float rotation);
-    void translateX(float translation);
-    void translateY(float translation);
-    void translateZ(float translation);
-    void scale(float scale);
     int run(void);
 };
 

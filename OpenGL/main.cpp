@@ -25,6 +25,9 @@ int main(int argc, const char * argv[]) {
      *  for a square.
      */
     vector<GLfloat> points {
+        /**
+         *  Front 2 triangles
+         */
         -0.5f, 0.5f, 0.0f,
         0.5f, 0.5f, 0.0f,
         0.5f, -0.5f, 0.0f,
@@ -32,7 +35,11 @@ int main(int argc, const char * argv[]) {
         -0.5f, 0.5f, 0.0f,
         0.5f, -0.5f, 0.0f,
         -0.5f, -0.5f, 0.0f
-
+        
+        /**
+         *  Left side 2 triangles
+         */
+//        -0.5f, 0.5f, -0.5f,
     };
     vector<GLfloat> colours {
         1.0f, 0.0f, 0.0f,
@@ -40,8 +47,8 @@ int main(int argc, const char * argv[]) {
         0.0f, 0.0f, 1.0f,
         
         1.0f, 0.0f, 0.0f,
-        0.0f, 1.0f, 0.0f,
-        0.0f, 0.0f, 1.0f
+        0.0f, 0.0f, 1.0f,
+        0.0f, 1.0f, 0.0f
     };
     
     CubeTransformDemo *cube_demo = new CubeTransformDemo(points, colours);
