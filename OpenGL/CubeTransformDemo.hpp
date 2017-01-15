@@ -66,11 +66,11 @@ public:
     void translateX(Direction direction) {
         switch(direction) {
             case LEFT: {
-                move_x -= 0.005f;
+                move_x -= 0.05f;
                 break;
             }
             case RIGHT: {
-                move_x += 0.005f;
+                move_x += 0.05f;
                 break;
             }
         }
@@ -80,15 +80,49 @@ public:
     void translateY(Direction direction) {
         switch(direction) {
             case UP: {
-                move_y += 0.005f;
+                move_y += 0.05f;
                 break;
             }
             case DOWN: {
-                move_y -= 0.005f;
+                move_y -= 0.05f;
                 break;
             }
         }
         translation[13] = move_y;
+    }
+    
+    void rotateX(Direction direction) {
+        switch(direction) {
+            case UP: {
+                rotate_x += 0.05f;
+                break;
+            }
+            case DOWN: {
+                rotate_x -= 0.05f;
+                break;
+            }
+        }
+        rotation_x[6] = cosf(rotate_x);
+        rotation_x[7] = cosf(rotate_x);
+        rotation_x[10] = -sinf(rotate_x);
+        rotation_x[11] = cosf(rotate_x);
+    }
+    
+    void rotateY(Direction direction) {
+        switch(direction) {
+            case LEFT: {
+                rotate_y += 0.05f;
+                break;
+            }
+            case RIGHT: {
+                rotate_y -= 0.05f;
+                break;
+            }
+        }
+        rotation_y[1] = cosf(rotate_y);
+        rotation_y[2] = -sinf(rotate_y);
+        rotation_y[8] = sinf(rotate_y);
+        rotation_y[10] = cosf(rotate_y);
     }
 };
 
@@ -113,6 +147,7 @@ private:
      *  Matrices for transformation and rotation.
      */
     Matrices m;
+    float *current_matrix;
     
     /** 
      *  private functions
@@ -125,17 +160,6 @@ private:
     void applyTransformationMatrix(void);
     void keyActionListener(void);
     
-    /**
-     *  private transformation functions
-     */
-    void rotateX(Direction direction);
-    void rotateY(float rotation, Direction direction);
-    void rotateZ(float rotation, Direction direction);
-    void translateX(Direction direction);
-    void translateY(Direction direction);
-    void translateZ(float translation, Direction direction);
-    void scale(float scale);
-
 public:
     /**  
      *  public functions

@@ -39,9 +39,14 @@ CubeTransformDemo::CubeTransformDemo(vector<GLfloat> _vertex_floats, vector<GLfl
         
         GLuint vertex_shader = compileShader(vertex_shader_str, GL_VERTEX_SHADER);
         GLuint fragment_shader = compileShader(fragment_shader_str, GL_FRAGMENT_SHADER);
-        
         program = linkShaders(vertex_shader, fragment_shader);
         gl_params.print_program_info_log(program);
+        
+        /**
+         *  Finally, we need to set the current adjustment 
+         *  matrix (transform, rotate, scale).
+         */
+        current_matrix = m.translation;
     }
     catch(exception &e) {
         cout << e.what() << endl;
@@ -260,7 +265,7 @@ void CubeTransformDemo::drawLoop(GLuint vao) {
     
     if(GL_TRUE == program_ready) {
         glBindVertexArray(vao);
-        glDrawArrays(GL_TRIANGLES, 0, 6);
+        glDrawArrays(GL_TRIANGLES, 0, vertex_floats.size() / 3);
     }
     
     /**
@@ -273,7 +278,7 @@ void CubeTransformDemo::drawLoop(GLuint vao) {
 void CubeTransformDemo::applyTransformationMatrix(void) {
     int matrix_location = glGetUniformLocation(program, "matrix");
     if(GL_TRUE != matrix_location) {
-        glUniformMatrix4fv(matrix_location, 1, GL_FALSE, m.translation);
+        glUniformMatrix4fv(matrix_location, 1, GL_FALSE, current_matrix);
     }
     else {
         cout << "Matrix location could not be determined in the shaders. Exiting.";
@@ -304,45 +309,44 @@ void CubeTransformDemo::keyActionListener(void) {
     }
     
     if(GLFW_PRESS == glfwGetKey(window, GLFW_KEY_LEFT)) {
-        translateX(LEFT);
+        current_matrix = m.translation;
+        m.translateX(LEFT);
     }
     
     if(GLFW_PRESS == glfwGetKey(window, GLFW_KEY_RIGHT)) {
-        translateX(RIGHT);
+        current_matrix = m.translation;
+        m.translateX(RIGHT);
     }
     
     if(GLFW_PRESS == glfwGetKey(window, GLFW_KEY_UP)) {
-        translateY(UP);
+        current_matrix = m.translation;
+        m.translateY(UP);
     }
     
     if(GLFW_PRESS == glfwGetKey(window, GLFW_KEY_DOWN)) {
-        translateY(DOWN);
+        current_matrix = m.translation;
+        m.translateY(DOWN);
     }
-}
-
-void CubeTransformDemo::rotateX(Direction direction) {
-}
-
-void CubeTransformDemo::rotateY(float rotation, Direction direction) {
-}
-
-void CubeTransformDemo::rotateZ(float rotation, Direction direction) {
-}
-
-void CubeTransformDemo::translateX(Direction direction) {
-    m.translateX(direction);
-}
-
-void CubeTransformDemo::translateY(Direction direction) {
-    m.translateY(direction);
-}
-
-void CubeTransformDemo::translateZ(float translation, Direction direction) {
     
-}
-
-void CubeTransformDemo::scale(float scale) {
+    if(GLFW_PRESS == glfwGetKey(window, GLFW_KEY_W)) {
+        current_matrix = m.rotation_x;
+        m.rotateX(UP);
+    }
     
+    if(GLFW_PRESS == glfwGetKey(window, GLFW_KEY_S)) {
+        current_matrix = m.rotation_x;
+        m.rotateX(DOWN);
+    }
+    
+    if(GLFW_PRESS == glfwGetKey(window, GLFW_KEY_A)) {
+        current_matrix = m.rotation_y;
+        m.rotateY(LEFT);
+    }
+    
+    if(GLFW_PRESS == glfwGetKey(window, GLFW_KEY_D)) {
+        current_matrix = m.rotation_y;
+        m.rotateY(RIGHT);
+    }
 }
 
 int CubeTransformDemo::run(void) {
