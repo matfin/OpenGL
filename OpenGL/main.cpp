@@ -6,12 +6,36 @@
 //  Copyright © 2017 Matt Finucane. All rights reserved.
 //
 
+#include <vector>
+#include <OpenGL/gl3.h>
 #include "Shapes.hpp"
 #include "Shaders.hpp"
 #include "VertexBufferObjects.hpp"
+#include "CubeTransformDemo.hpp"
+
+using namespace std;
 
 int main(int argc, const char * argv[]) {
 //    return shapes_main();
 //    return shaders_main();
-    return vertex_buffer_objects_main();
+//    return vertex_buffer_objects_main();
+    
+    /**
+     *  Teeing up the points and colours 
+     *  for a triangle.
+     */
+    vector<GLfloat> points {
+        -0.5f, 0.5f, 0.0f,
+        0.5f, -0.5f, 0.0f,
+        -0.5f, -0.5f, 0.0f
+    };
+    vector<GLfloat> colours {
+        1.0f, 0.0f, 0.0f,
+        0.0f, 1.0f, 0.0f,
+        0.0f, 0.0f, 1.0f
+    };
+    
+    CubeTransformDemo *cube_demo = new CubeTransformDemo(points, colours);
+    cube_demo->run();
+    delete(cube_demo);
 }
