@@ -260,7 +260,7 @@ void CubeTransformDemo::drawLoop(GLuint vao) {
     
     if(GL_TRUE == program_ready) {
         glBindVertexArray(vao);
-        glDrawArrays(GL_TRIANGLES, 0, 3);
+        glDrawArrays(GL_TRIANGLES, 0, 6);
     }
     
     /**

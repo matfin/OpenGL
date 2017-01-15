@@ -22,14 +22,23 @@ int main(int argc, const char * argv[]) {
     
     /**
      *  Teeing up the points and colours 
-     *  for a triangle.
+     *  for a square.
      */
     vector<GLfloat> points {
         -0.5f, 0.5f, 0.0f,
+        0.5f, 0.5f, 0.0f,
+        0.5f, -0.5f, 0.0f,
+        
+        -0.5f, 0.5f, 0.0f,
         0.5f, -0.5f, 0.0f,
         -0.5f, -0.5f, 0.0f
+
     };
     vector<GLfloat> colours {
+        1.0f, 0.0f, 0.0f,
+        0.0f, 1.0f, 0.0f,
+        0.0f, 0.0f, 1.0f,
+        
         1.0f, 0.0f, 0.0f,
         0.0f, 1.0f, 0.0f,
         0.0f, 0.0f, 1.0f
