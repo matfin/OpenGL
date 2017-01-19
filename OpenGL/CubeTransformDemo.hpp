@@ -9,7 +9,6 @@
 #ifndef CubeTransformDemo_hpp
 #define CubeTransformDemo_hpp
 
-//#include <OpenGL/gl3.h>
 #include <GLFW/glfw3.h>
 #include <string>
 #include <vector>
@@ -102,10 +101,10 @@ public:
                 break;
             }
         }
+        rotation_x[5] = cosf(rotate_x);
         rotation_x[6] = cosf(rotate_x);
-        rotation_x[7] = cosf(rotate_x);
-        rotation_x[10] = -sinf(rotate_x);
-        rotation_x[11] = cosf(rotate_x);
+        rotation_x[9] = -sinf(rotate_x);
+        rotation_x[10] = cosf(rotate_x);
     }
     
     void rotateY(Direction direction) {
@@ -119,7 +118,7 @@ public:
                 break;
             }
         }
-        rotation_y[1] = cosf(rotate_y);
+        rotation_y[0] = cosf(rotate_y);
         rotation_y[2] = -sinf(rotate_y);
         rotation_y[8] = sinf(rotate_y);
         rotation_y[10] = cosf(rotate_y);

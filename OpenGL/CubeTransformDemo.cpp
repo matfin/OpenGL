@@ -117,8 +117,8 @@ bool CubeTransformDemo::setupWindow(void) {
      *  Set up back face culling so fragments aren't 
      *  shaded for the part of a mesh we cannot see.
      */
-    glEnable(GL_CULL_FACE);
-    glCullFace(GL_BACK);
+//    glEnable(GL_CULL_FACE);
+//    glCullFace(GL_BACK);
     
     /**
      *  This is needed to tell OpenGL what the front 

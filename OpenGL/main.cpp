@@ -7,7 +7,6 @@
 //
 
 #include <vector>
-#include <OpenGL/gl3.h>
 #include "Shapes.hpp"
 #include "Shaders.hpp"
 #include "VertexBufferObjects.hpp"
@@ -24,10 +23,7 @@ int main(int argc, const char * argv[]) {
      *  Teeing up the points and colours 
      *  for a square.
      */
-    vector<GLfloat> points {
-        /**
-         *  Front 2 triangles
-         */
+    vector<GLfloat> square_points {
         -0.5f, 0.5f, 0.0f,
         0.5f, 0.5f, 0.0f,
         0.5f, -0.5f, 0.0f,
@@ -35,13 +31,8 @@ int main(int argc, const char * argv[]) {
         -0.5f, 0.5f, 0.0f,
         0.5f, -0.5f, 0.0f,
         -0.5f, -0.5f, 0.0f
-        
-        /**
-         *  Left side 2 triangles
-         */
-//        -0.5f, 0.5f, -0.5f,
     };
-    vector<GLfloat> colours {
+    vector<GLfloat> square_colours {
         1.0f, 0.0f, 0.0f,
         0.0f, 1.0f, 0.0f,
         0.0f, 0.0f, 1.0f,
@@ -51,7 +42,20 @@ int main(int argc, const char * argv[]) {
         0.0f, 1.0f, 0.0f
     };
     
-    CubeTransformDemo *cube_demo = new CubeTransformDemo(points, colours);
-    cube_demo->run();
+    vector<GLfloat> triangle_points {
+        0.0f, 0.5f, 0.0f,
+        0.5f, -0.5f, 0.0f,
+        -0.5f, -0.5f, 0.0f
+    };
+    vector<GLfloat> triangle_colours {
+        1.0f, 0.0f, 0.0f,
+        0.0f, 1.0f, 0.0f,
+        0.0f, 0.0f, 1.0f
+    };
+    
+    CubeTransformDemo *cube_demo = new CubeTransformDemo(triangle_points, triangle_colours);
+    int run = cube_demo->run();
     delete(cube_demo);
+//    return run;
+    return 0;
 }
