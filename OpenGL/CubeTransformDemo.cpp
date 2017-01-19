@@ -347,6 +347,24 @@ void CubeTransformDemo::keyActionListener(void) {
         current_matrix = m.rotation_y;
         m.rotateY(RIGHT);
     }
+    
+    if(GLFW_PRESS == glfwGetKey(window, GLFW_KEY_Q)) {
+        current_matrix = m.rotation_z;
+        m.rotateZ(LEFT);
+    }
+    
+    if(GLFW_PRESS == glfwGetKey(window, GLFW_KEY_E)) {
+        current_matrix = m.rotation_z;
+        m.rotateZ(RIGHT);
+    }
+    
+    if(GLFW_PRESS == glfwGetKey(window, GLFW_KEY_EQUAL)) {
+        cout << "Add key was pressed.";
+    }
+    
+    if(GLFW_PRESS == glfwGetKey(window, GLFW_KEY_MINUS)) {
+        cout << "Sub key was pressed.";
+    }
 }
 
 int CubeTransformDemo::run(void) {

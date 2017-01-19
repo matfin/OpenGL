@@ -7,6 +7,7 @@
 //
 
 #include <vector>
+#include "Points.hpp"
 #include "Shapes.hpp"
 #include "Shaders.hpp"
 #include "VertexBufferObjects.hpp"
@@ -20,42 +21,29 @@ int main(int argc, const char * argv[]) {
 //    return vertex_buffer_objects_main();
     
     /**
-     *  Teeing up the points and colours 
-     *  for a square.
+     *  Cube points are too big, let's 
+     *  reduce their values.
      */
-    vector<GLfloat> square_points {
-        -0.5f, 0.5f, 0.0f,
-        0.5f, 0.5f, 0.0f,
-        0.5f, -0.5f, 0.0f,
-        
-        -0.5f, 0.5f, 0.0f,
-        0.5f, -0.5f, 0.0f,
-        -0.5f, -0.5f, 0.0f
-    };
-    vector<GLfloat> square_colours {
-        1.0f, 0.0f, 0.0f,
-        0.0f, 1.0f, 0.0f,
-        0.0f, 0.0f, 1.0f,
-        
-        1.0f, 0.0f, 0.0f,
-        0.0f, 0.0f, 1.0f,
-        0.0f, 1.0f, 0.0f
-    };
+    transform(begin(cube_points), end(cube_points), begin(cube_points), [](GLfloat p) {
+        return p / 2;
+    });
+    /**
+     *  Set up the colours too.
+     *  Note:   I know this is a horrible way to do it,
+     *          but we will move on to texture mapping soon!
+     */
+    vector<GLfloat> cube_colours(108);
     
-    vector<GLfloat> triangle_points {
-        0.0f, 0.5f, 0.0f,
-        0.5f, -0.5f, 0.0f,
-        -0.5f, -0.5f, 0.0f
-    };
-    vector<GLfloat> triangle_colours {
-        1.0f, 0.0f, 0.0f,
-        0.0f, 1.0f, 0.0f,
-        0.0f, 0.0f, 1.0f
-    };
+    GLfloat x = 0.0f;
     
-    CubeTransformDemo *cube_demo = new CubeTransformDemo(triangle_points, triangle_colours);
+    transform(begin(cube_colours), end(cube_colours), begin(cube_colours), [&x](GLfloat c) {
+        x += 0.002f;
+        return 0.5f + x;
+    });
+    
+    
+    CubeTransformDemo *cube_demo = new CubeTransformDemo(cube_points, cube_colours);
     int run = cube_demo->run();
     delete(cube_demo);
-//    return run;
-    return 0;
+    return run;
 }

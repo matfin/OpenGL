@@ -62,6 +62,7 @@
 		5869ACB81E27E59D00182916 /* vertex_buffer_objects.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = vertex_buffer_objects.frag; sourceTree = "<group>"; };
 		5869ACBB1E29033A00182916 /* CubeTransformDemo.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CubeTransformDemo.cpp; sourceTree = "<group>"; };
 		5869ACBC1E29033A00182916 /* CubeTransformDemo.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = CubeTransformDemo.hpp; sourceTree = "<group>"; };
+		5869ACD81E316EAD00182916 /* Points.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Points.hpp; sourceTree = "<group>"; };
 		58B8F0951E1CE8D1005C5C5F /* OpenGL */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = OpenGL; sourceTree = BUILT_PRODUCTS_DIR; };
 		58B8F0981E1CE8D1005C5C5F /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		58B8F09F1E1CE92B005C5C5F /* Shapes.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Shapes.cpp; sourceTree = "<group>"; };
@@ -137,6 +138,7 @@
 				5869ACB51E27C97100182916 /* VertexBufferObjects.hpp */,
 				5869ACBB1E29033A00182916 /* CubeTransformDemo.cpp */,
 				5869ACBC1E29033A00182916 /* CubeTransformDemo.hpp */,
+				5869ACD81E316EAD00182916 /* Points.hpp */,
 			);
 			path = OpenGL;
 			sourceTree = "<group>";

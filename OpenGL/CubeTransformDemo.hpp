@@ -30,7 +30,7 @@ private:
     float rotate_z = 0.0f;
     float move_x = 0.0f;
     float move_y = 0.0f;
-
+    
 public:
     float rotation_x[16] = {
         1.0f, 0.0f, 0.0f, 0.0f,
@@ -123,6 +123,24 @@ public:
         rotation_y[8] = sinf(rotate_y);
         rotation_y[10] = cosf(rotate_y);
     }
+    
+    void rotateZ(Direction direction) {
+        switch(direction) {
+            case LEFT: {
+                rotate_z += 0.05f;
+                break;
+            }
+            case RIGHT: {
+                rotate_z -= 0.05f;
+                break;
+            }
+        }
+        
+        rotation_z[0] = cosf(rotate_z);
+        rotation_z[1] = sinf(rotate_z);
+        rotation_z[4] = -sinf(rotate_z);
+        rotation_z[5] = cosf(rotate_z);
+    }
 };
 
 class CubeTransformDemo {
@@ -147,6 +165,15 @@ private:
      */
     Matrices m;
     float *current_matrix;
+    
+    /**
+     *  Used to track interpolation, where we 
+     *  make the colours and points GLFloat 
+     *  vectors more fine grained and the shape 
+     *  smoother as a result.
+     */
+    float interpolation = 0.0f;
+
     
     /** 
      *  private functions
