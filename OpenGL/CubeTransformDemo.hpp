@@ -170,7 +170,6 @@ private:
      *  Matrices for transformation and rotation.
      */
     Matrices *m = new Matrices();
-    float *current_matrix;
     
     /**
      *  Used to track interpolation, where we 

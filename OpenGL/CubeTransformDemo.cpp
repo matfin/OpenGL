@@ -46,7 +46,6 @@ CubeTransformDemo::CubeTransformDemo(vector<GLfloat> _vertex_floats, vector<GLfl
          *  Finally, we need to set the current adjustment 
          *  matrix (transform, rotate, scale).
          */
-        current_matrix = m->translation;
     }
     catch(exception &e) {
         cout << e.what() << endl;
@@ -118,8 +117,8 @@ bool CubeTransformDemo::setupWindow(void) {
      *  Set up back face culling so fragments aren't 
      *  shaded for the part of a mesh we cannot see.
      */
-//    glEnable(GL_CULL_FACE);
-//    glCullFace(GL_BACK);
+    glEnable(GL_CULL_FACE);
+    glCullFace(GL_BACK);
     
     /**
      *  This is needed to tell OpenGL what the front 
@@ -277,9 +276,22 @@ void CubeTransformDemo::drawLoop(GLuint vao) {
 }
 
 void CubeTransformDemo::applyMatrices(void) {
-    int matrix_location = glGetUniformLocation(program, "matrix");
-    if(GL_TRUE != matrix_location) {
-        glUniformMatrix4fv(matrix_location, 1, GL_FALSE, current_matrix);
+    
+    int rot_x_matrix_loc = glGetUniformLocation(program, "rot_x_matrix");
+    int rot_y_matrix_loc = glGetUniformLocation(program, "rot_y_matrix");
+    int rot_z_matrix_loc = glGetUniformLocation(program, "rot_z_matrix");
+    int translate_matrix_loc = glGetUniformLocation(program, "translate_matrix");
+    
+    if(
+       GL_TRUE != rot_x_matrix_loc ||
+       GL_TRUE != rot_y_matrix_loc ||
+       GL_TRUE != rot_z_matrix_loc ||
+       GL_TRUE != translate_matrix_loc
+    ) {
+        glUniformMatrix4fv(rot_x_matrix_loc, 1, GL_FALSE, m->rotation_x);
+        glUniformMatrix4fv(rot_y_matrix_loc, 1, GL_FALSE, m->rotation_y);
+        glUniformMatrix4fv(rot_z_matrix_loc, 1, GL_FALSE, m->rotation_z);
+        glUniformMatrix4fv(translate_matrix_loc, 1, GL_FALSE, m->translation);
     }
     else {
         cout << "Matrix location could not be determined in the shaders. Exiting.";
@@ -310,52 +322,46 @@ void CubeTransformDemo::keyActionListener(void) {
     }
     
     if(GLFW_PRESS == glfwGetKey(window, GLFW_KEY_LEFT)) {
-        current_matrix = m->translation;
+//        current_matrix = m->translation;
         m->translateX(LEFT);
     }
     
     if(GLFW_PRESS == glfwGetKey(window, GLFW_KEY_RIGHT)) {
-        current_matrix = m->translation;
+//        current_matrix = m->translation;
         m->translateX(RIGHT);
     }
     
     if(GLFW_PRESS == glfwGetKey(window, GLFW_KEY_UP)) {
-        current_matrix = m->translation;
+//        current_matrix = m->translation;
         m->translateY(UP);
     }
     
     if(GLFW_PRESS == glfwGetKey(window, GLFW_KEY_DOWN)) {
-        current_matrix = m->translation;
+//        current_matrix = m->translation;
         m->translateY(DOWN);
     }
     
     if(GLFW_PRESS == glfwGetKey(window, GLFW_KEY_W)) {
-        current_matrix = m->rotation_x;
         m->rotateX(UP);
     }
     
     if(GLFW_PRESS == glfwGetKey(window, GLFW_KEY_S)) {
-        current_matrix = m->rotation_x;
         m->rotateX(DOWN);
     }
     
     if(GLFW_PRESS == glfwGetKey(window, GLFW_KEY_A)) {
-        current_matrix = m->rotation_y;
         m->rotateY(LEFT);
     }
     
     if(GLFW_PRESS == glfwGetKey(window, GLFW_KEY_D)) {
-        current_matrix = m->rotation_y;
         m->rotateY(RIGHT);
     }
     
     if(GLFW_PRESS == glfwGetKey(window, GLFW_KEY_Q)) {
-        current_matrix = m->rotation_z;
         m->rotateZ(LEFT);
     }
     
     if(GLFW_PRESS == glfwGetKey(window, GLFW_KEY_E)) {
-        current_matrix = m->rotation_z;
         m->rotateZ(RIGHT);
     }
     

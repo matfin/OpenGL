@@ -25,7 +25,7 @@ int main(int argc, const char * argv[]) {
      *  reduce their values.
      */
     transform(begin(cube_points), end(cube_points), begin(cube_points), [](GLfloat p) {
-        return p / 2;
+        return p * 0.4;
     });
     /**
      *  Set up the colours too.
