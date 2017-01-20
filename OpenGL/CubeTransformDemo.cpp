@@ -46,7 +46,7 @@ CubeTransformDemo::CubeTransformDemo(vector<GLfloat> _vertex_floats, vector<GLfl
          *  Finally, we need to set the current adjustment 
          *  matrix (transform, rotate, scale).
          */
-        current_matrix = m.translation;
+        current_matrix = m->translation;
     }
     catch(exception &e) {
         cout << e.what() << endl;
@@ -59,6 +59,7 @@ CubeTransformDemo::CubeTransformDemo(vector<GLfloat> _vertex_floats, vector<GLfl
  */
 CubeTransformDemo::~CubeTransformDemo() {
     cout << "Destruct: CubeTransformDemo." << endl;
+    delete m;
     window = 0;
     program = 0;
     vertex_floats.clear();
@@ -309,53 +310,53 @@ void CubeTransformDemo::keyActionListener(void) {
     }
     
     if(GLFW_PRESS == glfwGetKey(window, GLFW_KEY_LEFT)) {
-        current_matrix = m.translation;
-        m.translateX(LEFT);
+        current_matrix = m->translation;
+        m->translateX(LEFT);
     }
     
     if(GLFW_PRESS == glfwGetKey(window, GLFW_KEY_RIGHT)) {
-        current_matrix = m.translation;
-        m.translateX(RIGHT);
+        current_matrix = m->translation;
+        m->translateX(RIGHT);
     }
     
     if(GLFW_PRESS == glfwGetKey(window, GLFW_KEY_UP)) {
-        current_matrix = m.translation;
-        m.translateY(UP);
+        current_matrix = m->translation;
+        m->translateY(UP);
     }
     
     if(GLFW_PRESS == glfwGetKey(window, GLFW_KEY_DOWN)) {
-        current_matrix = m.translation;
-        m.translateY(DOWN);
+        current_matrix = m->translation;
+        m->translateY(DOWN);
     }
     
     if(GLFW_PRESS == glfwGetKey(window, GLFW_KEY_W)) {
-        current_matrix = m.rotation_x;
-        m.rotateX(UP);
+        current_matrix = m->rotation_x;
+        m->rotateX(UP);
     }
     
     if(GLFW_PRESS == glfwGetKey(window, GLFW_KEY_S)) {
-        current_matrix = m.rotation_x;
-        m.rotateX(DOWN);
+        current_matrix = m->rotation_x;
+        m->rotateX(DOWN);
     }
     
     if(GLFW_PRESS == glfwGetKey(window, GLFW_KEY_A)) {
-        current_matrix = m.rotation_y;
-        m.rotateY(LEFT);
+        current_matrix = m->rotation_y;
+        m->rotateY(LEFT);
     }
     
     if(GLFW_PRESS == glfwGetKey(window, GLFW_KEY_D)) {
-        current_matrix = m.rotation_y;
-        m.rotateY(RIGHT);
+        current_matrix = m->rotation_y;
+        m->rotateY(RIGHT);
     }
     
     if(GLFW_PRESS == glfwGetKey(window, GLFW_KEY_Q)) {
-        current_matrix = m.rotation_z;
-        m.rotateZ(LEFT);
+        current_matrix = m->rotation_z;
+        m->rotateZ(LEFT);
     }
     
     if(GLFW_PRESS == glfwGetKey(window, GLFW_KEY_E)) {
-        current_matrix = m.rotation_z;
-        m.rotateZ(RIGHT);
+        current_matrix = m->rotation_z;
+        m->rotateZ(RIGHT);
     }
     
     if(GLFW_PRESS == glfwGetKey(window, GLFW_KEY_EQUAL)) {

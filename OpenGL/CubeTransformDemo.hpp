@@ -32,6 +32,12 @@ private:
     float move_y = 0.0f;
     
 public:
+    Matrices() {
+        std::cout << "Construct: Matrices." << std::endl;
+    }
+    ~Matrices() {
+        std::cout << "Destruct: Matrices." << std::endl;
+    }
     float rotation_x[16] = {
         1.0f, 0.0f, 0.0f, 0.0f,
         0.0f, cosf(rotate_x), sinf(rotate_x), 0.0f,
@@ -163,7 +169,7 @@ private:
     /**
      *  Matrices for transformation and rotation.
      */
-    Matrices m;
+    Matrices *m = new Matrices();
     float *current_matrix;
     
     /**
