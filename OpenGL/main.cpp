@@ -34,11 +34,27 @@ int main(int argc, const char * argv[]) {
      */
     vector<GLfloat> cube_colours(108);
     
-    GLfloat x = 0.0f;
+    int i = 0;
     
-    transform(begin(cube_colours), end(cube_colours), begin(cube_colours), [&x](GLfloat c) {
-        x += 0.002f;
-        return 0.5f + x;
+    transform(begin(cube_colours), end(cube_colours), begin(cube_colours), [&i](GLfloat c) {
+    
+        float f = 0.0f;
+        
+        if(i % 5) {
+            f = 0.75f;
+        }
+        else if(i % 4) {
+            f = 0.5f;
+        }
+        else if(i % 3) {
+            f =  0.25f;
+        }
+        else if(i % 2) {
+            f =  0.0f;
+        }
+        
+        i++;
+        return f;
     });
     
     

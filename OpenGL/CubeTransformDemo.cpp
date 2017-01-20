@@ -34,8 +34,8 @@ CubeTransformDemo::CubeTransformDemo(vector<GLfloat> _vertex_floats, vector<GLfl
          *  - loadig the fragment shader and compiling it.
          *  - compiling and linking them to form a program.
          */
-        string vertex_shader_str = shader_loader.load("vertex_buffer_objects.vert");
-        string fragment_shader_str = shader_loader.load("vertex_buffer_objects.frag");
+        string vertex_shader_str = shader_loader.load("cube_transform_demo.vert");
+        string fragment_shader_str = shader_loader.load("cube_transform_demo.frag");
         
         GLuint vertex_shader = compileShader(vertex_shader_str, GL_VERTEX_SHADER);
         GLuint fragment_shader = compileShader(fragment_shader_str, GL_FRAGMENT_SHADER);
@@ -276,7 +276,7 @@ void CubeTransformDemo::drawLoop(GLuint vao) {
     glfwSwapBuffers(window);
 }
 
-void CubeTransformDemo::applyTransformationMatrix(void) {
+void CubeTransformDemo::applyMatrices(void) {
     int matrix_location = glGetUniformLocation(program, "matrix");
     if(GL_TRUE != matrix_location) {
         glUniformMatrix4fv(matrix_location, 1, GL_FALSE, current_matrix);
@@ -381,7 +381,7 @@ int CubeTransformDemo::run(void) {
     glUseProgram(program);
     
     while(!glfwWindowShouldClose(window)) {
-        applyTransformationMatrix();
+        applyMatrices();
         drawLoop(mesh_vao);
         keyActionListener();
     }

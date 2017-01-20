@@ -189,7 +189,7 @@ private:
     GLuint linkShaders(const GLuint vertex_shader, const GLuint fragment_shader);
     GLuint prepareMesh(const std::vector<GLfloat> points, const std::vector<GLfloat> colours);
     void drawLoop(GLuint vao);
-    void applyTransformationMatrix(void);
+    void applyMatrices(void);
     void keyActionListener(void);
     
 public:
