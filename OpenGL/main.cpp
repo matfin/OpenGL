@@ -37,24 +37,13 @@ int main(int argc, const char * argv[]) {
     int i = 0;
     
     transform(begin(cube_colours), end(cube_colours), begin(cube_colours), [&i](GLfloat c) {
-    
-        float f = 0.0f;
+        GLfloat x = 0;
         
-        if(i % 5) {
-            f = 0.75f;
-        }
-        else if(i % 4) {
-            f = 0.5f;
-        }
-        else if(i % 3) {
-            f =  0.25f;
-        }
-        else if(i % 2) {
-            f =  0.0f;
-        }
+        if(i++ == 0) x = 1.0f;
+        else if(i % 4 == 0) x =  1.0f;
+        else if(i % 8 == 0) x = 1.0f;
         
-        i++;
-        return f;
+        return x;
     });
     
     
