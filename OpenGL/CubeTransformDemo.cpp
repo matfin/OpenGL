@@ -7,6 +7,7 @@
 //
 #include <iostream>
 #include "CubeTransformDemo.hpp"
+#include "Enumerations.h"
 
 using namespace std;
 
@@ -385,6 +386,16 @@ int CubeTransformDemo::run(void) {
      */
     glUseProgram(program);
     
+    /**
+     *  While GLFW determines that the window 
+     *  should remain open, run these three 
+     *  functions. 
+     *
+     *  Note: The keyActionListener() function 
+     *  will kill the window when the ESC key
+     *  is pressed and the while condition will
+     *  no longer evaluate to true.
+     */
     while(!glfwWindowShouldClose(window)) {
         applyMatrices();
         drawLoop(mesh_vao);
