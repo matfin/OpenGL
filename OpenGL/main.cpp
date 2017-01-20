@@ -46,7 +46,6 @@ int main(int argc, const char * argv[]) {
         return x;
     });
     
-    
     CubeTransformDemo *cube_demo = new CubeTransformDemo(cube_points, cube_colours);
     int run = cube_demo->run();
     delete(cube_demo);

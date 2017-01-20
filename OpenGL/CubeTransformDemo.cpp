@@ -280,18 +280,21 @@ void CubeTransformDemo::applyMatrices(void) {
     int rot_x_matrix_loc = glGetUniformLocation(program, "rot_x_matrix");
     int rot_y_matrix_loc = glGetUniformLocation(program, "rot_y_matrix");
     int rot_z_matrix_loc = glGetUniformLocation(program, "rot_z_matrix");
+    int scale_matrix_loc = glGetUniformLocation(program, "scale_matrix");
     int translate_matrix_loc = glGetUniformLocation(program, "translate_matrix");
     
     if(
        GL_TRUE != rot_x_matrix_loc ||
        GL_TRUE != rot_y_matrix_loc ||
        GL_TRUE != rot_z_matrix_loc ||
+       GL_TRUE != scale_matrix_loc ||
        GL_TRUE != translate_matrix_loc
     ) {
         glUniformMatrix4fv(rot_x_matrix_loc, 1, GL_FALSE, m->rotation_x);
         glUniformMatrix4fv(rot_y_matrix_loc, 1, GL_FALSE, m->rotation_y);
         glUniformMatrix4fv(rot_z_matrix_loc, 1, GL_FALSE, m->rotation_z);
         glUniformMatrix4fv(translate_matrix_loc, 1, GL_FALSE, m->translation);
+        glUniformMatrix4fv(scale_matrix_loc, 1, GL_FALSE, m->scaling);
     }
     else {
         cout << "Matrix location could not be determined in the shaders. Exiting.";
@@ -322,22 +325,18 @@ void CubeTransformDemo::keyActionListener(void) {
     }
     
     if(GLFW_PRESS == glfwGetKey(window, GLFW_KEY_LEFT)) {
-//        current_matrix = m->translation;
         m->translateX(LEFT);
     }
     
     if(GLFW_PRESS == glfwGetKey(window, GLFW_KEY_RIGHT)) {
-//        current_matrix = m->translation;
         m->translateX(RIGHT);
     }
     
     if(GLFW_PRESS == glfwGetKey(window, GLFW_KEY_UP)) {
-//        current_matrix = m->translation;
         m->translateY(UP);
     }
     
     if(GLFW_PRESS == glfwGetKey(window, GLFW_KEY_DOWN)) {
-//        current_matrix = m->translation;
         m->translateY(DOWN);
     }
     
@@ -366,11 +365,11 @@ void CubeTransformDemo::keyActionListener(void) {
     }
     
     if(GLFW_PRESS == glfwGetKey(window, GLFW_KEY_EQUAL)) {
-        cout << "Add key was pressed.";
+        m->scale(LARGER);
     }
     
     if(GLFW_PRESS == glfwGetKey(window, GLFW_KEY_MINUS)) {
-        cout << "Sub key was pressed.";
+        m->scale(SMALLER);
     }
 }
 

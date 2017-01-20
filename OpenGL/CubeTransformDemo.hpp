@@ -23,6 +23,11 @@ enum Direction {
     DOWN
 };
 
+enum ScaleMag {
+    LARGER,
+    SMALLER
+};
+
 struct Matrices {
 private:
     float rotate_x = 0.0f;
@@ -30,6 +35,7 @@ private:
     float rotate_z = 0.0f;
     float move_x = 0.0f;
     float move_y = 0.0f;
+    float scale_mag = 1.0f;
     
 public:
     Matrices() {
@@ -66,7 +72,26 @@ public:
         move_x, move_y, 0.0f, 1.0f
     };
     
-    float scale[16] = {};
+    float scaling[16] = {
+        scale_mag, 0.0f, 0.0f, 0.0f,
+        0.0f, scale_mag, 0.0f, 0.0f,
+        0.0f, 0.0f, scale_mag, 0.0f,
+        0.0f, 0.0f, 0.0f, 1.0f
+    };
+    
+    void scale(ScaleMag direction) {
+        switch(direction) {
+            case LARGER: {
+                if(scale_mag <= 0.8f) scale_mag += 0.05f;
+                break;
+            }
+            case SMALLER: {
+                if(scale_mag >= 0.1f) scale_mag -= 0.05f;
+                break;
+            }
+        }
+        scaling[0] = scaling[5] = scaling[10] = scale_mag;
+    }
     
     void translateX(Direction direction) {
         switch(direction) {
