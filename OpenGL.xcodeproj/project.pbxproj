@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		582FB5B51E32621600C031C6 /* Matrices.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 582FB5B31E32621600C031C6 /* Matrices.cpp */; };
+		582FB5BA1E3567FD00C031C6 /* cup.mtl in CopyFiles */ = {isa = PBXBuildFile; fileRef = 582FB5B81E3567EE00C031C6 /* cup.mtl */; };
+		582FB5BB1E3567FD00C031C6 /* cup.obj in CopyFiles */ = {isa = PBXBuildFile; fileRef = 582FB5B91E3567EE00C031C6 /* cup.obj */; };
 		5862C8CD1E323C4A00D0ADEF /* cube_transform_demo.vert in CopyFiles */ = {isa = PBXBuildFile; fileRef = 5862C8CB1E32390100D0ADEF /* cube_transform_demo.vert */; };
 		5862C8CE1E323C4A00D0ADEF /* cube_transform_demo.frag in CopyFiles */ = {isa = PBXBuildFile; fileRef = 5862C8CC1E32391300D0ADEF /* cube_transform_demo.frag */; };
 		5869ACB61E27C97100182916 /* VertexBufferObjects.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5869ACB41E27C97000182916 /* VertexBufferObjects.cpp */; };
@@ -46,6 +48,8 @@
 			dstPath = "";
 			dstSubfolderSpec = 16;
 			files = (
+				582FB5BA1E3567FD00C031C6 /* cup.mtl in CopyFiles */,
+				582FB5BB1E3567FD00C031C6 /* cup.obj in CopyFiles */,
 				5862C8CD1E323C4A00D0ADEF /* cube_transform_demo.vert in CopyFiles */,
 				5862C8CE1E323C4A00D0ADEF /* cube_transform_demo.frag in CopyFiles */,
 				5869ACB91E27F0B000182916 /* vertex_buffer_objects.vert in CopyFiles */,
@@ -64,6 +68,8 @@
 		582FB5B31E32621600C031C6 /* Matrices.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Matrices.cpp; sourceTree = "<group>"; };
 		582FB5B41E32621600C031C6 /* Matrices.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Matrices.hpp; sourceTree = "<group>"; };
 		582FB5B61E32627F00C031C6 /* Enumerations.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Enumerations.h; sourceTree = "<group>"; };
+		582FB5B81E3567EE00C031C6 /* cup.mtl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = cup.mtl; sourceTree = "<group>"; };
+		582FB5B91E3567EE00C031C6 /* cup.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = cup.obj; sourceTree = "<group>"; };
 		5862C8CB1E32390100D0ADEF /* cube_transform_demo.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = cube_transform_demo.vert; sourceTree = "<group>"; };
 		5862C8CC1E32391300D0ADEF /* cube_transform_demo.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = cube_transform_demo.frag; sourceTree = "<group>"; };
 		5869ACB41E27C97000182916 /* VertexBufferObjects.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = VertexBufferObjects.cpp; sourceTree = "<group>"; };
@@ -110,6 +116,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		582FB5B71E3567AC00C031C6 /* models */ = {
+			isa = PBXGroup;
+			children = (
+				582FB5B81E3567EE00C031C6 /* cup.mtl */,
+				582FB5B91E3567EE00C031C6 /* cup.obj */,
+			);
+			name = models;
+			sourceTree = "<group>";
+		};
 		58B8F08C1E1CE8D1005C5C5F = {
 			isa = PBXGroup;
 			children = (
@@ -130,6 +145,7 @@
 		58B8F0971E1CE8D1005C5C5F /* OpenGL */ = {
 			isa = PBXGroup;
 			children = (
+				582FB5B71E3567AC00C031C6 /* models */,
 				58B8F0AD1E1D2C50005C5C5F /* shaders */,
 				58B8F0981E1CE8D1005C5C5F /* main.cpp */,
 				58B8F09F1E1CE92B005C5C5F /* Shapes.cpp */,
