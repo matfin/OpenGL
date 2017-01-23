@@ -8,6 +8,7 @@
 
 #include <vector>
 #include "Points.hpp"
+#include "Meshes.h"
 #include "Shapes.hpp"
 #include "Shaders.hpp"
 #include "ObjectLoader.hpp"
@@ -74,9 +75,9 @@ int runModelLoadDemo(void) {
 }
 
 int runCameraPerspectiveDemo(void) {
-    vector<GLfloat> points = {0.0f, 1.0f, 0.0f};
-    vector<GLfloat> colours = {0.0f, 1.0f, 0.0f};
-    CameraPerspectiveDemo *demo = new CameraPerspectiveDemo(points, colours);
+    CameraPerspectiveDemo *demo = new CameraPerspectiveDemo();
+    demo->addMesh(&cube, 0.0, 0.0, 0.0);
+    
     int run = demo->run();
     delete(demo);
     return run;

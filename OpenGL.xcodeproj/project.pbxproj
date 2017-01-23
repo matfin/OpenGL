@@ -12,6 +12,8 @@
 		582FB5BE1E35E46100C031C6 /* ObjectLoader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 582FB5BC1E35E46100C031C6 /* ObjectLoader.cpp */; };
 		582FB5C01E36574400C031C6 /* structure.obj in CopyFiles */ = {isa = PBXBuildFile; fileRef = 582FB5BF1E36573A00C031C6 /* structure.obj */; };
 		582FB5C31E36778E00C031C6 /* CameraPerspectiveDemo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 582FB5C11E36778E00C031C6 /* CameraPerspectiveDemo.cpp */; };
+		582FB5C61E36A13600C031C6 /* camera_perspective_demo.vert in CopyFiles */ = {isa = PBXBuildFile; fileRef = 582FB5C41E36A11A00C031C6 /* camera_perspective_demo.vert */; };
+		582FB5C71E36A13600C031C6 /* camera_perspective_demo.frag in CopyFiles */ = {isa = PBXBuildFile; fileRef = 582FB5C51E36A12D00C031C6 /* camera_perspective_demo.frag */; };
 		5862C8CD1E323C4A00D0ADEF /* cube_transform_demo.vert in CopyFiles */ = {isa = PBXBuildFile; fileRef = 5862C8CB1E32390100D0ADEF /* cube_transform_demo.vert */; };
 		5862C8CE1E323C4A00D0ADEF /* cube_transform_demo.frag in CopyFiles */ = {isa = PBXBuildFile; fileRef = 5862C8CC1E32391300D0ADEF /* cube_transform_demo.frag */; };
 		5869ACB61E27C97100182916 /* VertexBufferObjects.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5869ACB41E27C97000182916 /* VertexBufferObjects.cpp */; };
@@ -50,6 +52,8 @@
 			dstPath = "";
 			dstSubfolderSpec = 16;
 			files = (
+				582FB5C61E36A13600C031C6 /* camera_perspective_demo.vert in CopyFiles */,
+				582FB5C71E36A13600C031C6 /* camera_perspective_demo.frag in CopyFiles */,
 				582FB5C01E36574400C031C6 /* structure.obj in CopyFiles */,
 				582FB5BB1E3567FD00C031C6 /* cup.obj in CopyFiles */,
 				5862C8CD1E323C4A00D0ADEF /* cube_transform_demo.vert in CopyFiles */,
@@ -76,6 +80,10 @@
 		582FB5BF1E36573A00C031C6 /* structure.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = structure.obj; sourceTree = "<group>"; };
 		582FB5C11E36778E00C031C6 /* CameraPerspectiveDemo.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CameraPerspectiveDemo.cpp; sourceTree = "<group>"; };
 		582FB5C21E36778E00C031C6 /* CameraPerspectiveDemo.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = CameraPerspectiveDemo.hpp; sourceTree = "<group>"; };
+		582FB5C41E36A11A00C031C6 /* camera_perspective_demo.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = camera_perspective_demo.vert; sourceTree = "<group>"; };
+		582FB5C51E36A12D00C031C6 /* camera_perspective_demo.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = camera_perspective_demo.frag; sourceTree = "<group>"; };
+		582FB5C81E36BE9C00C031C6 /* Meshes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Meshes.h; sourceTree = "<group>"; };
+		582FB5C91E36BEEB00C031C6 /* Structs.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Structs.h; sourceTree = "<group>"; };
 		5862C8CB1E32390100D0ADEF /* cube_transform_demo.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = cube_transform_demo.vert; sourceTree = "<group>"; };
 		5862C8CC1E32391300D0ADEF /* cube_transform_demo.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = cube_transform_demo.frag; sourceTree = "<group>"; };
 		5869ACB41E27C97000182916 /* VertexBufferObjects.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = VertexBufferObjects.cpp; sourceTree = "<group>"; };
@@ -178,6 +186,8 @@
 				582FB5BD1E35E46100C031C6 /* ObjectLoader.hpp */,
 				582FB5C11E36778E00C031C6 /* CameraPerspectiveDemo.cpp */,
 				582FB5C21E36778E00C031C6 /* CameraPerspectiveDemo.hpp */,
+				582FB5C81E36BE9C00C031C6 /* Meshes.h */,
+				582FB5C91E36BEEB00C031C6 /* Structs.h */,
 			);
 			path = OpenGL;
 			sourceTree = "<group>";
@@ -204,6 +214,8 @@
 				5869ACB81E27E59D00182916 /* vertex_buffer_objects.frag */,
 				5862C8CB1E32390100D0ADEF /* cube_transform_demo.vert */,
 				5862C8CC1E32391300D0ADEF /* cube_transform_demo.frag */,
+				582FB5C41E36A11A00C031C6 /* camera_perspective_demo.vert */,
+				582FB5C51E36A12D00C031C6 /* camera_perspective_demo.frag */,
 			);
 			name = shaders;
 			sourceTree = "<group>";

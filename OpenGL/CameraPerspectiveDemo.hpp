@@ -16,34 +16,32 @@
 #include "ShaderLoader.hpp"
 #include "GLParams.hpp"
 #include "Matrices.hpp"
+#include "Structs.h"
 
 class CameraPerspectiveDemo {
 private:
-    GLuint *program;
+    GLuint program;
     GLFWwindow *window;
 
-    std::vector<GLfloat> vertex_floats;
-    std::vector<GLfloat> colour_floats;
-    std::vector<GLuint> vertex_array_objects;
-    
-    ShaderLoader shader_loader;
+    std::vector<Mesh> *meshes;
+    ShaderLoader *shader_loader;
     GLParams gl_params;
     Matrices *m;
     
-    void prepare(void) const;
+    void prepare(void);
     bool setupWindow(void);
-    GLuint compileShader(const std::string *shader_src_str, GLenum type) const;
-    GLuint linkShaders(const GLuint vertex_shader, const GLuint fragment_shader);
-    GLuint prepareMesh(const GLfloat pos_x, const GLfloat pos_y, const GLfloat pos_z) const;
+    GLuint compileShader(const std::string *shader_src_str, GLenum type);
+    void linkShaders(const GLuint vertex_shader, const GLuint fragment_shader);
     
-    void drawLoop(const std::vector<GLuint> *meshes) const;
+    void drawLoop() const;
     void applyMatrices(void) const;
     void keyActionListener(void) const;
     
 public:
-    CameraPerspectiveDemo(const std::vector<GLfloat> _vertex_floats, const std::vector<GLfloat> _colour_floats);
+    CameraPerspectiveDemo();
     ~CameraPerspectiveDemo();
-    int run(void) const;
+    void addMesh(Mesh *mesh, const GLfloat pos_x, const GLfloat pos_y, const GLfloat pos_z);
+    int run(void);
 };
 
 #endif /* CameraPerspectiveDemo_hpp */
