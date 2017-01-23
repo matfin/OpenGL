@@ -21,4 +21,12 @@ enum ScaleMag {
     SMALLER
 };
 
+enum ModelLineType {
+    VERTEX,
+    NORMAL,
+    TEXTURE_COORDINATE,
+    FACE,
+    UNKNOWN
+};
+
 #endif /* Enumerations_h */

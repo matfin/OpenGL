@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		582FB5B51E32621600C031C6 /* Matrices.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 582FB5B31E32621600C031C6 /* Matrices.cpp */; };
 		582FB5BB1E3567FD00C031C6 /* cup.obj in CopyFiles */ = {isa = PBXBuildFile; fileRef = 582FB5B91E3567EE00C031C6 /* cup.obj */; };
+		582FB5BE1E35E46100C031C6 /* ObjectLoader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 582FB5BC1E35E46100C031C6 /* ObjectLoader.cpp */; };
 		5862C8CD1E323C4A00D0ADEF /* cube_transform_demo.vert in CopyFiles */ = {isa = PBXBuildFile; fileRef = 5862C8CB1E32390100D0ADEF /* cube_transform_demo.vert */; };
 		5862C8CE1E323C4A00D0ADEF /* cube_transform_demo.frag in CopyFiles */ = {isa = PBXBuildFile; fileRef = 5862C8CC1E32391300D0ADEF /* cube_transform_demo.frag */; };
 		5869ACB61E27C97100182916 /* VertexBufferObjects.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5869ACB41E27C97000182916 /* VertexBufferObjects.cpp */; };
@@ -67,6 +68,8 @@
 		582FB5B41E32621600C031C6 /* Matrices.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Matrices.hpp; sourceTree = "<group>"; };
 		582FB5B61E32627F00C031C6 /* Enumerations.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Enumerations.h; sourceTree = "<group>"; };
 		582FB5B91E3567EE00C031C6 /* cup.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = cup.obj; sourceTree = "<group>"; };
+		582FB5BC1E35E46100C031C6 /* ObjectLoader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ObjectLoader.cpp; sourceTree = "<group>"; };
+		582FB5BD1E35E46100C031C6 /* ObjectLoader.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ObjectLoader.hpp; sourceTree = "<group>"; };
 		5862C8CB1E32390100D0ADEF /* cube_transform_demo.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = cube_transform_demo.vert; sourceTree = "<group>"; };
 		5862C8CC1E32391300D0ADEF /* cube_transform_demo.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = cube_transform_demo.frag; sourceTree = "<group>"; };
 		5869ACB41E27C97000182916 /* VertexBufferObjects.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = VertexBufferObjects.cpp; sourceTree = "<group>"; };
@@ -164,6 +167,8 @@
 				582FB5B31E32621600C031C6 /* Matrices.cpp */,
 				582FB5B41E32621600C031C6 /* Matrices.hpp */,
 				582FB5B61E32627F00C031C6 /* Enumerations.h */,
+				582FB5BC1E35E46100C031C6 /* ObjectLoader.cpp */,
+				582FB5BD1E35E46100C031C6 /* ObjectLoader.hpp */,
 			);
 			path = OpenGL;
 			sourceTree = "<group>";
@@ -260,6 +265,7 @@
 				58B8F0991E1CE8D1005C5C5F /* main.cpp in Sources */,
 				58B8F0BF1E20F2A7005C5C5F /* GLParams.cpp in Sources */,
 				582FB5B51E32621600C031C6 /* Matrices.cpp in Sources */,
+				582FB5BE1E35E46100C031C6 /* ObjectLoader.cpp in Sources */,
 				5869ACB61E27C97100182916 /* VertexBufferObjects.cpp in Sources */,
 				58B8F0B41E1D311C005C5C5F /* ShaderLoader.cpp in Sources */,
 			);
