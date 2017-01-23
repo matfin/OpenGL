@@ -51,7 +51,7 @@ int runCubeTransformDemo(void) {
 
 int runModelLoadDemo(void) {
     ObjectLoader loader;
-    loader.load("cup.obj");
+    loader.load("structure.obj");
     
     vector<GLfloat> vertices = loader.getVertices();
     vector<GLfloat> colours(vertices.size());
@@ -76,7 +76,8 @@ int main(int argc, const char * argv[]) {
 //    return shapes_main();
 //    return shaders_main();
 //    return vertex_buffer_objects_main();
-//    int run = runCubeTransformDemo();
+//    int run = runModelLoadDemo();
+    int run = runCubeTransformDemo();
     
-    return runModelLoadDemo();
+    return run;
 }

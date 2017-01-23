@@ -10,6 +10,7 @@
 		582FB5B51E32621600C031C6 /* Matrices.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 582FB5B31E32621600C031C6 /* Matrices.cpp */; };
 		582FB5BB1E3567FD00C031C6 /* cup.obj in CopyFiles */ = {isa = PBXBuildFile; fileRef = 582FB5B91E3567EE00C031C6 /* cup.obj */; };
 		582FB5BE1E35E46100C031C6 /* ObjectLoader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 582FB5BC1E35E46100C031C6 /* ObjectLoader.cpp */; };
+		582FB5C01E36574400C031C6 /* structure.obj in CopyFiles */ = {isa = PBXBuildFile; fileRef = 582FB5BF1E36573A00C031C6 /* structure.obj */; };
 		5862C8CD1E323C4A00D0ADEF /* cube_transform_demo.vert in CopyFiles */ = {isa = PBXBuildFile; fileRef = 5862C8CB1E32390100D0ADEF /* cube_transform_demo.vert */; };
 		5862C8CE1E323C4A00D0ADEF /* cube_transform_demo.frag in CopyFiles */ = {isa = PBXBuildFile; fileRef = 5862C8CC1E32391300D0ADEF /* cube_transform_demo.frag */; };
 		5869ACB61E27C97100182916 /* VertexBufferObjects.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5869ACB41E27C97000182916 /* VertexBufferObjects.cpp */; };
@@ -48,6 +49,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 16;
 			files = (
+				582FB5C01E36574400C031C6 /* structure.obj in CopyFiles */,
 				582FB5BB1E3567FD00C031C6 /* cup.obj in CopyFiles */,
 				5862C8CD1E323C4A00D0ADEF /* cube_transform_demo.vert in CopyFiles */,
 				5862C8CE1E323C4A00D0ADEF /* cube_transform_demo.frag in CopyFiles */,
@@ -70,6 +72,7 @@
 		582FB5B91E3567EE00C031C6 /* cup.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = cup.obj; sourceTree = "<group>"; };
 		582FB5BC1E35E46100C031C6 /* ObjectLoader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ObjectLoader.cpp; sourceTree = "<group>"; };
 		582FB5BD1E35E46100C031C6 /* ObjectLoader.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ObjectLoader.hpp; sourceTree = "<group>"; };
+		582FB5BF1E36573A00C031C6 /* structure.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = structure.obj; sourceTree = "<group>"; };
 		5862C8CB1E32390100D0ADEF /* cube_transform_demo.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = cube_transform_demo.vert; sourceTree = "<group>"; };
 		5862C8CC1E32391300D0ADEF /* cube_transform_demo.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = cube_transform_demo.frag; sourceTree = "<group>"; };
 		5869ACB41E27C97000182916 /* VertexBufferObjects.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = VertexBufferObjects.cpp; sourceTree = "<group>"; };
@@ -119,6 +122,7 @@
 		582FB5B71E3567AC00C031C6 /* models */ = {
 			isa = PBXGroup;
 			children = (
+				582FB5BF1E36573A00C031C6 /* structure.obj */,
 				582FB5B91E3567EE00C031C6 /* cup.obj */,
 			);
 			name = models;
