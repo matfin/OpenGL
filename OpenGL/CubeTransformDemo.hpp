@@ -58,6 +58,7 @@ private:
     void drawLoop(GLuint vao);
     void applyMatrices(void);
     void keyActionListener(void);
+    void prepare(void);
     
 public:
     /**  

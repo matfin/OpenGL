@@ -13,6 +13,7 @@
 #include "ObjectLoader.hpp"
 #include "VertexBufferObjects.hpp"
 #include "CubeTransformDemo.hpp"
+#include "CameraPerspectiveDemo.hpp"
 
 using namespace std;
 
@@ -72,12 +73,22 @@ int runModelLoadDemo(void) {
     return run;
 }
 
+int runCameraPerspectiveDemo(void) {
+    vector<GLfloat> points = {0.0f, 1.0f, 0.0f};
+    vector<GLfloat> colours = {0.0f, 1.0f, 0.0f};
+    CameraPerspectiveDemo *demo = new CameraPerspectiveDemo(points, colours);
+    int run = demo->run();
+    delete(demo);
+    return run;
+}
+
 int main(int argc, const char * argv[]) {
 //    return shapes_main();
 //    return shaders_main();
 //    return vertex_buffer_objects_main();
 //    int run = runModelLoadDemo();
-    int run = runCubeTransformDemo();
+//    int run = runCubeTransformDemo();
+    int run = runCameraPerspectiveDemo();
     
     return run;
 }
