@@ -12,13 +12,14 @@ using namespace std;
 
 CameraPerspectiveDemo::CameraPerspectiveDemo() {
     cout << "Construct: CameraPerspectiveDemo" << endl;
-    meshes = {};
+    meshes = new vector<Mesh>();
 }
 
 CameraPerspectiveDemo::~CameraPerspectiveDemo() {
     program = 0;
     window = 0;
-    meshes.clear();
+    meshes->clear();
+    delete(meshes);
     glfwTerminate();
 }
 
@@ -121,7 +122,7 @@ void CameraPerspectiveDemo::linkShaders(const GLuint vertex_shader, const GLuint
  *  In the drawing loop we need points and a reference to this VAO.
  */
 void CameraPerspectiveDemo::prepareMeshes(void) {
-    for(auto &mesh: meshes) {
+    for(auto &mesh: *meshes) {
         /**
          *  Grab the points and colours.
          */
@@ -181,7 +182,7 @@ void CameraPerspectiveDemo::addMesh(Mesh mesh, const GLfloat pos_x, const GLfloa
     /**
      *  Once transformed, add the mesh to the meshes vector.
      */
-    meshes.push_back(mesh);
+    meshes->push_back(mesh);
 }
 
 /**
@@ -195,7 +196,7 @@ void CameraPerspectiveDemo::drawLoop() const {
     glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
     
     if(GL_TRUE == programReady()) {
-        for(auto &mesh: meshes) {
+        for(auto &mesh: *meshes) {
             glBindVertexArray(mesh.getVao());
             glDrawArrays(GL_TRIANGLES, 0, mesh.pointsSize());
         }

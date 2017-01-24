@@ -61,8 +61,13 @@ void Mesh::transformOrigin(const GLfloat pos_x, const GLfloat pos_y, const GLflo
     });
 }
 
-void Mesh::scaleMesh(const GLfloat value) {
-    
+void Mesh::scaleMesh(const GLfloat scale) {
+    transform(begin(points), end(points), begin(points), [scale](Point &point) {
+        point.x *= scale;
+        point.y *= scale;
+        point.z *= scale;
+        return point;
+    });
 }
 
 void Mesh::setVao(GLuint _vao) {
