@@ -9,23 +9,23 @@
 #ifndef Meshes_h
 #define Meshes_h
 
-#include "Structs.h"
+#include "Mesh.hpp"
 
-struct Mesh triangle = {
-    {
+Mesh triangle {
+    {   // Vertices
         {0.0f, 0.2f, 0.0f},
         {0.2f, -0.2f, 0.0f},
         {-0.2f, -0.2f, 0.0f}
     },
-    {
+    {   // Colours
         {1.0f, 0.0f, 0.0f},
         {0.0f, 1.0f, 0.0f},
         {0.0f, 0.0f, 1.0f}
     }
 };
 
-struct Mesh cube = {
-    {
+Mesh cube = {
+    {   // Vertices
         {-1.0f, -1.0f, -1.0f},
         {-1.0f, -1.0f, 1.0f},
         {-1.0f, 1.0f, 1.0f},
@@ -74,7 +74,7 @@ struct Mesh cube = {
         {-1.0f, 1.0f, 1.0f},
         {1.0f, -1.0f, 1.0f}
     },
-    {
+    {   //Colours
         {0.0f, 1.0f, 0.0f},
         {0.0f, 1.0f, 0.0f},
         {0.0f, 1.0f, 0.0f},

@@ -16,7 +16,7 @@
 #include "ShaderLoader.hpp"
 #include "GLParams.hpp"
 #include "Matrices.hpp"
-#include "Structs.h"
+#include "Mesh.hpp"
 
 class CameraPerspectiveDemo {
 private:

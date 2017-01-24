@@ -16,6 +16,8 @@ CameraPerspectiveDemo::CameraPerspectiveDemo() {
 }
 
 CameraPerspectiveDemo::~CameraPerspectiveDemo() {
+    program = 0;
+    window = 0;
     meshes.clear();
     glfwTerminate();
 }
@@ -123,8 +125,8 @@ void CameraPerspectiveDemo::prepareMeshes(void) {
         /**
          *  Grab the points and colours.
          */
-        vector<GLfloat> points = mesh.pointsUngrouped();
-        vector<GLfloat> colours = mesh.coloursUngrouped();
+        vector<GLfloat> points = mesh.pointsUnwound();
+        vector<GLfloat> colours = mesh.coloursUnwound();
         
         /**
          *  Tee uo the VBOs.
