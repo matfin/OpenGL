@@ -16,6 +16,7 @@ CameraPerspectiveDemo::CameraPerspectiveDemo() {
 }
 
 CameraPerspectiveDemo::~CameraPerspectiveDemo() {
+    cout << "Destruct: CameraPerspectiveDemo" << endl;
     program = 0;
     window = 0;
     meshes->clear();
