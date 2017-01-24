@@ -222,11 +222,11 @@ void CameraPerspectiveDemo::applyMatrices(void) const {
            GL_TRUE != scale_matrix ||
            GL_TRUE != translate_matrix
            ) {
-            glUniformMatrix4fv(rot_x_matrix, 1, GL_FALSE, m.rotation_x);
-            glUniformMatrix4fv(rot_y_matrix, 1, GL_FALSE, m.rotation_y);
-            glUniformMatrix4fv(rot_z_matrix, 1, GL_FALSE, m.rotation_z);
-            glUniformMatrix4fv(translate_matrix, 1, GL_FALSE, m.translation);
-            glUniformMatrix4fv(scale_matrix, 1, GL_FALSE, m.scaling);
+            glUniformMatrix4fv(rot_x_matrix, 1, GL_FALSE, m.getRotationX());
+            glUniformMatrix4fv(rot_y_matrix, 1, GL_FALSE, m.getRotationY());
+            glUniformMatrix4fv(rot_z_matrix, 1, GL_FALSE, m.getRotationZ());
+            glUniformMatrix4fv(translate_matrix, 1, GL_FALSE, m.getTranslation());
+            glUniformMatrix4fv(scale_matrix, 1, GL_FALSE, m.getTranslation());
         }
         else {
             cout << "Matrix transformation could match to uniform locations inside the shaders.";
@@ -273,6 +273,10 @@ int CameraPerspectiveDemo::run(void) {
     glUseProgram(program);
     
     while(!glfwWindowShouldClose(window)) {
+        
+//        m.rotateY(LEFT);
+//        m.rotateX(RIGHT);
+//        m.rotateZ(LEFT);
         applyMatrices();
         drawLoop();
     }

@@ -77,15 +77,10 @@ int runModelLoadDemo(void) {
 int runCameraPerspectiveDemo(void) {
     CameraPerspectiveDemo *demo = new CameraPerspectiveDemo();
     
-    cube.scaleMesh(0.25f);
-    demo->addMesh(cube, -0.3f, 0.0f, 0.0f);
-    demo->addMesh(cube, -0.3f, 0.0f, 0.3f);
-    demo->addMesh(cube, -0.3f, 0.0f, 0.6f);
+    cube.scaleMesh(0.3f);
     
-    demo->addMesh(cube, 0.3f, 0.0f, 0.0f);
-    demo->addMesh(cube, 0.3f, 0.0f, 0.3f);
-    demo->addMesh(cube, 0.3f, 0.0f, 0.6f);
-    
+    demo->addMesh(cube, 0.0f, 0.0f, 0.0f);
+
     int run = demo->run();
     delete(demo);
     return run;

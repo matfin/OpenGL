@@ -13,7 +13,9 @@ enum Direction {
     LEFT,
     RIGHT,
     UP,
-    DOWN
+    DOWN,
+    CLOSER,
+    FURTHER
 };
 
 enum ScaleMag {

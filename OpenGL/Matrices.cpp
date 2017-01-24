@@ -35,37 +35,54 @@ void Matrices::scale(ScaleMag direction) {
 void Matrices::translateX(Direction direction) {
     switch(direction) {
         case LEFT: {
-            move_x -= 0.05f;
+            translate_x -= 0.05f;
             break;
         }
         case RIGHT: {
-            move_x += 0.05f;
+            translate_x += 0.05f;
             break;
         }
         default: {
             break;
         }
     }
-    translation[12] = move_x;
+    translation[12] = translate_x;
 }
     
 void Matrices::translateY(Direction direction) {
     switch(direction) {
         case UP: {
-            move_y += 0.05f;
+            translate_y += 0.05f;
             break;
         }
         case DOWN: {
-            move_y -= 0.05f;
+            translate_y -= 0.05f;
             break;
         }
         default: {
             break;
         }
     }
-    translation[13] = move_y;
+    translation[13] = translate_y;
 }
-    
+
+void Matrices::translateZ(Direction direction) {
+    switch(direction) {
+        case CLOSER: {
+            translate_z += 0.05f;
+            break;
+        }
+        case FURTHER: {
+            translate_z -= 0.05f;
+            break;
+        }
+        default: {
+            break;
+        }
+    }
+    translation[14] = translate_z;
+}
+
 void Matrices::rotateX(Direction direction) {
     switch(direction) {
         case UP: {
