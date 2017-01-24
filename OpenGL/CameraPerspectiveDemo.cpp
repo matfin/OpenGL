@@ -15,29 +15,16 @@ CameraPerspectiveDemo::CameraPerspectiveDemo() {
     meshes = {};
 }
 
-CameraPerspectiveDemo::~CameraPerspectiveDemo() {}
-
-void CameraPerspectiveDemo::prepare() {
-    
-    try {
-        setupWindow();
-        
-        string vertex_shader_str = shader_loader.load("camera_perspective_demo.vert");
-        string fragment_shader_str = shader_loader.load("camera_perspective_demo.frag");
-        
-        GLuint vertex_shader = compileShader(&vertex_shader_str, GL_VERTEX_SHADER);
-        GLuint fragment_shader = compileShader(&fragment_shader_str, GL_FRAGMENT_SHADER);
-        
-        linkShaders(vertex_shader, fragment_shader);
-        gl_params.print_program_info_log(program);
-        
-        prepareMeshes();
-    }
-    catch(exception &e) {
-        cout << e.what();
-    }
+CameraPerspectiveDemo::~CameraPerspectiveDemo() {
+    meshes.clear();
+    glfwTerminate();
 }
 
+/**
+ *  This is where we need to set the window up
+ *  and tee up GLFW. We need to do this first
+ *  before we do anything else.
+ */
 bool CameraPerspectiveDemo::setupWindow(void) {
     
     if(!glfwInit()) {
@@ -69,6 +56,11 @@ bool CameraPerspectiveDemo::setupWindow(void) {
     return true;
 }
 
+/**
+ *  This function will compile a shader (vertex/fragment) and 
+ *  return the reference as a GLuint, so it can be attached 
+ *  to a program for linking.
+ */
 GLuint CameraPerspectiveDemo::compileShader(const string *shader_src_str, GLenum type) {
     
     GLuint shader = glCreateShader(type);
@@ -88,6 +80,20 @@ GLuint CameraPerspectiveDemo::compileShader(const string *shader_src_str, GLenum
     return shader;
 }
 
+/**
+ *  Checks to see if the program is ready by 
+ *  checking its GL_LINK_STATUS
+ */
+GLint CameraPerspectiveDemo::programReady() const {
+    GLint status;
+    glGetProgramiv(program, GL_LINK_STATUS, &status);
+    return status;
+}
+
+/**
+ *  This takes in the reference to two shaders that have been compiled and 
+ *  returns a reference to the linked program.
+ */
 void CameraPerspectiveDemo::linkShaders(const GLuint vertex_shader, const GLuint fragment_shader) {
     
     program = glCreateProgram();
@@ -96,22 +102,33 @@ void CameraPerspectiveDemo::linkShaders(const GLuint vertex_shader, const GLuint
     glAttachShader(program, fragment_shader);
     glLinkProgram(program);
     
-    int status;
-    glGetProgramiv(program, GL_LINK_STATUS, &status);
-    if(GL_TRUE != status) {
+    if(GL_TRUE != programReady()) {
         cout << "Failed to link the program with reference: " << program << endl;
         gl_params.print_program_info_log(program);
     }
 }
 
+/**
+ *  This prepares the VBOs and VAO for a mesh. It takes care of 
+ *  buffering so we can use them later on in the drawing loop.
+ *
+ *  A Mesh in this case is a struct that stores its own GLfloats 
+ *  for points and colours, along with a reference to a VAO we 
+ *  set down here. 
+ *  
+ *  In the drawing loop we need points and a reference to this VAO.
+ */
 void CameraPerspectiveDemo::prepareMeshes(void) {
     for(auto &mesh: meshes) {
         /**
-         *  Grab the points and colours
+         *  Grab the points and colours.
          */
         vector<GLfloat> points = mesh.pointsUngrouped();
         vector<GLfloat> colours = mesh.coloursUngrouped();
         
+        /**
+         *  Tee uo the VBOs.
+         */
         GLuint points_vbo;
         glGenBuffers(1, &points_vbo);
         glBindBuffer(GL_ARRAY_BUFFER, points_vbo);
@@ -122,10 +139,16 @@ void CameraPerspectiveDemo::prepareMeshes(void) {
         glBindBuffer(GL_ARRAY_BUFFER, colours_vbo);
         glBufferData(GL_ARRAY_BUFFER, colours.size() * sizeof(GLfloat), &colours[0], GL_STATIC_DRAW);
         
+        /**
+         *  Tee up the VAO.
+         */
         GLuint vao;
         glGenVertexArrays(1, &vao);
         glBindVertexArray(vao);
         
+        /**
+         *  The set up the vertex attrib pointers.
+         */
         glBindBuffer(GL_ARRAY_BUFFER, points_vbo);
         glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, NULL);
         glBindBuffer(GL_ARRAY_BUFFER, colours_vbo);
@@ -134,10 +157,17 @@ void CameraPerspectiveDemo::prepareMeshes(void) {
         glEnableVertexAttribArray(0);
         glEnableVertexAttribArray(1);
         
+        /**
+         *  Then assign the mesh a reference to its VAO.
+         */
         mesh.setVao(vao);
     }
 }
 
+/**
+ *  Called from another function, the first thing we need to do is 
+ *  add some meshes that we can later prepare.
+ */
 void CameraPerspectiveDemo::addMesh(Mesh *mesh, const GLfloat pos_x, const GLfloat pos_y, const GLfloat pos_z) {
     
     /**
@@ -152,47 +182,51 @@ void CameraPerspectiveDemo::addMesh(Mesh *mesh, const GLfloat pos_x, const GLflo
     meshes.push_back(*mesh);
 }
 
+/**
+ *  The main drawing loop where we go through each mesh
+ *  and draw it to the screen.
+ */
 void CameraPerspectiveDemo::drawLoop() const {
     
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glViewport(0, 0, 1280, 960);
     glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
     
-    int program_ready;
-    glGetProgramiv(program, GL_LINK_STATUS, &program_ready);
+    if(GL_TRUE == programReady()) {
+        for(auto &mesh: meshes) {
+            glBindVertexArray(mesh.getVao());
+            glDrawArrays(GL_TRIANGLES, 0, mesh.pointsSize());
+        }
+    }
     
-//    if(meshes && GL_TRUE == program_ready) {
-//        for(auto const mesh: *meshes) {
-//            glBindVertexArray(mesh.vao);
-//            glDrawArrays(GL_TRIANGLES, 0, mesh.points.size());
-//        }
-//    }
-    
+    glfwPollEvents();
     glfwSwapBuffers(window);
 }
 
 void CameraPerspectiveDemo::applyMatrices(void) const {
-    int rot_x_matrix = glGetUniformLocation(program, "rot_x_matrix");
-    int rot_y_matrix = glGetUniformLocation(program, "rot_y_matrix");
-    int rot_z_matrix = glGetUniformLocation(program, "rot_z_matrix");
-    int scale_matrix = glGetUniformLocation(program, "scale_matrix");
-    int translate_matrix = glGetUniformLocation(program, "translate_matrix");
-    
-    if(
-       GL_TRUE != rot_x_matrix ||
-       GL_TRUE != rot_y_matrix ||
-       GL_TRUE != rot_z_matrix ||
-       GL_TRUE != scale_matrix ||
-       GL_TRUE != translate_matrix
-    ) {
-        cout << "Matrix transformation could match to uniform locations inside the shaders.";
-    }
-    else {
-        glUniformMatrix4fv(rot_x_matrix, 1, GL_FALSE, m.rotation_x);
-        glUniformMatrix4fv(rot_y_matrix, 1, GL_FALSE, m.rotation_y);
-        glUniformMatrix4fv(rot_z_matrix, 1, GL_FALSE, m.rotation_z);
-        glUniformMatrix4fv(translate_matrix, 1, GL_FALSE, m.translation);
-        glUniformMatrix4fv(scale_matrix, 1, GL_FALSE, m.scaling);
+    if(GL_TRUE == programReady()) {
+        GLint rot_x_matrix = glGetUniformLocation(program, "rot_x_matrix");
+        GLint rot_y_matrix = glGetUniformLocation(program, "rot_y_matrix");
+        GLint rot_z_matrix = glGetUniformLocation(program, "rot_z_matrix");
+        GLint scale_matrix = glGetUniformLocation(program, "scale_matrix");
+        GLint translate_matrix = glGetUniformLocation(program, "translate_matrix");
+        
+        if(
+           GL_TRUE != rot_x_matrix ||
+           GL_TRUE != rot_y_matrix ||
+           GL_TRUE != rot_z_matrix ||
+           GL_TRUE != scale_matrix ||
+           GL_TRUE != translate_matrix
+           ) {
+            glUniformMatrix4fv(rot_x_matrix, 1, GL_FALSE, m.rotation_x);
+            glUniformMatrix4fv(rot_y_matrix, 1, GL_FALSE, m.rotation_y);
+            glUniformMatrix4fv(rot_z_matrix, 1, GL_FALSE, m.rotation_z);
+            glUniformMatrix4fv(translate_matrix, 1, GL_FALSE, m.translation);
+            glUniformMatrix4fv(scale_matrix, 1, GL_FALSE, m.scaling);
+        }
+        else {
+            cout << "Matrix transformation could match to uniform locations inside the shaders.";
+        }
     }
 }
 
@@ -200,11 +234,42 @@ void CameraPerspectiveDemo::keyActionListener(void) const {}
 
 int CameraPerspectiveDemo::run(void) {
     
-    prepare();
+    try {
+        /**
+         *  Set up the window. We need to call this before doing anything
+         *  with preparing VBOs and VAOs or we will get a Thread access exception.
+         */
+        setupWindow();
+    }
+    catch(exception &e) {
+        cout << e.what();
+        return -1;
+    }
     
+    /**
+     *  We then need to grab the vertex and fragment shaders, compile
+     *  both of them and then link them to form a program. We then
+     *  print the program status.
+     */
+    string vertex_shader_str = shader_loader.load("camera_perspective_demo.vert");
+    string fragment_shader_str = shader_loader.load("camera_perspective_demo.frag");
+    GLuint vertex_shader = compileShader(&vertex_shader_str, GL_VERTEX_SHADER);
+    GLuint fragment_shader = compileShader(&fragment_shader_str, GL_FRAGMENT_SHADER);
+    linkShaders(vertex_shader, fragment_shader);
+    gl_params.print_program_info_log(program);
+    
+    /**
+     *  This is where we tee up the meshes that have been added.
+     */
+    prepareMeshes();
+    
+    /**
+     *  Then we use the compiled program.
+     */
     glUseProgram(program);
     
     while(!glfwWindowShouldClose(window)) {
+        applyMatrices();
         drawLoop();
     }
     return 0;

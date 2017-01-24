@@ -28,10 +28,10 @@ private:
     GLParams gl_params;
     Matrices m;
     
-    void prepare(void);
     void prepareMeshes(void);
     bool setupWindow(void);
     GLuint compileShader(const std::string *shader_src_str, GLenum type);
+    GLint programReady() const;
     void linkShaders(const GLuint vertex_shader, const GLuint fragment_shader);
     
     void drawLoop() const;

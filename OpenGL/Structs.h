@@ -39,8 +39,16 @@ public:
         std::cout << "Desturct: Mesh" << std::endl;
     }
     
-    GLuint getVao() {
+    GLuint getVao() const {
         return vao;
+    }
+    
+    int pointsSize() const {
+        return points.size();
+    }
+    
+    int coloursSize() const {
+        return colours.size();
     }
     
     std::vector<GLfloat> pointsUngrouped() {

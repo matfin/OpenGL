@@ -11,6 +11,19 @@
 
 #include "Structs.h"
 
+struct Mesh triangle = {
+    {
+        {0.0f, 0.5f, 0.0f},
+        {0.5f, -0.5f, 0.0f},
+        {-0.5f, -0.5f, 0.0f}
+    },
+    {
+        {1.0f, 0.0f, 0.0f},
+        {0.0f, 1.0f, 0.0f},
+        {1.0f, 0.0f, 1.0f}
+    }
+};
+
 struct Mesh cube = {
     {
         {-1.0f, -1.0f, -1.0f},

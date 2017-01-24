@@ -76,10 +76,13 @@ int runModelLoadDemo(void) {
 
 int runCameraPerspectiveDemo(void) {
     CameraPerspectiveDemo *demo = new CameraPerspectiveDemo();
-    demo->addMesh(&cube, 0.0, 0.0, 0.0);
+//    demo->addMesh(&cube, 0.0, 0.0, 0.0);
+//    demo->addMesh(&cube, 0.5f, 0.5f, -1.0f);
+
+    demo->addMesh(&triangle, 0.0f, 0.0f, 0.0f);
     
     int run = demo->run();
-//    delete(demo);
+    delete(demo);
     return run;
 }
 
@@ -89,7 +92,9 @@ int main(int argc, const char * argv[]) {
 //    return vertex_buffer_objects_main();
 //    int run = runModelLoadDemo();
 //    int run = runCubeTransformDemo();
-    int run = runCameraPerspectiveDemo();
     
+    cout << "About to run!" << endl;
+    int run = runCameraPerspectiveDemo();
+    cout << "Done!" << endl;
     return run;
 }
