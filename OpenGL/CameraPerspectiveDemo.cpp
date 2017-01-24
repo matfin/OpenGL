@@ -13,29 +13,25 @@ using namespace std;
 CameraPerspectiveDemo::CameraPerspectiveDemo() {
     cout << "Construct: CameraPerspectiveDemo" << endl;
     meshes = {};
-    m = new Matrices();
-    shader_loader = new ShaderLoader();
 }
 
-CameraPerspectiveDemo::~CameraPerspectiveDemo() {
-    delete(m);
-    delete(meshes);
-}
+CameraPerspectiveDemo::~CameraPerspectiveDemo() {}
 
 void CameraPerspectiveDemo::prepare() {
     
     try {
         setupWindow();
         
-        string vertex_shader_str = shader_loader->load("camera_perspective_demo.vert");
-        string fragment_shader_str = shader_loader->load("camera_perspective_demo.frag");
-        
-        delete(shader_loader);
+        string vertex_shader_str = shader_loader.load("camera_perspective_demo.vert");
+        string fragment_shader_str = shader_loader.load("camera_perspective_demo.frag");
         
         GLuint vertex_shader = compileShader(&vertex_shader_str, GL_VERTEX_SHADER);
         GLuint fragment_shader = compileShader(&fragment_shader_str, GL_FRAGMENT_SHADER);
+        
         linkShaders(vertex_shader, fragment_shader);
         gl_params.print_program_info_log(program);
+        
+        prepareMeshes();
     }
     catch(exception &e) {
         cout << e.what();
@@ -108,6 +104,40 @@ void CameraPerspectiveDemo::linkShaders(const GLuint vertex_shader, const GLuint
     }
 }
 
+void CameraPerspectiveDemo::prepareMeshes(void) {
+    for(auto &mesh: meshes) {
+        /**
+         *  Grab the points and colours
+         */
+        vector<GLfloat> points = mesh.pointsUngrouped();
+        vector<GLfloat> colours = mesh.coloursUngrouped();
+        
+        GLuint points_vbo;
+        glGenBuffers(1, &points_vbo);
+        glBindBuffer(GL_ARRAY_BUFFER, points_vbo);
+        glBufferData(GL_ARRAY_BUFFER, points.size() * sizeof(GLfloat), &points[0], GL_STATIC_DRAW);
+        
+        GLuint colours_vbo;
+        glGenBuffers(1, &colours_vbo);
+        glBindBuffer(GL_ARRAY_BUFFER, colours_vbo);
+        glBufferData(GL_ARRAY_BUFFER, colours.size() * sizeof(GLfloat), &colours[0], GL_STATIC_DRAW);
+        
+        GLuint vao;
+        glGenVertexArrays(1, &vao);
+        glBindVertexArray(vao);
+        
+        glBindBuffer(GL_ARRAY_BUFFER, points_vbo);
+        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, NULL);
+        glBindBuffer(GL_ARRAY_BUFFER, colours_vbo);
+        glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, NULL);
+        
+        glEnableVertexAttribArray(0);
+        glEnableVertexAttribArray(1);
+        
+        mesh.setVao(vao);
+    }
+}
+
 void CameraPerspectiveDemo::addMesh(Mesh *mesh, const GLfloat pos_x, const GLfloat pos_y, const GLfloat pos_z) {
     
     /**
@@ -115,59 +145,11 @@ void CameraPerspectiveDemo::addMesh(Mesh *mesh, const GLfloat pos_x, const GLflo
      *  altered so we can place it relative to the world
      *  origin. We do this here.
      */
-    transform(begin(mesh->points), end(mesh->points), begin(mesh->points), [pos_x, pos_y, pos_z] (Point &point) {
-        point.x += pos_x;
-        point.y += pos_y;
-        point.z += pos_z;
-        return point;
-    });
-    
+    mesh->transformOrigin(pos_x, pos_y, pos_z);
     /**
-     *  We need to set up an array of points from the mesh Point structs.
+     *  Once transformed, add the mesh to the meshes vector.
      */
-    GLfloat points[mesh->points.size() * 3];
-    int size_i = 0;
-    for(auto const point: mesh->points) {
-        points[++size_i] = point.x;
-        points[++size_i] = point.y;
-        points[++size_i] = point.z;
-    }
-    
-    /**
-     *  We also need to do the same for colours
-     */
-    GLfloat colours[mesh->colours.size() * 3];
-    int size_j = 0;
-    for(auto const colour: mesh->colours) {
-        colours[++size_j] = colour.r;
-        colours[++size_j] = colour.g;
-        colours[++size_j] = colour.b;
-    }
-    
-    GLuint points_vbo;
-    glGenBuffers(1, &points_vbo);
-    glBindBuffer(GL_ARRAY_BUFFER, points_vbo);
-    glBufferData(GL_ARRAY_BUFFER, size_i * sizeof(GLfloat), &points, GL_STATIC_DRAW);
-    
-    GLuint colours_vbo;
-    glGenBuffers(1, &colours_vbo);
-    glBindBuffer(GL_ARRAY_BUFFER, colours_vbo);
-    glBufferData(GL_ARRAY_BUFFER, size_j * sizeof(GLfloat), &colours, GL_STATIC_DRAW);
-    
-    GLuint vao;
-    glGenVertexArrays(1, &vao);
-    glBindVertexArray(vao);
-    
-    glBindBuffer(GL_ARRAY_BUFFER, points_vbo);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, NULL);
-    glBindBuffer(GL_ARRAY_BUFFER, colours_vbo);
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, NULL);
-    
-    glEnableVertexAttribArray(0);
-    glEnableVertexAttribArray(1);
-    
-    mesh->vao = vao;
-    meshes->push_back(*mesh);
+    meshes.push_back(*mesh);
 }
 
 void CameraPerspectiveDemo::drawLoop() const {
@@ -179,12 +161,12 @@ void CameraPerspectiveDemo::drawLoop() const {
     int program_ready;
     glGetProgramiv(program, GL_LINK_STATUS, &program_ready);
     
-    if(meshes && GL_TRUE == program_ready) {
-        for(auto const mesh: *meshes) {
-            glBindVertexArray(mesh.vao);
-            glDrawArrays(GL_TRIANGLES, 0, mesh.points.size());
-        }
-    }
+//    if(meshes && GL_TRUE == program_ready) {
+//        for(auto const mesh: *meshes) {
+//            glBindVertexArray(mesh.vao);
+//            glDrawArrays(GL_TRIANGLES, 0, mesh.points.size());
+//        }
+//    }
     
     glfwSwapBuffers(window);
 }
@@ -206,17 +188,18 @@ void CameraPerspectiveDemo::applyMatrices(void) const {
         cout << "Matrix transformation could match to uniform locations inside the shaders.";
     }
     else {
-        glUniformMatrix4fv(rot_x_matrix, 1, GL_FALSE, m->rotation_x);
-        glUniformMatrix4fv(rot_y_matrix, 1, GL_FALSE, m->rotation_y);
-        glUniformMatrix4fv(rot_z_matrix, 1, GL_FALSE, m->rotation_z);
-        glUniformMatrix4fv(translate_matrix, 1, GL_FALSE, m->translation);
-        glUniformMatrix4fv(scale_matrix, 1, GL_FALSE, m->scaling);
+        glUniformMatrix4fv(rot_x_matrix, 1, GL_FALSE, m.rotation_x);
+        glUniformMatrix4fv(rot_y_matrix, 1, GL_FALSE, m.rotation_y);
+        glUniformMatrix4fv(rot_z_matrix, 1, GL_FALSE, m.rotation_z);
+        glUniformMatrix4fv(translate_matrix, 1, GL_FALSE, m.translation);
+        glUniformMatrix4fv(scale_matrix, 1, GL_FALSE, m.scaling);
     }
 }
 
 void CameraPerspectiveDemo::keyActionListener(void) const {}
 
 int CameraPerspectiveDemo::run(void) {
+    
     prepare();
     
     glUseProgram(program);

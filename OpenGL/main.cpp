@@ -79,7 +79,7 @@ int runCameraPerspectiveDemo(void) {
     demo->addMesh(&cube, 0.0, 0.0, 0.0);
     
     int run = demo->run();
-    delete(demo);
+//    delete(demo);
     return run;
 }
 

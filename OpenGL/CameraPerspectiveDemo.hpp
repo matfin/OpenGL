@@ -23,12 +23,13 @@ private:
     GLuint program;
     GLFWwindow *window;
 
-    std::vector<Mesh> *meshes;
-    ShaderLoader *shader_loader;
+    std::vector<Mesh> meshes;
+    ShaderLoader shader_loader;
     GLParams gl_params;
-    Matrices *m;
+    Matrices m;
     
     void prepare(void);
+    void prepareMeshes(void);
     bool setupWindow(void);
     GLuint compileShader(const std::string *shader_src_str, GLenum type);
     void linkShaders(const GLuint vertex_shader, const GLuint fragment_shader);
