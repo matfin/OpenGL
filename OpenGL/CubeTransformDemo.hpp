@@ -9,6 +9,7 @@
 #ifndef CubeTransformDemo_hpp
 #define CubeTransformDemo_hpp
 
+#include <OpenGL/gl3.h>
 #include <GLFW/glfw3.h>
 #include <string>
 #include <vector>

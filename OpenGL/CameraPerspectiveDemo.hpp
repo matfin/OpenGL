@@ -9,6 +9,7 @@
 #ifndef CameraPerspectiveDemo_hpp
 #define CameraPerspectiveDemo_hpp
 
+#include <OpenGL/gl3.h>
 #include <GLFW/glfw3.h>
 #include <string>
 #include <vector>
