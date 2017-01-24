@@ -168,18 +168,18 @@ void CameraPerspectiveDemo::prepareMeshes(void) {
  *  Called from another function, the first thing we need to do is 
  *  add some meshes that we can later prepare.
  */
-void CameraPerspectiveDemo::addMesh(Mesh *mesh, const GLfloat pos_x, const GLfloat pos_y, const GLfloat pos_z) {
+void CameraPerspectiveDemo::addMesh(Mesh mesh, const GLfloat pos_x, const GLfloat pos_y, const GLfloat pos_z) {
     
     /**
      *  The given points for the mesh might need to be 
      *  altered so we can place it relative to the world
      *  origin. We do this here.
      */
-    mesh->transformOrigin(pos_x, pos_y, pos_z);
+    mesh.transformOrigin(pos_x, pos_y, pos_z);
     /**
      *  Once transformed, add the mesh to the meshes vector.
      */
-    meshes.push_back(*mesh);
+    meshes.push_back(mesh);
 }
 
 /**

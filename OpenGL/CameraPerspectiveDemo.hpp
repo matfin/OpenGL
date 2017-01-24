@@ -41,7 +41,7 @@ private:
 public:
     CameraPerspectiveDemo();
     ~CameraPerspectiveDemo();
-    void addMesh(Mesh *mesh, const GLfloat pos_x, const GLfloat pos_y, const GLfloat pos_z);
+    void addMesh(Mesh mesh, const GLfloat pos_x, const GLfloat pos_y, const GLfloat pos_z);
     int run(void);
 };
 
