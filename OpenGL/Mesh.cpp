@@ -30,6 +30,10 @@ int Mesh::coloursSize() const {
     return colours.size();
 }
 
+Matrices* Mesh::getMatrices() {
+    return &m;
+}
+
 vector<GLfloat> Mesh::pointsUnwound() {
     vector<GLfloat> points_unwound;
     points_unwound.reserve(points.size() * 3);
@@ -52,22 +56,29 @@ vector<GLfloat> Mesh::coloursUnwound() {
     return colours_unwound;
 }
 
-void Mesh::transformOrigin(const GLfloat pos_x, const GLfloat pos_y, const GLfloat pos_z) {
-    transform(begin(points), end(points), begin(points), [pos_x, pos_y, pos_z](Point &point) {
-        point.x += pos_x;
-        point.y += pos_y;
-        point.z += pos_z;
-        return point;
-    });
-}
-
-void Mesh::scaleMesh(const GLfloat scale) {
-    transform(begin(points), end(points), begin(points), [scale](Point &point) {
-        point.x *= scale;
-        point.y *= scale;
-        point.z *= scale;
-        return point;
-    });
+void Mesh::applyMatrices(GLuint program) const {
+    GLuint rot_x_matrix = glGetUniformLocation(program, "rot_x_matrix");
+    GLuint rot_y_matrix = glGetUniformLocation(program, "rot_y_matrix");
+    GLuint rot_z_matrix = glGetUniformLocation(program, "rot_z_matrix");
+    GLuint scale_matrix = glGetUniformLocation(program, "scale_matrix");
+    GLuint translate_matrix = glGetUniformLocation(program, "translate_matrix");
+    
+    if(
+       GL_TRUE != rot_x_matrix ||
+       GL_TRUE != rot_y_matrix ||
+       GL_TRUE != rot_z_matrix ||
+       GL_TRUE != scale_matrix ||
+       GL_TRUE != translate_matrix
+       ) {
+        glUniformMatrix4fv(rot_x_matrix, 1, GL_FALSE, m.getRotationX());
+        glUniformMatrix4fv(rot_y_matrix, 1, GL_FALSE, m.getRotationY());
+        glUniformMatrix4fv(rot_z_matrix, 1, GL_FALSE, m.getRotationZ());
+        glUniformMatrix4fv(scale_matrix, 1, GL_FALSE, m.getScaling());
+        glUniformMatrix4fv(translate_matrix, 1, GL_FALSE, m.getTranslation());
+    }
+    else {
+        cout << "Unable to apply matrices to this mesh." << endl;
+    }
 }
 
 void Mesh::setVao(GLuint _vao) {

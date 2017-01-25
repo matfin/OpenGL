@@ -81,22 +81,22 @@ public:
         return scaling;
     }
     
-    void scale(ScaleMag direction);
     void translateX(Direction direction);
     void translateY(Direction direction);
     void translateZ(Direction direction);
+    void translateXTo(const float _x);
+    void translateYTo(const float _y);
+    void translateZTo(const float _z);
+    
     void rotateX(Direction direction);
     void rotateY(Direction direction);
     void rotateZ(Direction direction);
+    void rotateXTo(const float _x);
+    void rotateYTo(const float _y);
+    void rotateZTo(const float _z);
+    
+    void scale(ScaleMag direction);
+    void scaleTo(const float _scale);
 };
 
 #endif /* Matrices_hpp */
-
-
-
-//{
-//    1,  0,  0,  -Px,
-//    0,  0,  0,  0,
-//    0,  1,  0,  -py,
-//    0,  0,  0,  1
-//}

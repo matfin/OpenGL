@@ -12,6 +12,7 @@
 #include <GLFW/glfw3.h>
 #include <vector>
 #include <iostream>
+#include "Matrices.hpp"
 #include "Structs.h"
 
 class Mesh {
@@ -19,6 +20,7 @@ class Mesh {
 private:
     std::vector<Point> points;
     std::vector<Colour> colours;
+    Matrices m;
     GLuint vao;
     
 public:
@@ -28,12 +30,12 @@ public:
     GLuint getVao() const;
     int pointsSize() const;
     int coloursSize() const;
+    Matrices* getMatrices();
     
     std::vector<GLfloat> pointsUnwound();
     std::vector<GLfloat> coloursUnwound();
     
-    void transformOrigin(const GLfloat pos_x, const GLfloat pos_y, const GLfloat pos_z);
-    void scaleMesh(const GLfloat scale);
+    void applyMatrices(GLuint program) const;
     void setVao(GLuint _vao);
 };
 

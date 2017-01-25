@@ -36,7 +36,6 @@ private:
     void linkShaders(const GLuint vertex_shader, const GLuint fragment_shader);
     
     void drawLoop() const;
-    void applyMatrices(void) const;
     void keyActionListener(void) const;
     
 public:

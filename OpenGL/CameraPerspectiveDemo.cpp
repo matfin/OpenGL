@@ -41,7 +41,7 @@ bool CameraPerspectiveDemo::setupWindow(void) {
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     
-    window = glfwCreateWindow(1280, 960, "Camera Perspective Demo", NULL, NULL);
+    window = glfwCreateWindow(1024, 1024, "Camera Perspective Demo", NULL, NULL);
     if(!window) {
         glfwTerminate();
         throw runtime_error("GLFW failed to create a window.");
@@ -175,14 +175,15 @@ void CameraPerspectiveDemo::prepareMeshes(void) {
 void CameraPerspectiveDemo::addMesh(Mesh mesh, const GLfloat pos_x, const GLfloat pos_y, const GLfloat pos_z) {
     
     /**
-     *  The given points for the mesh might need to be 
-     *  altered so we can place it relative to the world
-     *  origin. We do this here.
+     *  Since the mesh might be a little big,
+     *  we should scale it down.
+     *  We should then use matrix translation
+     *  to place it where we want it to go.
      */
-    mesh.transformOrigin(pos_x, pos_y, pos_z);
-    /**
-     *  Once transformed, add the mesh to the meshes vector.
-     */
+    mesh.getMatrices()->scaleTo(0.2f);
+    mesh.getMatrices()->translateXTo(pos_x);
+    mesh.getMatrices()->translateYTo(pos_y);
+    
     meshes->push_back(mesh);
 }
 
@@ -193,45 +194,34 @@ void CameraPerspectiveDemo::addMesh(Mesh mesh, const GLfloat pos_x, const GLfloa
 void CameraPerspectiveDemo::drawLoop() const {
     
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    glViewport(0, 0, 1280, 960);
+    glViewport(0, 0, 1024, 1024);
     glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+    
+    int i = 0;
     
     if(GL_TRUE == programReady()) {
         for(auto &mesh: *meshes) {
             glBindVertexArray(mesh.getVao());
+            
+            /**
+             *  Alternate rotation for the meshes.
+             */
+            if(i == 0) {
+                mesh.getMatrices()->rotateZ(LEFT);
+                i++;
+            }
+            else {
+                mesh.getMatrices()->rotateZ(RIGHT);
+                i--;
+            }
+            
+            mesh.applyMatrices(program);
             glDrawArrays(GL_TRIANGLES, 0, mesh.pointsSize());
         }
     }
     
     glfwPollEvents();
     glfwSwapBuffers(window);
-}
-
-void CameraPerspectiveDemo::applyMatrices(void) const {
-    if(GL_TRUE == programReady()) {
-        GLint rot_x_matrix = glGetUniformLocation(program, "rot_x_matrix");
-        GLint rot_y_matrix = glGetUniformLocation(program, "rot_y_matrix");
-        GLint rot_z_matrix = glGetUniformLocation(program, "rot_z_matrix");
-        GLint scale_matrix = glGetUniformLocation(program, "scale_matrix");
-        GLint translate_matrix = glGetUniformLocation(program, "translate_matrix");
-        
-        if(
-           GL_TRUE != rot_x_matrix ||
-           GL_TRUE != rot_y_matrix ||
-           GL_TRUE != rot_z_matrix ||
-           GL_TRUE != scale_matrix ||
-           GL_TRUE != translate_matrix
-           ) {
-            glUniformMatrix4fv(rot_x_matrix, 1, GL_FALSE, m.getRotationX());
-            glUniformMatrix4fv(rot_y_matrix, 1, GL_FALSE, m.getRotationY());
-            glUniformMatrix4fv(rot_z_matrix, 1, GL_FALSE, m.getRotationZ());
-            glUniformMatrix4fv(translate_matrix, 1, GL_FALSE, m.getTranslation());
-            glUniformMatrix4fv(scale_matrix, 1, GL_FALSE, m.getTranslation());
-        }
-        else {
-            cout << "Matrix transformation could match to uniform locations inside the shaders.";
-        }
-    }
 }
 
 void CameraPerspectiveDemo::keyActionListener(void) const {}
@@ -273,11 +263,6 @@ int CameraPerspectiveDemo::run(void) {
     glUseProgram(program);
     
     while(!glfwWindowShouldClose(window)) {
-        
-//        m.rotateY(LEFT);
-//        m.rotateX(RIGHT);
-//        m.rotateZ(LEFT);
-        applyMatrices();
         drawLoop();
     }
     return 0;
