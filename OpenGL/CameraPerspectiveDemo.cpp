@@ -10,6 +10,8 @@
 
 using namespace std;
 
+int Matrices::objectCount = 0;
+
 CameraPerspectiveDemo::CameraPerspectiveDemo() {
     cout << "Construct: CameraPerspectiveDemo" << endl;
     meshes = new vector<Mesh>();
@@ -17,6 +19,7 @@ CameraPerspectiveDemo::CameraPerspectiveDemo() {
 
 CameraPerspectiveDemo::~CameraPerspectiveDemo() {
     cout << "Destruct: CameraPerspectiveDemo" << endl;
+    cout << "We had: " << Matrices::getObjectCount() << " Matrices objects." << endl;
     program = 0;
     window = 0;
     meshes->clear();
@@ -172,7 +175,7 @@ void CameraPerspectiveDemo::prepareMeshes(void) {
  *  Called from another function, the first thing we need to do is 
  *  add some meshes that we can later prepare.
  */
-void CameraPerspectiveDemo::addMesh(Mesh mesh, const GLfloat pos_x, const GLfloat pos_y, const GLfloat pos_z) {
+void CameraPerspectiveDemo::addMesh(Mesh mesh, const Position position, const Rotation rotation) {
     
     /**
      *  Since the mesh might be a little big,
@@ -181,8 +184,14 @@ void CameraPerspectiveDemo::addMesh(Mesh mesh, const GLfloat pos_x, const GLfloa
      *  to place it where we want it to go.
      */
     mesh.getMatrices()->scaleTo(0.2f);
-    mesh.getMatrices()->translateXTo(pos_x);
-    mesh.getMatrices()->translateYTo(pos_y);
+    
+    mesh.getMatrices()->translateXTo(position.px);
+    mesh.getMatrices()->translateYTo(position.py);
+    mesh.getMatrices()->translateZTo(position.pz);
+    
+    mesh.getMatrices()->rotateXTo(rotation.rx);
+    mesh.getMatrices()->rotateYTo(rotation.ry);
+    mesh.getMatrices()->rotateZTo(rotation.rz);
     
     meshes->push_back(mesh);
 }
@@ -197,24 +206,9 @@ void CameraPerspectiveDemo::drawLoop() const {
     glViewport(0, 0, 1024, 1024);
     glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
     
-    int i = 0;
-    
     if(GL_TRUE == programReady()) {
         for(auto &mesh: *meshes) {
             glBindVertexArray(mesh.getVao());
-            
-            /**
-             *  Alternate rotation for the meshes.
-             */
-            if(i == 0) {
-                mesh.getMatrices()->rotateZ(LEFT);
-                i++;
-            }
-            else {
-                mesh.getMatrices()->rotateZ(RIGHT);
-                i--;
-            }
-            
             mesh.applyMatrices(program);
             glDrawArrays(GL_TRIANGLES, 0, mesh.pointsSize());
         }

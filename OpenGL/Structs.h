@@ -25,4 +25,16 @@ struct Colour {
     GLfloat b;
 };
 
+struct Position {
+    GLfloat px;
+    GLfloat py;
+    GLfloat pz;
+};
+
+struct Rotation {
+    GLfloat rx;
+    GLfloat ry;
+    GLfloat rz;
+};
+
 #endif /* Structs_h */

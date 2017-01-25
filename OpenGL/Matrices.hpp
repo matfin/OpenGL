@@ -61,6 +61,8 @@ public:
     Matrices();
     ~Matrices();
     
+    static int objectCount;
+    
     const float *getRotationX() const {
         return rotation_x;
     }
@@ -81,6 +83,10 @@ public:
         return scaling;
     }
     
+    static int getObjectCount() {
+        return objectCount;
+    }
+    
     void translateX(Direction direction);
     void translateY(Direction direction);
     void translateZ(Direction direction);
@@ -96,7 +102,7 @@ public:
     void rotateZTo(const float _z);
     
     void scale(ScaleMag direction);
-    void scaleTo(const float _scale);
+    void scaleTo(float _scale);
 };
 
 #endif /* Matrices_hpp */

@@ -17,6 +17,7 @@
 #include "ShaderLoader.hpp"
 #include "GLParams.hpp"
 #include "Matrices.hpp"
+#include "Structs.h"
 #include "Mesh.hpp"
 
 class CameraPerspectiveDemo {
@@ -27,7 +28,6 @@ private:
     std::vector<Mesh> *meshes;
     ShaderLoader shader_loader;
     GLParams gl_params;
-    Matrices m;
     
     void prepareMeshes(void);
     bool setupWindow(void);
@@ -41,7 +41,7 @@ private:
 public:
     CameraPerspectiveDemo();
     ~CameraPerspectiveDemo();
-    void addMesh(Mesh mesh, const GLfloat pos_x, const GLfloat pos_y, const GLfloat pos_z);
+    void addMesh(Mesh mesh, const Position position, const Rotation rotation);
     int run(void);
 };
 

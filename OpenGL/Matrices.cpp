@@ -13,6 +13,7 @@ using namespace std;
 
 Matrices::Matrices() {
     cout << "Construct: Matrices." << std::endl;
+    objectCount++;
 }
 Matrices::~Matrices() {
     cout << "Destruct: Matrices." << std::endl;
@@ -105,7 +106,11 @@ void Matrices::rotateX(Direction direction) {
 }
 
 void Matrices::rotateXTo(const float _x) {
-    //TODO
+    rotate_x = _x;
+    rotation_x[5] = cosf(rotate_x);
+    rotation_x[6] = cosf(rotate_x);
+    rotation_x[9] = -sinf(rotate_x);
+    rotation_x[10] = cosf(rotate_x);
 }
     
 void Matrices::rotateY(Direction direction) {
@@ -129,7 +134,11 @@ void Matrices::rotateY(Direction direction) {
 }
 
 void Matrices::rotateYTo(const float _y) {
-    //TODO
+    rotate_y = _y;
+    rotation_y[0] = cosf(rotate_y);
+    rotation_y[2] = -sinf(rotate_y);
+    rotation_y[8] = sinf(rotate_y);
+    rotation_y[10] = cosf(rotate_y);
 }
     
 void Matrices::rotateZ(Direction direction) {
@@ -146,7 +155,6 @@ void Matrices::rotateZ(Direction direction) {
             break;
         }
     }
-    
     rotation_z[0] = cosf(rotate_z);
     rotation_z[1] = sinf(rotate_z);
     rotation_z[4] = -sinf(rotate_z);
@@ -154,7 +162,11 @@ void Matrices::rotateZ(Direction direction) {
 }
 
 void Matrices::rotateZTo(const float _z) {
-    //TODO
+    rotate_z = _z;
+    rotation_z[0] = cosf(rotate_z);
+    rotation_z[1] = sinf(rotate_z);
+    rotation_z[4] = -sinf(rotate_z);
+    rotation_z[5] = cosf(rotate_z);
 }
 
 void Matrices::scale(ScaleMag direction) {
@@ -171,7 +183,7 @@ void Matrices::scale(ScaleMag direction) {
     scaling[0] = scaling[5] = scaling[10] = scale_mag;
 }
 
-void Matrices::scaleTo(const float _scale) {
+void Matrices::scaleTo(float _scale) {
     scale_mag = _scale;
     scaling[0] = scaling[5] = scaling[10] = scale_mag;
 }
