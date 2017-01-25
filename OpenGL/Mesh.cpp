@@ -30,7 +30,7 @@ int Mesh::coloursSize() const {
     return colours.size();
 }
 
-Matrices* Mesh::getMatrices() {
+Matrices* Mesh::getMatrices() const {
     return &m;
 }
 

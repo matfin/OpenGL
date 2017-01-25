@@ -20,7 +20,7 @@ class Mesh {
 private:
     std::vector<Point> points;
     std::vector<Colour> colours;
-    Matrices m;
+    mutable Matrices m;
     GLuint vao;
     
 public:
@@ -30,7 +30,7 @@ public:
     GLuint getVao() const;
     int pointsSize() const;
     int coloursSize() const;
-    Matrices* getMatrices();
+    Matrices* getMatrices() const;
     
     std::vector<GLfloat> pointsUnwound();
     std::vector<GLfloat> coloursUnwound();

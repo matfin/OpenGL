@@ -14,7 +14,6 @@ int Matrices::objectCount = 0;
 
 CameraPerspectiveDemo::CameraPerspectiveDemo() {
     cout << "Construct: CameraPerspectiveDemo" << endl;
-    meshes = new vector<Mesh>();
 }
 
 CameraPerspectiveDemo::~CameraPerspectiveDemo() {
@@ -22,8 +21,7 @@ CameraPerspectiveDemo::~CameraPerspectiveDemo() {
     cout << "We had: " << Matrices::getObjectCount() << " Matrices objects." << endl;
     program = 0;
     window = 0;
-    meshes->clear();
-    delete(meshes);
+    meshes.clear();
     glfwTerminate();
 }
 
@@ -126,7 +124,7 @@ void CameraPerspectiveDemo::linkShaders(const GLuint vertex_shader, const GLuint
  *  In the drawing loop we need points and a reference to this VAO.
  */
 void CameraPerspectiveDemo::prepareMeshes(void) {
-    for(auto &mesh: *meshes) {
+    for(auto &mesh: meshes) {
         /**
          *  Grab the points and colours.
          */
@@ -193,7 +191,7 @@ void CameraPerspectiveDemo::addMesh(Mesh mesh, const Position position, const Ro
     mesh.getMatrices()->rotateYTo(rotation.ry);
     mesh.getMatrices()->rotateZTo(rotation.rz);
     
-    meshes->push_back(mesh);
+    meshes.push_back(mesh);
 }
 
 /**
@@ -207,7 +205,24 @@ void CameraPerspectiveDemo::drawLoop() const {
     glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
     
     if(GL_TRUE == programReady()) {
-        for(auto &mesh: *meshes) {
+        for(auto &mesh: meshes) {
+            
+            auto i = &mesh - &meshes[0];
+            Matrices *m = mesh.getMatrices();
+            
+            if(i == 0) {
+                m->rotateZ(LEFT);
+            }
+            if(i == 1) {
+                m->rotateY(RIGHT);
+            }
+            if(i == 2) {
+                m->rotateX(UP);
+            }
+            if(i == 3) {
+                m->rotateZ(RIGHT);
+            }
+            
             glBindVertexArray(mesh.getVao());
             mesh.applyMatrices(program);
             glDrawArrays(GL_TRIANGLES, 0, mesh.pointsSize());

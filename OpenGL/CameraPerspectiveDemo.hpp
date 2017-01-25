@@ -25,7 +25,7 @@ private:
     GLuint program;
     GLFWwindow *window;
 
-    std::vector<Mesh> *meshes;
+    std::vector<Mesh> meshes;
     ShaderLoader shader_loader;
     GLParams gl_params;
     

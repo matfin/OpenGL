@@ -89,8 +89,11 @@ int runCameraPerspectiveDemo(void) {
      *  -   the second parameter is a Position struct (x, y, z) GLfloat coords.
      *  -   the third parameter is a Rotation struct (x, y, z) GLfloat rotation values.
      */
-    demo->addMesh(cube, {-2.0f, 0.0f, 0.0f}, {0.0f, 0.5f, 0.5f});
-    demo->addMesh(cube, {2.0f, 0.0f, 0.0f}, {0.5f, 0.0f, 0.5f});
+    demo->addMesh(cube, {-2.0f, 2.0f, 0.0f}, {0.0f, 0.5f, 0.5f});
+    demo->addMesh(cube, {2.0f, 2.0f, 0.0f}, {0.5f, 0.0f, 0.5f});
+    
+    demo->addMesh(cube, {-2.0f, -2.0f, 0.0f}, {1.0f, 0.25f, 0.25f});
+    demo->addMesh(cube, {2.0f, -2.0f, 0.0f}, {1.5f, 0.5f, 1.5f});
 
     int run = demo->run();
     delete(demo);
