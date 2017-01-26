@@ -30,6 +30,10 @@ int Mesh::coloursSize() const {
     return colours.size();
 }
 
+Position Mesh::originDifference() const {
+    return m.getTranslationDifference();
+}
+
 Matrices* Mesh::getMatrices() const {
     return &m;
 }

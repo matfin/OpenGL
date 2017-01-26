@@ -192,6 +192,10 @@ void CameraPerspectiveDemo::addMesh(Mesh mesh, const Position position, const Ro
     mesh.getMatrices()->rotateZTo(rotation.rz);
     
     meshes.push_back(mesh);
+    
+    Position difference = mesh.originDifference();
+    
+    cout << "Mesh added with dx: " << difference.px << ", dy: " << difference.py << ", dz: " << difference.pz << endl;
 }
 
 /**
@@ -206,21 +210,15 @@ void CameraPerspectiveDemo::drawLoop() const {
     
     if(GL_TRUE == programReady()) {
         for(auto &mesh: meshes) {
-            
-            auto i = &mesh - &meshes[0];
-            Matrices *m = mesh.getMatrices();
-            
-            if(i == 0) {
-                m->rotateZ(LEFT);
-            }
-            if(i == 1) {
-                m->rotateY(RIGHT);
-            }
-            if(i == 2) {
-                m->rotateX(UP);
-            }
-            if(i == 3) {
-                m->rotateZ(RIGHT);
+            {
+                auto i = &mesh - &meshes[0];
+                Matrices *m = mesh.getMatrices();
+                if(!i || !i % 2) {
+                    m->rotateZ(RIGHT);
+                }
+                else {
+                    m->rotateX(UP);
+                }
             }
             
             glBindVertexArray(mesh.getVao());

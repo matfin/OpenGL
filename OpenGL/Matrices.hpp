@@ -11,6 +11,7 @@
 
 #include <cmath>
 #include "Enumerations.h"
+#include "Structs.h"
 
 class Matrices {
 private:
@@ -81,6 +82,14 @@ public:
 
     const float *getScaling() const {
         return scaling;
+    }
+    
+    Position getTranslationDifference() const {
+        return Position{
+            translate_x,
+            translate_y,
+            translate_z
+        };
     }
     
     static int getObjectCount() {

@@ -11,6 +11,7 @@
 #include "Meshes.h"
 #include "Shapes.hpp"
 #include "Structs.h"
+#include "Matrix.hpp"
 #include "Shaders.hpp"
 #include "ObjectLoader.hpp"
 #include "VertexBufferObjects.hpp"
@@ -100,12 +101,38 @@ int runCameraPerspectiveDemo(void) {
     return run;
 }
 
+int matrixOperations() {
+    Matrix<GLfloat> m1({
+        Row<GLfloat>({1.0f, 2.0f, 3.0f, 4.0f}),
+        Row<GLfloat>({5.0f, 6.0f, 7.0f, 8.0f})
+    });
+
+    Matrix<GLfloat> m2({
+        Row<GLfloat>({1.0f, 2.0f, 3.0f, 4.0f}),
+        Row<GLfloat>({5.0f, 6.0f, 7.0f, 8.0f})
+    });
+    
+    Matrix<GLfloat> m3({
+        Row<GLfloat>({2.0f, 2.0f, 3.0f, 4.0f}),
+        Row<GLfloat>({5.0f, 6.0f, 7.0f, 8.0f})
+    });
+
+    bool m1_eq_m2 = m1 == m2;
+    bool m1_eq_m3 = m1 == m3;
+    bool m1_ne_m3 = m1 != m3;
+    bool m1_ne_m2 = m1 != m2;
+    
+    return 0;
+}
+
 int main(int argc, const char * argv[]) {
 //    return shapes_main();
 //    return shaders_main();
 //    return vertex_buffer_objects_main();
 //    int run = runModelLoadDemo();
 //    int run = runCubeTransformDemo();
-    int run = runCameraPerspectiveDemo();
-    return run;
+//    int run = runCameraPerspectiveDemo();
+//    return run;
+    int matrix_run = matrixOperations();
+    return 0;
 }
