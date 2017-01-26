@@ -27,10 +27,6 @@ struct Row {
         items = _items;
     }
     
-    int count() const {
-        return items.size();
-    }
-    
     bool operator==(const Row &row) const {
         return items == row.items;
     }
@@ -55,6 +51,7 @@ public:
     bool operator!=(const Matrix<T> &matrix) const;
     Matrix operator+(const Matrix<T> &matrix) const;
     Matrix operator-(const Matrix<T> &matrix) const;
+    Matrix operator*(const T scalar) const;
     Matrix operator*(const Matrix<T> &matrix) const;
 };
 
@@ -115,7 +112,7 @@ Matrix<T> Matrix<T>::operator+(const Matrix<T> &matrix) const {
     auto a = begin(rows);
     auto b = begin(matrix.rows);
     for(; a != end(rows) && b != end(matrix.rows); ++a, ++b) {
-        assert(a->count() == b->count());
+        assert(a->items.size() == b->items.size());
         
         auto c = begin(a->items);
         auto d = begin(b->items);
@@ -140,7 +137,7 @@ Matrix<T> Matrix<T>::operator-(const Matrix<T> &matrix) const {
     auto a = begin(rows);
     auto b = begin(matrix.rows);
     for(; a != end(rows) && b != end(matrix.rows); ++a, ++b) {
-        assert(a->count() == b->count());
+        assert(a->items.size() == b->items.size());
         
         auto c = begin(a->items);
         auto d = begin(b->items);
@@ -157,8 +154,26 @@ Matrix<T> Matrix<T>::operator-(const Matrix<T> &matrix) const {
 }
 
 template<typename T>
+Matrix<T> Matrix<T>::operator*(const T scalar) const {
+    
+    Matrix<T> m;
+    
+    for(auto &row: rows) {
+        Row<T> m_row;
+        for(auto &value: row.items) {
+            m_row.items.push_back(value * scalar);
+        }
+        m.addRow(m_row);
+    }
+    
+    return m;
+}
+
+template<typename T>
 Matrix<T> Matrix<T>::operator*(const Matrix<T> &matrix) const {
-    return *this;
+    
+    
+    
 }
 
 #endif /* Matrix_hpp */
