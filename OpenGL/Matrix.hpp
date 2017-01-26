@@ -11,6 +11,7 @@
 
 #include <GLFW/glfw3.h>
 #include <vector>
+#include <algorithm>
 #include <iostream>
 #include <cassert>
 
@@ -172,8 +173,60 @@ Matrix<T> Matrix<T>::operator*(const T scalar) const {
 template<typename T>
 Matrix<T> Matrix<T>::operator*(const Matrix<T> &matrix) const {
     
+    /**
+     *  When multiplying matrices, the number of rows in
+     *  the second matrix must be equal to the number of 
+     *  columns in the first matrix. Here, we get the number
+     *  of rows in the second matrix.
+     */
+    int matrix_row_size = matrix.rows.size();
     
+    /**
+     *  We then run through each row of the first matrix to ensure 
+     *  that the size of the items in each row is eqaul to the size 
+     *  of the rows in the second matrix.
+     *
+     *  If one of the sizes don't match, then we don't have a valid
+     *  matrix we can multiply.
+     */
+    bool row_column_match = std::all_of(begin(rows), end(rows), [matrix_row_size](Row<T> row) {
+        return row.items.size() == matrix_row_size;
+    });
     
+    /**
+     *  This assert will fail if the matrix is not valid.
+     */
+    assert(row_column_match);
+    
+    Matrix<T> m;
+    
+    for(const auto &row: rows) {
+        
+        Row<T> m_row;
+        
+        for(int i = 0; i < matrix.rows.at(0).items.size(); i++) {
+            
+            auto a = begin(row.items);
+            auto a_end = end(row.items);
+            std::vector<Row<T>> matrix_rows = matrix.getRows();
+            auto b = begin(matrix_rows);
+            auto b_end = end(matrix_rows);
+            
+            T product = 0;
+            for(; a != a_end && b != b_end; ++a, ++b) {
+                
+                T first = *a;
+                T second = b->items.at(i);
+                
+                product += *(a) * b->items.at(i);
+            }
+            m_row.items.push_back(product);
+        }
+        
+        m.addRow(m_row);
+    }
+    
+    return m;
 }
 
 #endif /* Matrix_hpp */

@@ -103,23 +103,67 @@ int runCameraPerspectiveDemo(void) {
 
 int matrixOperations() {
     
-    Matrix<int> m1({
-        Row<int>({4, 6}),
-        Row<int>({9, 8}),
-        Row<int>({2, 3})
-    });
+//    Matrix<int> m1({
+//        Row<int>({4, 6}),
+//        Row<int>({9, 8}),
+//        Row<int>({2, 3})
+//    });
+//    
+//    Matrix<int> m2({
+//        Row<int>({2, 9}),
+//        Row<int>({4, 1}),
+//        Row<int>({3, 3})
+//    });
     
-    Matrix<int> m2({
-        Row<int>({2, 9}),
-        Row<int>({4, 1}),
-        Row<int>({3, 3})
-    });
-    
-    Matrix<int> added = m1 + m2;
-    
-    Matrix<int> subtracted = m1 - m2;
-    
-    Matrix<int> multiplied = added * 5;
+//    Matrix<int> added = m1 + m2;
+//    
+//    Matrix<int> subtracted = m1 - m2;
+//    
+//    Matrix<int> scalar_multiplied = added * 4;
+    {
+        Matrix<int> mul1({
+            Row<int>({1, 4}),
+            Row<int>({19, 7})
+        });
+        
+        Matrix<int> mul2({
+            Row<int>({9}),
+            Row<int>({16})
+        });
+        
+        Matrix<int> result = mul1 * mul2;
+        bool wait = true;
+    }
+    {
+        Matrix<int> mul1({
+            Row<int>({1,4,3,6}),
+            Row<int>({5,2,1,0})
+        });
+        Matrix<int> mul2({
+            Row<int>({1,3}),
+            Row<int>({4,0}),
+            Row<int>({5,-1}),
+            Row<int>({6,8})
+        });
+        
+        Matrix<int> result = mul1 * mul2;
+        bool wait = true;
+    }
+    {
+        Matrix<int> mul1({
+            Row<int>({0,2,6}),
+            Row<int>({9,7,4}),
+            Row<int>({3,1,8})
+        });
+        Matrix<int> mul2({
+            Row<int>({9,5,6}),
+            Row<int>({2,2,1}),
+            Row<int>({0,0,4})
+        });
+        
+        Matrix<int> result = mul1 * mul2;
+        bool wait = true;
+    }
     
     return 0;
 }
