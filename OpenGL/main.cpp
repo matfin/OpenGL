@@ -117,6 +117,8 @@ int matrixOperations() {
     
     Matrix<int> added = m1 + m2;
     
+    Matrix<int> subtracted = m1 - m2;
+    
     return 0;
 }
 

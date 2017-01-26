@@ -133,7 +133,27 @@ Matrix<T> Matrix<T>::operator+(const Matrix<T> &matrix) const {
 
 template<typename T>
 Matrix<T> Matrix<T>::operator-(const Matrix<T> &matrix) const {
-    return *this;
+    
+    assert(rows.size() == matrix.rows.size());
+    Matrix<T> m;
+    
+    auto a = begin(rows);
+    auto b = begin(matrix.rows);
+    for(; a != end(rows) && b != end(matrix.rows); ++a, ++b) {
+        assert(a->count() == b->count());
+        
+        auto c = begin(a->items);
+        auto d = begin(b->items);
+        Row<T> row;
+        
+        for(; c != end(a->items) && d != end(b->items); ++c, ++d) {
+            row.items.push_back(*c - *d);
+        }
+        
+        m.addRow(row);
+    }
+    
+    return m;
 }
 
 template<typename T>
