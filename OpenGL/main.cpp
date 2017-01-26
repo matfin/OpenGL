@@ -102,25 +102,20 @@ int runCameraPerspectiveDemo(void) {
 }
 
 int matrixOperations() {
-    Matrix<GLfloat> m1({
-        Row<GLfloat>({1.0f, 2.0f, 3.0f, 4.0f}),
-        Row<GLfloat>({5.0f, 6.0f, 7.0f, 8.0f})
-    });
-
-    Matrix<GLfloat> m2({
-        Row<GLfloat>({1.0f, 2.0f, 3.0f, 4.0f}),
-        Row<GLfloat>({5.0f, 6.0f, 7.0f, 8.0f})
+    
+    Matrix<int> m1({
+        Row<int>({4, 6}),
+        Row<int>({9, 8}),
+        Row<int>({2, 3})
     });
     
-    Matrix<GLfloat> m3({
-        Row<GLfloat>({2.0f, 2.0f, 3.0f, 4.0f}),
-        Row<GLfloat>({5.0f, 6.0f, 7.0f, 8.0f})
+    Matrix<int> m2({
+        Row<int>({2, 9}),
+        Row<int>({4, 1}),
+        Row<int>({3, 3})
     });
-
-    bool m1_eq_m2 = m1 == m2;
-    bool m1_eq_m3 = m1 == m3;
-    bool m1_ne_m3 = m1 != m3;
-    bool m1_ne_m2 = m1 != m2;
+    
+    Matrix<int> added = m1 + m2;
     
     return 0;
 }
