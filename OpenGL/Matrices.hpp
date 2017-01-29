@@ -113,10 +113,10 @@ public:
         }
     }
     
-    const float* getMatrixUnwound(MatrixType type) const {
-        int size = 0;
+    std::vector<float> getMatrixUnwound(MatrixType type) const {
+        
         Matrix<float> *_to_convert;
-        GLfloat result[16];
+        std::vector<float> result;
         
         switch(type) {
             case ROTATION_X: {
@@ -143,7 +143,7 @@ public:
         
         for(const auto &row: _to_convert->getRows()) {
             for(const auto &item: row.items) {
-                result[size++] = item;
+                result.push_back(item);
             }
         }
         

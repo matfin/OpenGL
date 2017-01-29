@@ -291,11 +291,11 @@ void CubeTransformDemo::applyMatrices(void) {
        GL_TRUE != scale_matrix_loc ||
        GL_TRUE != translate_matrix_loc
     ) {
-        glUniformMatrix4fv(rot_x_matrix_loc, 1, GL_FALSE, m->getMatrixUnwound(ROTATION_X));
-        glUniformMatrix4fv(rot_y_matrix_loc, 1, GL_FALSE, m->getMatrixUnwound(ROTATION_Y));
-        glUniformMatrix4fv(rot_z_matrix_loc, 1, GL_FALSE, m->getMatrixUnwound(ROTATION_Z));
-        glUniformMatrix4fv(translate_matrix_loc, 1, GL_FALSE, m->getMatrixUnwound(TRANSLATION));
-        glUniformMatrix4fv(scale_matrix_loc, 1, GL_FALSE, m->getMatrixUnwound(SCALING));
+//        glUniformMatrix4fv(rot_x_matrix_loc, 1, GL_FALSE, m->getMatrixUnwound(ROTATION_X));
+//        glUniformMatrix4fv(rot_y_matrix_loc, 1, GL_FALSE, m->getMatrixUnwound(ROTATION_Y));
+//        glUniformMatrix4fv(rot_z_matrix_loc, 1, GL_FALSE, m->getMatrixUnwound(ROTATION_Z));
+//        glUniformMatrix4fv(translate_matrix_loc, 1, GL_FALSE, m->getMatrixUnwound(TRANSLATION));
+//        glUniformMatrix4fv(scale_matrix_loc, 1, GL_FALSE, m->getMatrixUnwound(SCALING));
     }
     else {
         cout << "Matrix location could not be determined in the shaders. Exiting.";

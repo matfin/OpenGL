@@ -235,11 +235,8 @@ int CameraPerspectiveDemo::run(void) {
      *  both of them and then link them to form a program. We then
      *  print the program status.
      */
-//    string vertex_shader_str = shader_loader.load("camera_perspective_demo.vert");
-//    string fragment_shader_str = shader_loader.load("camera_perspective_demo.frag");
-    
-    string vertex_shader_str = shader_loader.load("one_vs.glsl");
-    string fragment_shader_str = shader_loader.load("one_fs.glsl");
+    string vertex_shader_str = shader_loader.load("camera_perspective_demo.vert");
+    string fragment_shader_str = shader_loader.load("camera_perspective_demo.frag");
     
     GLuint vertex_shader = compileShader(&vertex_shader_str, GL_VERTEX_SHADER);
     GLuint fragment_shader = compileShader(&fragment_shader_str, GL_FRAGMENT_SHADER);
