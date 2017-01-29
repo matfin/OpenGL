@@ -9,20 +9,6 @@
 #ifndef Enumerations_h
 #define Enumerations_h
 
-enum Direction {
-    LEFT,
-    RIGHT,
-    UP,
-    DOWN,
-    CLOSER,
-    FURTHER
-};
-
-enum ScaleMag {
-    LARGER,
-    SMALLER
-};
-
 enum ModelLineType {
     VERTEX,
     NORMAL,

@@ -13,177 +13,168 @@ using namespace std;
 
 Matrices::Matrices() {
     cout << "Construct: Matrices." << std::endl;
-    objectCount++;
 }
+
 Matrices::~Matrices() {
     cout << "Destruct: Matrices." << std::endl;
+//    delete(rotation_x_matrix);
+//    delete(rotation_y_matrix);
+//    delete(rotation_z_matrix);
+//    delete(translation_matrix);
+//    delete(scaling_matrix);
 }
 
-void Matrices::translateX(Direction direction) {
-    switch(direction) {
-        case LEFT: {
-            translate_x -= 0.05f;
-            break;
-        }
-        case RIGHT: {
-            translate_x += 0.05f;
-            break;
-        }
-        default: {
-            break;
-        }
-    }
-    translation[12] = translate_x;
-}
-
-void Matrices::translateXTo(const float _x) {
-    translate_x = _x;
-    translation[12] = translate_x;
-}
+void Matrices::translate(AdjustmentType type, Adjustments adjustment) {
     
-void Matrices::translateY(Direction direction) {
-    switch(direction) {
-        case UP: {
-            translate_y += 0.05f;
-            break;
-        }
-        case DOWN: {
-            translate_y -= 0.05f;
-            break;
-        }
-        default: {
-            break;
-        }
-    }
-    translation[13] = translate_y;
-}
-
-void Matrices::translateYTo(const float _y) {
-    translate_y = _y;
-    translation[13] = translate_y;
-}
-
-void Matrices::translateZ(Direction direction) {
-    switch(direction) {
-        case CLOSER: {
-            translate_z += 0.05f;
-            break;
-        }
-        case FURTHER: {
-            translate_z -= 0.05f;
-            break;
-        }
-        default: {
-            break;
-        }
-    }
-    translation[14] = translate_z;
-}
-
-void Matrices::translateZTo(const float _z) {
-    translate_z = _z;
-    translation[14] = translate_z;
-}
-
-void Matrices::rotateX(Direction direction) {
-    switch(direction) {
-        case UP: {
-            rotate_x += 0.05f;
-            break;
-        }
-        case DOWN: {
-            rotate_x -= 0.05f;
-            break;
-        }
-        default: {
-            break;
-        }
-    }
-    rotation_x[5] = cosf(rotate_x);
-    rotation_x[6] = cosf(rotate_x);
-    rotation_x[9] = -sinf(rotate_x);
-    rotation_x[10] = cosf(rotate_x);
-}
-
-void Matrices::rotateXTo(const float _x) {
-    rotate_x = _x;
-    rotation_x[5] = cosf(rotate_x);
-    rotation_x[6] = cosf(rotate_x);
-    rotation_x[9] = -sinf(rotate_x);
-    rotation_x[10] = cosf(rotate_x);
-}
+    float _adjustment = 0.0f;
     
-void Matrices::rotateY(Direction direction) {
-    switch(direction) {
-        case LEFT: {
-            rotate_y += 0.05f;
+    switch(type) {
+        case TRANSLATE_X: {
+            switch(adjustment) {
+                case LEFT: {
+                    _adjustment = -0.025f;
+                    break;
+                }
+                case RIGHT: {
+                    _adjustment = 0.025f;
+                    break;
+                }
+                default: {
+                    _adjustment = 0.0f;
+                }
+            }
+            translate_x += _adjustment;
+            translation_matrix->getRows().at(3).items.at(0) = translate_x;
             break;
         }
-        case RIGHT: {
-            rotate_y -= 0.05f;
+        case TRANSLATE_Y: {
+            switch(adjustment) {
+                case DOWN: {
+                    _adjustment = -0.025f;
+                    break;
+                }
+                case UP: {
+                    _adjustment = 0.025f;
+                    break;
+                }
+                default: {
+                    _adjustment = 0.0f;
+                }
+            }
+            translate_y += _adjustment;
+            translation_matrix->getRows().at(3).items.at(1) = translate_y;
             break;
         }
-        default: {
-            break;
-        }
-    }
-    rotation_y[0] = cosf(rotate_y);
-    rotation_y[2] = -sinf(rotate_y);
-    rotation_y[8] = sinf(rotate_y);
-    rotation_y[10] = cosf(rotate_y);
-}
-
-void Matrices::rotateYTo(const float _y) {
-    rotate_y = _y;
-    rotation_y[0] = cosf(rotate_y);
-    rotation_y[2] = -sinf(rotate_y);
-    rotation_y[8] = sinf(rotate_y);
-    rotation_y[10] = cosf(rotate_y);
-}
-    
-void Matrices::rotateZ(Direction direction) {
-    switch(direction) {
-        case LEFT: {
-            rotate_z += 0.05f;
-            break;
-        }
-        case RIGHT: {
-            rotate_z -= 0.05f;
-            break;
-        }
-        default: {
-            break;
-        }
-    }
-    rotation_z[0] = cosf(rotate_z);
-    rotation_z[1] = sinf(rotate_z);
-    rotation_z[4] = -sinf(rotate_z);
-    rotation_z[5] = cosf(rotate_z);
-}
-
-void Matrices::rotateZTo(const float _z) {
-    rotate_z = _z;
-    rotation_z[0] = cosf(rotate_z);
-    rotation_z[1] = sinf(rotate_z);
-    rotation_z[4] = -sinf(rotate_z);
-    rotation_z[5] = cosf(rotate_z);
-}
-
-void Matrices::scale(ScaleMag direction) {
-    switch(direction) {
-        case LARGER: {
-            if(scale_mag <= 0.8f) scale_mag += 0.05f;
-            break;
-        }
-        case SMALLER: {
-            if(scale_mag >= 0.1f) scale_mag -= 0.05f;
+        case TRANSLATE_Z: {
+            switch(adjustment) {
+                case CLOSER: {
+                    _adjustment = 0.025f;
+                    break;
+                }
+                case FURTHER: {
+                    _adjustment = -0.025f;
+                    break;
+                }
+                default: {
+                    _adjustment = 0.0f;
+                }
+            }
+            translation_matrix->getRows().at(3).items.at(2) = translate_z;
             break;
         }
     }
-    scaling[0] = scaling[5] = scaling[10] = scale_mag;
+}
+
+void Matrices::translateTo(AdjustmentType type, const float _translate) {
+    switch(type) {
+        case TRANSLATE_X: {
+            translate_x = _translate;
+            translation_matrix->getRows().at(3).items.at(0) = translate_x;
+            break;
+        }
+        case TRANSLATE_Y: {
+            translate_y = _translate;
+            translation_matrix->getRows().at(3).items.at(1) = translate_y;
+            break;
+        }
+        case TRANSLATE_Z: {
+            translate_z = _translate;
+            translation_matrix->getRows().at(3).items.at(2) = translate_z;
+            break;
+        }
+    }
+}
+
+void Matrices::rotate(AdjustmentType type, Adjustments adjustment) {
+    switch(type) {
+        case ROTATE_X: {
+            rotate_x += adjustment;
+            rotation_x_matrix->getRows().at(1).items.at(1) = cosf(rotate_x);
+            rotation_x_matrix->getRows().at(1).items.at(2) = sinf(rotate_x);
+            rotation_x_matrix->getRows().at(2).items.at(1) = -sinf(rotate_x);
+            rotation_x_matrix->getRows().at(2).items.at(2) = cosf(rotate_x);
+            break;
+        }
+        case ROTATE_Y: {
+            rotate_y += adjustment;
+            rotation_y_matrix->getRows().at(0).items.at(0) = cosf(rotate_y);
+            rotation_y_matrix->getRows().at(0).items.at(2) = -sinf(rotate_y);
+            rotation_y_matrix->getRows().at(2).items.at(0) = sinf(rotate_y);
+            rotation_y_matrix->getRows().at(2).items.at(2) = cosf(rotate_y);
+            break;
+        }
+        case ROTATE_Z: {
+            rotate_z += adjustment;
+            rotation_z_matrix->getRows().at(0).items.at(0) = cosf(rotate_z);
+            rotation_z_matrix->getRows().at(0).items.at(1) = sinf(rotate_z);
+            rotation_z_matrix->getRows().at(1).items.at(0) = -sinf(rotate_z);
+            rotation_z_matrix->getRows().at(1).items.at(1) = cosf(rotate_z);
+            break;
+        }
+    }
+}
+
+void Matrices::rotateTo(AdjustmentType type, const float _rotate) {
+    switch(type) {
+        case ROTATE_X: {
+            rotate_x = _rotate;
+            rotation_x_matrix->getRows().at(1).items.at(1) = cosf(rotate_x);
+            rotation_x_matrix->getRows().at(1).items.at(2) = sinf(rotate_x);
+            rotation_x_matrix->getRows().at(2).items.at(1) = -sinf(rotate_x);
+            rotation_x_matrix->getRows().at(2).items.at(2) = cosf(rotate_x);
+            break;
+        }
+        case ROTATE_Y: {
+            rotate_y = _rotate;
+            rotation_y_matrix->getRows().at(0).items.at(0) = cosf(rotate_y);
+            rotation_y_matrix->getRows().at(0).items.at(2) = -sinf(rotate_y);
+            rotation_y_matrix->getRows().at(2).items.at(0) = sinf(rotate_y);
+            rotation_y_matrix->getRows().at(2).items.at(2) = cosf(rotate_y);
+            break;
+        }
+        case ROTATE_Z: {
+            rotate_z = _rotate;
+            rotation_z_matrix->getRows().at(0).items.at(0) = cosf(rotate_z);
+            rotation_z_matrix->getRows().at(0).items.at(1) = sinf(rotate_z);
+            rotation_z_matrix->getRows().at(1).items.at(0) = -sinf(rotate_z);
+            rotation_z_matrix->getRows().at(1).items.at(1) = cosf(rotate_z);
+            break;
+        }
+    }
+}
+
+void Matrices::scale(Adjustments adjustment) {
+    scale_mag += adjustment;
+    scaling_matrix->getRows().at(0).items.at(0) = scale_mag;
+    scaling_matrix->getRows().at(1).items.at(1) = scale_mag;
+    scaling_matrix->getRows().at(2).items.at(2) = scale_mag;
+    scaling_matrix->getRows().at(3).items.at(3) = scale_mag;
 }
 
 void Matrices::scaleTo(float _scale) {
     scale_mag = _scale;
-    scaling[0] = scaling[5] = scaling[10] = scale_mag;
+    scaling_matrix->getRows().at(0).items.at(0) = scale_mag;
+    scaling_matrix->getRows().at(1).items.at(1) = scale_mag;
+    scaling_matrix->getRows().at(2).items.at(2) = scale_mag;
+    scaling_matrix->getRows().at(3).items.at(3) = scale_mag;
 }

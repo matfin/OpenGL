@@ -186,7 +186,7 @@ Matrix<T> Matrix<T>::operator*(const Matrix<T> &matrix) const {
      *  that the size of the items in each row is eqaul to the size 
      *  of the rows in the second matrix.
      *
-     *  If one of the sizes don't match, then we don't have a valid
+     *  If one of the sizes doesn't match, then we don't have a valid
      *  matrix we can multiply.
      */
     bool row_column_match = std::all_of(begin(rows), end(rows), [matrix_row_size](Row<T> row) {
@@ -202,30 +202,36 @@ Matrix<T> Matrix<T>::operator*(const Matrix<T> &matrix) const {
     
     for(const auto &row: rows) {
         
-        Row<T> m_row;
-        
-        for(int i = 0; i < matrix.rows.at(0).items.size(); i++) {
+        try {
             
-            auto a = begin(row.items);
-            auto a_end = end(row.items);
-            std::vector<Row<T>> matrix_rows = matrix.getRows();
-            auto b = begin(matrix_rows);
-            auto b_end = end(matrix_rows);
-            
-            T product = 0;
-            for(; a != a_end && b != b_end; ++a, ++b) {
+            Row<T> m_row;
+            for(int i = 0; i < matrix.rows.at(0).items.size(); i++) {
                 
-                T first = *a;
-                T second = b->items.at(i);
+                auto a = begin(row.items);
+                auto a_end = end(row.items);
+                std::vector<Row<T>> matrix_rows = matrix.getRows();
+                auto b = begin(matrix_rows);
+                auto b_end = end(matrix_rows);
                 
-                product += *(a) * b->items.at(i);
+                T product = 0;
+                for(; a != a_end && b != b_end; ++a, ++b) {
+                    
+                    T first = *a;
+                    T second = b->items.at(i);
+                    
+                    product += *(a) * b->items.at(i);
+                }
+                m_row.items.push_back(product);
             }
-            m_row.items.push_back(product);
+            
+            m.addRow(m_row);
         }
-        
-        m.addRow(m_row);
+        catch(std::exception &e) {
+            std::cout << "Error in vector multiplication: " <<  e.what() << std::endl;
+            return *this;
+        }
     }
-    
+
     return m;
 }
 

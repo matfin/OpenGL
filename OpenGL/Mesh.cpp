@@ -30,10 +30,6 @@ int Mesh::coloursSize() const {
     return colours.size();
 }
 
-Position Mesh::originDifference() const {
-    return m.getTranslationDifference();
-}
-
 Matrices* Mesh::getMatrices() const {
     return &m;
 }
@@ -74,11 +70,11 @@ void Mesh::applyMatrices(GLuint program) const {
        GL_TRUE != scale_matrix ||
        GL_TRUE != translate_matrix
        ) {
-        glUniformMatrix4fv(rot_x_matrix, 1, GL_FALSE, m.getRotationX());
-        glUniformMatrix4fv(rot_y_matrix, 1, GL_FALSE, m.getRotationY());
-        glUniformMatrix4fv(rot_z_matrix, 1, GL_FALSE, m.getRotationZ());
-        glUniformMatrix4fv(scale_matrix, 1, GL_FALSE, m.getScaling());
-        glUniformMatrix4fv(translate_matrix, 1, GL_FALSE, m.getTranslation());
+        glUniformMatrix4fv(rot_x_matrix, 1, GL_FALSE, m.getMatrixUnwound(ROTATION_X));
+        glUniformMatrix4fv(rot_y_matrix, 1, GL_FALSE, m.getMatrixUnwound(ROTATION_Y));
+        glUniformMatrix4fv(rot_z_matrix, 1, GL_FALSE, m.getMatrixUnwound(ROTATION_Z));
+        glUniformMatrix4fv(scale_matrix, 1, GL_FALSE, m.getMatrixUnwound(SCALING));
+        glUniformMatrix4fv(translate_matrix, 1, GL_FALSE, m.getMatrixUnwound(TRANSLATION));
     }
     else {
         cout << "Unable to apply matrices to this mesh." << endl;

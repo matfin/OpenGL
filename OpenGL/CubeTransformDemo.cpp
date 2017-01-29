@@ -291,17 +291,11 @@ void CubeTransformDemo::applyMatrices(void) {
        GL_TRUE != scale_matrix_loc ||
        GL_TRUE != translate_matrix_loc
     ) {
-//        glUniformMatrix4fv(rot_x_matrix_loc, 1, GL_FALSE, m->rotation_x);
-//        glUniformMatrix4fv(rot_y_matrix_loc, 1, GL_FALSE, m->rotation_y);
-//        glUniformMatrix4fv(rot_z_matrix_loc, 1, GL_FALSE, m->rotation_z);
-//        glUniformMatrix4fv(translate_matrix_loc, 1, GL_FALSE, m->translation);
-//        glUniformMatrix4fv(scale_matrix_loc, 1, GL_FALSE, m->scaling);
-        
-        glUniformMatrix4fv(rot_x_matrix_loc, 1, GL_FALSE, m->getRotationX());
-        glUniformMatrix4fv(rot_y_matrix_loc, 1, GL_FALSE, m->getRotationY());
-        glUniformMatrix4fv(rot_z_matrix_loc, 1, GL_FALSE, m->getRotationZ());
-        glUniformMatrix4fv(translate_matrix_loc, 1, GL_FALSE, m->getTranslation());
-        glUniformMatrix4fv(scale_matrix_loc, 1, GL_FALSE, m->getScaling());
+        glUniformMatrix4fv(rot_x_matrix_loc, 1, GL_FALSE, m->getMatrixUnwound(ROTATION_X));
+        glUniformMatrix4fv(rot_y_matrix_loc, 1, GL_FALSE, m->getMatrixUnwound(ROTATION_Y));
+        glUniformMatrix4fv(rot_z_matrix_loc, 1, GL_FALSE, m->getMatrixUnwound(ROTATION_Z));
+        glUniformMatrix4fv(translate_matrix_loc, 1, GL_FALSE, m->getMatrixUnwound(TRANSLATION));
+        glUniformMatrix4fv(scale_matrix_loc, 1, GL_FALSE, m->getMatrixUnwound(SCALING));
     }
     else {
         cout << "Matrix location could not be determined in the shaders. Exiting.";
@@ -332,51 +326,51 @@ void CubeTransformDemo::keyActionListener(void) {
     }
     
     if(GLFW_PRESS == glfwGetKey(window, GLFW_KEY_LEFT)) {
-        m->translateX(LEFT);
+//        m->translateX(LEFT);
     }
     
     if(GLFW_PRESS == glfwGetKey(window, GLFW_KEY_RIGHT)) {
-        m->translateX(RIGHT);
+//        m->translateX(RIGHT);
     }
     
     if(GLFW_PRESS == glfwGetKey(window, GLFW_KEY_UP)) {
-        m->translateY(UP);
+//        m->translateY(UP);
     }
     
     if(GLFW_PRESS == glfwGetKey(window, GLFW_KEY_DOWN)) {
-        m->translateY(DOWN);
+//        m->translateY(DOWN);
     }
     
     if(GLFW_PRESS == glfwGetKey(window, GLFW_KEY_W)) {
-        m->rotateX(UP);
+//        m->rotateX(UP);
     }
     
     if(GLFW_PRESS == glfwGetKey(window, GLFW_KEY_S)) {
-        m->rotateX(DOWN);
+//        m->rotateX(DOWN);
     }
     
     if(GLFW_PRESS == glfwGetKey(window, GLFW_KEY_A)) {
-        m->rotateY(LEFT);
+//        m->rotateY(LEFT);
     }
     
     if(GLFW_PRESS == glfwGetKey(window, GLFW_KEY_D)) {
-        m->rotateY(RIGHT);
+//        m->rotateY(RIGHT);
     }
     
     if(GLFW_PRESS == glfwGetKey(window, GLFW_KEY_Q)) {
-        m->rotateZ(LEFT);
+//        m->rotateZ(LEFT);
     }
     
     if(GLFW_PRESS == glfwGetKey(window, GLFW_KEY_E)) {
-        m->rotateZ(RIGHT);
+//        m->rotateZ(RIGHT);
     }
     
     if(GLFW_PRESS == glfwGetKey(window, GLFW_KEY_EQUAL)) {
-        m->scale(LARGER);
+//        m->scale(LARGER);
     }
     
     if(GLFW_PRESS == glfwGetKey(window, GLFW_KEY_MINUS)) {
-        m->scale(SMALLER);
+//        m->scale(SMALLER);
     }
 }
 

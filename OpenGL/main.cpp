@@ -90,11 +90,7 @@ int runCameraPerspectiveDemo(void) {
      *  -   the second parameter is a Position struct (x, y, z) GLfloat coords.
      *  -   the third parameter is a Rotation struct (x, y, z) GLfloat rotation values.
      */
-    demo->addMesh(cube, {-2.0f, 2.0f, 0.0f}, {0.0f, 0.5f, 0.5f});
-    demo->addMesh(cube, {2.0f, 2.0f, 0.0f}, {0.5f, 0.0f, 0.5f});
-    
-    demo->addMesh(cube, {-2.0f, -2.0f, 0.0f}, {1.0f, 0.25f, 0.25f});
-    demo->addMesh(cube, {2.0f, -2.0f, 0.0f}, {1.5f, 0.5f, 1.5f});
+    demo->addMesh(triangle, {0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f});
 
     int run = demo->run();
     delete(demo);
@@ -103,23 +99,6 @@ int runCameraPerspectiveDemo(void) {
 
 int matrixOperations() {
     
-//    Matrix<int> m1({
-//        Row<int>({4, 6}),
-//        Row<int>({9, 8}),
-//        Row<int>({2, 3})
-//    });
-//    
-//    Matrix<int> m2({
-//        Row<int>({2, 9}),
-//        Row<int>({4, 1}),
-//        Row<int>({3, 3})
-//    });
-    
-//    Matrix<int> added = m1 + m2;
-//    
-//    Matrix<int> subtracted = m1 - m2;
-//    
-//    Matrix<int> scalar_multiplied = added * 4;
     {
         Matrix<int> mul1({
             Row<int>({1, 4}),
@@ -158,7 +137,7 @@ int matrixOperations() {
         Matrix<int> mul2({
             Row<int>({9,5,6}),
             Row<int>({2,2,1}),
-            Row<int>({0,0,4})
+            Row<int>({0,0,3})
         });
         
         Matrix<int> result = mul1 * mul2;
@@ -168,14 +147,41 @@ int matrixOperations() {
     return 0;
 }
 
+int distanceCalculatorDemo() {
+    
+    Matrix<GLfloat> camera_position({
+        Row<GLfloat>({20}),
+        Row<GLfloat>({2}),
+        Row<GLfloat>({-15})
+    });
+    
+    Matrix<GLfloat> item_position({
+        Row<GLfloat>({10.5}),
+        Row<GLfloat>({1}),
+        Row<GLfloat>({-20})
+    });
+    
+    Matrix<GLfloat> origin_position({
+        Row<GLfloat>({0}),
+        Row<GLfloat>({0}),
+        Row<GLfloat>({0})
+    });
+    
+    Matrix<GLfloat> movement = origin_position - camera_position;
+    Matrix<GLfloat> translated_to = movement + item_position;
+    
+    return 0;
+    
+}
+
 int main(int argc, const char * argv[]) {
 //    return shapes_main();
 //    return shaders_main();
 //    return vertex_buffer_objects_main();
 //    int run = runModelLoadDemo();
 //    int run = runCubeTransformDemo();
-//    int run = runCameraPerspectiveDemo();
-//    return run;
-    int matrix_run = matrixOperations();
+//    int matrix_run = matrixOperations();
+//    int mo_run = distanceCalculatorDemo();
+    int run = runCameraPerspectiveDemo();
     return 0;
 }

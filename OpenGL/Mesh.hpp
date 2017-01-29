@@ -30,7 +30,6 @@ public:
     GLuint getVao() const;
     int pointsSize() const;
     int coloursSize() const;
-    Position originDifference() const;
     Matrices* getMatrices() const;
     
     std::vector<GLfloat> pointsUnwound();

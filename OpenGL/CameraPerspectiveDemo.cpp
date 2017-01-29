@@ -10,15 +10,12 @@
 
 using namespace std;
 
-int Matrices::objectCount = 0;
-
 CameraPerspectiveDemo::CameraPerspectiveDemo() {
     cout << "Construct: CameraPerspectiveDemo" << endl;
 }
 
 CameraPerspectiveDemo::~CameraPerspectiveDemo() {
     cout << "Destruct: CameraPerspectiveDemo" << endl;
-    cout << "We had: " << Matrices::getObjectCount() << " Matrices objects." << endl;
     program = 0;
     window = 0;
     meshes.clear();
@@ -41,6 +38,7 @@ bool CameraPerspectiveDemo::setupWindow(void) {
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+    glfwWindowHint(GLFW_SAMPLES, 4);
     
     window = glfwCreateWindow(1024, 1024, "Camera Perspective Demo", NULL, NULL);
     if(!window) {
@@ -174,28 +172,7 @@ void CameraPerspectiveDemo::prepareMeshes(void) {
  *  add some meshes that we can later prepare.
  */
 void CameraPerspectiveDemo::addMesh(Mesh mesh, const Position position, const Rotation rotation) {
-    
-    /**
-     *  Since the mesh might be a little big,
-     *  we should scale it down.
-     *  We should then use matrix translation
-     *  to place it where we want it to go.
-     */
-    mesh.getMatrices()->scaleTo(0.2f);
-    
-    mesh.getMatrices()->translateXTo(position.px);
-    mesh.getMatrices()->translateYTo(position.py);
-    mesh.getMatrices()->translateZTo(position.pz);
-    
-    mesh.getMatrices()->rotateXTo(rotation.rx);
-    mesh.getMatrices()->rotateYTo(rotation.ry);
-    mesh.getMatrices()->rotateZTo(rotation.rz);
-    
     meshes.push_back(mesh);
-    
-    Position difference = mesh.originDifference();
-    
-    cout << "Mesh added with dx: " << difference.px << ", dy: " << difference.py << ", dz: " << difference.pz << endl;
 }
 
 /**
@@ -210,17 +187,6 @@ void CameraPerspectiveDemo::drawLoop() const {
     
     if(GL_TRUE == programReady()) {
         for(auto &mesh: meshes) {
-            {
-                auto i = &mesh - &meshes[0];
-                Matrices *m = mesh.getMatrices();
-                if(!i || !i % 2) {
-                    m->rotateZ(RIGHT);
-                }
-                else {
-                    m->rotateX(UP);
-                }
-            }
-            
             glBindVertexArray(mesh.getVao());
             mesh.applyMatrices(program);
             glDrawArrays(GL_TRIANGLES, 0, mesh.pointsSize());
@@ -231,7 +197,24 @@ void CameraPerspectiveDemo::drawLoop() const {
     glfwSwapBuffers(window);
 }
 
-void CameraPerspectiveDemo::keyActionListener(void) const {}
+void CameraPerspectiveDemo::keyActionListener(void) const {
+    if(glfwGetKey(window, GLFW_KEY_ESCAPE)) {
+        glfwSetWindowShouldClose(window, true);
+    }
+}
+
+void CameraPerspectiveDemo::lookAt(const Position camera_position, const Position target_position, const GLfloat up_direction) {
+    
+    /**
+     *  This function should modify the matrices associated with each mesh ?
+     *
+     *  go through each mesh and apply a Matrix transformation 
+     *  so we can adjust the positioning of each item.
+     */
+    for(auto &mesh: meshes) {
+        
+    }
+}
 
 int CameraPerspectiveDemo::run(void) {
     
@@ -252,8 +235,12 @@ int CameraPerspectiveDemo::run(void) {
      *  both of them and then link them to form a program. We then
      *  print the program status.
      */
-    string vertex_shader_str = shader_loader.load("camera_perspective_demo.vert");
-    string fragment_shader_str = shader_loader.load("camera_perspective_demo.frag");
+//    string vertex_shader_str = shader_loader.load("camera_perspective_demo.vert");
+//    string fragment_shader_str = shader_loader.load("camera_perspective_demo.frag");
+    
+    string vertex_shader_str = shader_loader.load("one_vs.glsl");
+    string fragment_shader_str = shader_loader.load("one_fs.glsl");
+    
     GLuint vertex_shader = compileShader(&vertex_shader_str, GL_VERTEX_SHADER);
     GLuint fragment_shader = compileShader(&fragment_shader_str, GL_FRAGMENT_SHADER);
     linkShaders(vertex_shader, fragment_shader);
@@ -271,6 +258,7 @@ int CameraPerspectiveDemo::run(void) {
     
     while(!glfwWindowShouldClose(window)) {
         drawLoop();
+        keyActionListener();
     }
     return 0;
 }
