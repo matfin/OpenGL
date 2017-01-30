@@ -10,7 +10,6 @@
 
 using namespace std;
 
-#define one_deg_in_rad (2.0 * M_PI) / 360.0f
 #define gl_viewport_w 1280
 #define gl_viewport_h 960
 
@@ -176,7 +175,7 @@ void CameraPerspectiveDemo::prepareMeshes(void) {
  *  add some meshes that we can later prepare.
  */
 void CameraPerspectiveDemo::addMesh(Mesh mesh, const Position position, const Rotation rotation) {
-    mesh.getMatrices()->rotateTo(ROTATE_Y, -45.0f);
+//    mesh.getMatrices()->rotateTo(ROTATE_Y, -45.0f);
 //    mesh.getMatrices()->translateTo(TRANSLATE_X, -0.2f);
     meshes.push_back(mesh);
 }
@@ -196,7 +195,7 @@ void CameraPerspectiveDemo::drawLoop() const {
             glBindVertexArray(mesh.getVao());
             mesh.applyMatrices(program);
             lookAt();
-            glDrawArrays(GL_TRIANGLES, 0, mesh.pointsSize());
+            glDrawArrays(GL_LINE_LOOP, 0, mesh.pointsSize());
         }
     }
     
@@ -205,9 +204,43 @@ void CameraPerspectiveDemo::drawLoop() const {
 }
 
 void CameraPerspectiveDemo::keyActionListener(void) const {
+    
     if(glfwGetKey(window, GLFW_KEY_ESCAPE)) {
         glfwSetWindowShouldClose(window, true);
     }
+    
+    if(glfwGetKey(window, GLFW_KEY_LEFT)) {
+        cam_pos_x -= 0.025f;
+    }
+    
+    if(glfwGetKey(window, GLFW_KEY_RIGHT)) {
+        cam_pos_x += 0.025f;
+    }
+    
+    if(glfwGetKey(window, GLFW_KEY_DOWN)) {
+        cam_pos_y -= 0.025f;
+    }
+    
+    if(glfwGetKey(window, GLFW_KEY_UP)) {
+        cam_pos_y += 0.025f;
+    }
+    
+    if(glfwGetKey(window, GLFW_KEY_W)) {
+        cam_pos_z -= 0.025f;
+    }
+    
+    if(glfwGetKey(window, GLFW_KEY_S)) {
+        cam_pos_z += 0.025f;
+    }
+    
+    if(glfwGetKey(window, GLFW_KEY_A)) {
+        cam_yaw += 1.0f;
+    }
+    
+    if(glfwGetKey(window, GLFW_KEY_D)) {
+        cam_yaw -= 1.0f;
+    }
+    
 }
 
 void CameraPerspectiveDemo::lookAt() const {
@@ -217,7 +250,6 @@ void CameraPerspectiveDemo::lookAt() const {
      */
     float near = 0.1f;
     float far = 100.0f;
-    float fov = 67.0f * one_deg_in_rad;
     float aspect = (float)gl_viewport_w / (float)gl_viewport_h;
     float range = tan(fov * 0.5f) * near;
     
@@ -236,15 +268,11 @@ void CameraPerspectiveDemo::lookAt() const {
     /**
      *  This sets up the View Matrix
      */
-    float cam_speed = 1.0f;
-    float cam_yaw_speed = 10.0f;
     float cam_pos[] = {
-        0.0f,   // x
-        0.0f,   // y
-        2.0f    // z
+        cam_pos_x,
+        cam_pos_y,
+        cam_pos_z
     };
-    float cam_yaw = 0.0f;
-    
     
     Matrices m;
     m.translateTo(TRANSLATE_X, -cam_pos[0]);
@@ -253,8 +281,8 @@ void CameraPerspectiveDemo::lookAt() const {
     m.rotateTo(ROTATE_Y, -cam_yaw);
     
     Matrix<float> T = m.translation_matrix();
-    Matrix<float> R = m.rotation_y_matrix();
-    Matrix<float> view_matrix = T * R;
+    Matrix<float> Ry = m.rotation_y_matrix();
+    Matrix<float> view_matrix = T * Ry;
     
     vector<float> view_matrix_unwound = view_matrix.unwind();
     
@@ -278,8 +306,6 @@ int CameraPerspectiveDemo::run(void) {
         cout << e.what();
         return -1;
     }
-    
-    lookAt();
     
     /**
      *  We then need to grab the vertex and fragment shaders, compile

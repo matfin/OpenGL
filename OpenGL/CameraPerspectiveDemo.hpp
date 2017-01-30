@@ -20,6 +20,20 @@
 #include "Structs.h"
 #include "Mesh.hpp"
 
+#define one_deg_in_rad (2.0 * M_PI) / 360.0f
+
+/**
+ *  Temporary view/projection matrix
+ *  member variables.
+ */
+static float fov = 67.0f * one_deg_in_rad;
+static float cam_speed = 1.0f;
+static float cam_yaw_speed = 1.0f;
+static float cam_yaw = 0.0f;
+static float cam_pos_x = 0.0f;
+static float cam_pos_y = 0.0f;
+static float cam_pos_z = 2.0f;
+
 class CameraPerspectiveDemo {
 private:
     GLuint program;
