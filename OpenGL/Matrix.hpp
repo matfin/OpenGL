@@ -52,9 +52,13 @@ public:
     bool operator==(const Matrix<T> &matrix) const;
     bool operator!=(const Matrix<T> &matrix) const;
     Matrix operator+(const Matrix<T> &matrix) const;
+    Matrix operator+=(const Matrix<T> &matrix);
     Matrix operator-(const Matrix<T> &matrix) const;
+    Matrix operator-=(const Matrix<T> &matrix);
     Matrix operator*(const T scalar) const;
+    Matrix operator*=(const T scalar);
     Matrix operator*(const Matrix<T> &matrix) const;
+    Matrix operator*=(const Matrix<T> &matrix);
 };
 
 /**
@@ -141,6 +145,34 @@ Matrix<T> Matrix<T>::operator+(const Matrix<T> &matrix) const {
 }
 
 template<typename T>
+Matrix<T> Matrix<T>::operator+=(const Matrix<T> &matrix) {
+    /**
+     *  For addition/subtraction, the number of
+     *  rows must be the same.
+     */
+    assert(rows.size() == matrix.rows.size());
+    
+    /**
+     *  The numner of columns should also be the same
+     *  and the assertion should fail if they are not.
+     */
+    auto a = begin(rows);
+    auto b = begin(matrix.rows);
+    for(; a != end(rows) && b != end(matrix.rows); ++a, ++b) {
+        assert(a->items.size() == b->items.size());
+        
+        auto c = begin(a->items);
+        auto d = begin(b->items);
+        
+        for(; c != end(a->items) && d != end(b->items); ++c, ++d) {
+            *c += *d;
+        }
+    }
+    
+    return *this;
+}
+
+template<typename T>
 Matrix<T> Matrix<T>::operator-(const Matrix<T> &matrix) const {
     
     assert(rows.size() == matrix.rows.size());
@@ -166,6 +198,27 @@ Matrix<T> Matrix<T>::operator-(const Matrix<T> &matrix) const {
 }
 
 template<typename T>
+Matrix<T> Matrix<T>::operator-=(const Matrix<T> &matrix) {
+    
+    assert(rows.size() == matrix.rows.size());
+    
+    auto a = begin(rows);
+    auto b = begin(matrix.rows);
+    for(; a != end(rows) && b != end(matrix.rows); ++a, ++b) {
+        assert(a->items.size() == b->items.size());
+        
+        auto c = begin(a->items);
+        auto d = begin(b->items);
+        
+        for(; c != end(a->items) && d != end(b->items); ++c, ++d) {
+            *c -= *d;
+        }
+    }
+    
+    return *this;
+}
+
+template<typename T>
 Matrix<T> Matrix<T>::operator*(const T scalar) const {
     
     Matrix<T> m;
@@ -179,6 +232,18 @@ Matrix<T> Matrix<T>::operator*(const T scalar) const {
     }
     
     return m;
+}
+
+template<typename T>
+Matrix<T> Matrix<T>::operator*=(const T scalar) {
+    
+    for(auto &row: rows) {
+        for(auto &value: row.items) {
+            value *= scalar;
+        }
+    }
+    
+    return *this;
 }
 
 template<typename T>
@@ -226,10 +291,6 @@ Matrix<T> Matrix<T>::operator*(const Matrix<T> &matrix) const {
                 
                 T product = 0;
                 for(; a != a_end && b != b_end; ++a, ++b) {
-                    
-                    T first = *a;
-                    T second = b->items.at(i);
-                    
                     product += *(a) * b->items.at(i);
                 }
                 m_row.items.push_back(product);
@@ -244,6 +305,47 @@ Matrix<T> Matrix<T>::operator*(const Matrix<T> &matrix) const {
     }
 
     return m;
+}
+
+template<typename T>
+Matrix<T> Matrix<T>::operator*=(const Matrix<T> &matrix) {
+    
+    int matrix_row_size = matrix.rows.size();
+    
+    bool row_column_match = std::all_of(begin(rows), end(rows), [matrix_row_size](Row<T> row) {
+        return row.items.size() == matrix_row_size;
+    });
+    
+    assert(row_column_match);
+    
+    for(auto &row: rows) {
+        try {
+            
+            Row<T> m_row;
+            
+            for(int i = 0; i < matrix.rows.at(0).items.size(); i++) {
+                std::vector<Row<T>> matrix_rows = matrix.getRows();
+                T product = 0;
+                auto b = begin(matrix_rows);
+                
+                for(auto a = begin(row.items); a != end(row.items); a++) {
+                    T first = *a;
+                    T second = b->items.at(i);
+                    product += first * second;
+                    b++;
+                }
+                m_row.items.push_back(product);
+            }
+            
+            row = m_row;
+        }
+        catch(std::exception &e) {
+            std::cout << "Error in vector multiplication: " <<  e.what() << std::endl;
+            return *this;
+        }
+    }
+    
+    return *this;
 }
 
 #endif /* Matrix_hpp */

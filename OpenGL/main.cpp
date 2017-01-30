@@ -143,6 +143,54 @@ int matrixOperations() {
         Matrix<int> result = mul1 * mul2;
         bool wait = true;
     }
+    {
+        Matrix<int> add_one({
+            Row<int>({1,2,3}),
+            Row<int>({4,5,6})
+        });
+        Matrix<int> add_two({
+            Row<int>({1,2,3}),
+            Row<int>({4,5,6})
+        });
+        add_one += add_two;
+    }
+    {
+        Matrix<int> sub_one({
+            Row<int>({3,4,5}),
+            Row<int>({6,7,8})
+        });
+        Matrix<int> sub_two({
+            Row<int>({1,2,3}),
+            Row<int>({4,5,6})
+        });
+        
+        sub_one -= sub_two;
+        int x = 1;
+    }
+    {
+        Matrix<int> scalar_mul({
+            Row<int>({1,2,3}),
+            Row<int>({4,5,6})
+        });
+        scalar_mul *= 4;
+        int x = 1;
+    }
+    {
+        Matrix<int> mul_one({
+            Row<int>({0,2,6}),
+            Row<int>({9,7,4}),
+            Row<int>({3,1,8})
+        });
+        Matrix<int> mul_two({
+            Row<int>({9,5,6}),
+            Row<int>({2,2,1}),
+            Row<int>({0,0,3})
+        });
+        
+        Matrix<int> x = mul_one * mul_two;
+        mul_one *= mul_two;
+        int f = 1;
+    }
     
     return 0;
 }
@@ -179,8 +227,8 @@ int main(int argc, const char * argv[]) {
 //    return shaders_main();
 //    return vertex_buffer_objects_main();
 //    int run = runModelLoadDemo();
-    int run = runCubeTransformDemo();
-//    int matrix_run = matrixOperations();
+//    int run = runCubeTransformDemo();
+    int matrix_run = matrixOperations();
 //    int mo_run = distanceCalculatorDemo();
 //    int run = runCameraPerspectiveDemo();
     return 0;
