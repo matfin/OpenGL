@@ -173,8 +173,8 @@ void CameraPerspectiveDemo::prepareMeshes(void) {
  */
 void CameraPerspectiveDemo::addMesh(Mesh mesh, const Position position, const Rotation rotation) {
     
-    mesh.getMatrices()->rotateTo(ROTATE_Z, 0.25f);
-    mesh.getMatrices()->translateTo(TRANSLATE_X, 0.2f);
+    mesh.getMatrices()->rotateTo(ROTATE_Z, 0.4f);
+    mesh.getMatrices()->translateTo(TRANSLATE_X, -0.2f);
     
     meshes.push_back(mesh);
 }

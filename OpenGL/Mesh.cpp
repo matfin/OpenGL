@@ -70,18 +70,11 @@ void Mesh::applyMatrices(GLuint program) const {
        GL_TRUE != scale_matrix ||
        GL_TRUE != translate_matrix
        ) {
-        
-        vector<float> x = m.getMatrixUnwound(ROTATION_X);
-        vector<float> y = m.getMatrixUnwound(ROTATION_Y);
-        vector<float> z = m.getMatrixUnwound(ROTATION_Z);
-        vector<float> t = m.getMatrixUnwound(TRANSLATION);
-        vector<float> s = m.getMatrixUnwound(SCALING);
-        
-        glUniformMatrix4fv(rot_x_matrix, 1, GL_FALSE, &x[0]);
-        glUniformMatrix4fv(rot_y_matrix, 1, GL_FALSE, &y[0]);
-        glUniformMatrix4fv(rot_z_matrix, 1, GL_FALSE, &z[0]);
-        glUniformMatrix4fv(scale_matrix, 1, GL_FALSE, &s[0]);
-        glUniformMatrix4fv(translate_matrix, 1, GL_FALSE, &t[0]);
+        glUniformMatrix4fv(rot_x_matrix, 1, GL_FALSE, &m.getMatrixUnwound(ROTATION_X)[0]);
+        glUniformMatrix4fv(rot_y_matrix, 1, GL_FALSE, &m.getMatrixUnwound(ROTATION_Y)[0]);
+        glUniformMatrix4fv(rot_z_matrix, 1, GL_FALSE, &m.getMatrixUnwound(ROTATION_Z)[0]);
+        glUniformMatrix4fv(scale_matrix, 1, GL_FALSE, &m.getMatrixUnwound(SCALING)[0]);
+        glUniformMatrix4fv(translate_matrix, 1, GL_FALSE, &m.getMatrixUnwound(TRANSLATION)[0]);
     }
     else {
         cout << "Unable to apply matrices to this mesh." << endl;
