@@ -44,7 +44,7 @@ void Matrices::translate(AdjustmentType type, Adjustments adjustment) {
                 }
             }
             translate_x += _adjustment;
-            translation_matrix->getRows().at(3).items.at(0) = translate_x;
+            translation_matrix->adjust(3, 0, translate_x);
             break;
         }
         case TRANSLATE_Y: {
@@ -62,7 +62,7 @@ void Matrices::translate(AdjustmentType type, Adjustments adjustment) {
                 }
             }
             translate_y += _adjustment;
-            translation_matrix->getRows().at(3).items.at(1) = translate_y;
+            translation_matrix->adjust(3, 1, translate_y);
             break;
         }
         case TRANSLATE_Z: {
@@ -79,7 +79,8 @@ void Matrices::translate(AdjustmentType type, Adjustments adjustment) {
                     _adjustment = 0.0f;
                 }
             }
-            translation_matrix->getRows().at(3).items.at(2) = translate_z;
+            translate_z += _adjustment;
+            translation_matrix->adjust(3, 2, translate_z);
             break;
         }
     }
@@ -89,17 +90,17 @@ void Matrices::translateTo(AdjustmentType type, const float _translate) {
     switch(type) {
         case TRANSLATE_X: {
             translate_x = _translate;
-            translation_matrix->getRows().at(3).items.at(0) = translate_x;
+            translation_matrix->adjust(3, 0, translate_x);
             break;
         }
         case TRANSLATE_Y: {
             translate_y = _translate;
-            translation_matrix->getRows().at(3).items.at(1) = translate_y;
+            translation_matrix->adjust(3, 1, translate_y);
             break;
         }
         case TRANSLATE_Z: {
             translate_z = _translate;
-            translation_matrix->getRows().at(3).items.at(2) = translate_z;
+            translation_matrix->adjust(3, 2, translate_z);
             break;
         }
     }
@@ -109,26 +110,26 @@ void Matrices::rotate(AdjustmentType type, Adjustments adjustment) {
     switch(type) {
         case ROTATE_X: {
             rotate_x += adjustment;
-            rotation_x_matrix->getRows().at(1).items.at(1) = cosf(rotate_x);
-            rotation_x_matrix->getRows().at(1).items.at(2) = sinf(rotate_x);
-            rotation_x_matrix->getRows().at(2).items.at(1) = -sinf(rotate_x);
-            rotation_x_matrix->getRows().at(2).items.at(2) = cosf(rotate_x);
+            rotation_x_matrix->adjust(1, 1, cosf(rotate_x));
+            rotation_x_matrix->adjust(1, 2, sinf(rotate_x));
+            rotation_x_matrix->adjust(2, 1, -sinf(rotate_x));
+            rotation_x_matrix->adjust(2, 2, cosf(rotate_x));
             break;
         }
         case ROTATE_Y: {
             rotate_y += adjustment;
-            rotation_y_matrix->getRows().at(0).items.at(0) = cosf(rotate_y);
-            rotation_y_matrix->getRows().at(0).items.at(2) = -sinf(rotate_y);
-            rotation_y_matrix->getRows().at(2).items.at(0) = sinf(rotate_y);
-            rotation_y_matrix->getRows().at(2).items.at(2) = cosf(rotate_y);
+            rotation_y_matrix->adjust(0, 0, cosf(rotate_y));
+            rotation_y_matrix->adjust(0, 2, -sinf(rotate_y));
+            rotation_y_matrix->adjust(2, 0, sinf(rotate_y));
+            rotation_y_matrix->adjust(2, 2, cosf(rotate_y));
             break;
         }
         case ROTATE_Z: {
             rotate_z += adjustment;
-            rotation_z_matrix->getRows().at(0).items.at(0) = cosf(rotate_z);
-            rotation_z_matrix->getRows().at(0).items.at(1) = sinf(rotate_z);
-            rotation_z_matrix->getRows().at(1).items.at(0) = -sinf(rotate_z);
-            rotation_z_matrix->getRows().at(1).items.at(1) = cosf(rotate_z);
+            rotation_z_matrix->adjust(0, 0, cosf(rotate_z));
+            rotation_z_matrix->adjust(0, 1, sinf(rotate_z));
+            rotation_z_matrix->adjust(1, 0, -sinf(rotate_z));
+            rotation_z_matrix->adjust(1, 1, cosf(rotate_z));
             break;
         }
     }
@@ -138,26 +139,26 @@ void Matrices::rotateTo(AdjustmentType type, const float _rotate) {
     switch(type) {
         case ROTATE_X: {
             rotate_x = _rotate;
-            rotation_x_matrix->getRows().at(1).items.at(1) = cosf(rotate_x);
-            rotation_x_matrix->getRows().at(1).items.at(2) = sinf(rotate_x);
-            rotation_x_matrix->getRows().at(2).items.at(1) = -sinf(rotate_x);
-            rotation_x_matrix->getRows().at(2).items.at(2) = cosf(rotate_x);
+            rotation_x_matrix->adjust(1, 1, cosf(rotate_x));
+            rotation_x_matrix->adjust(1, 2, sinf(rotate_x));
+            rotation_x_matrix->adjust(2, 1, -sinf(rotate_x));
+            rotation_x_matrix->adjust(2, 2, cosf(rotate_x));
             break;
         }
         case ROTATE_Y: {
             rotate_y = _rotate;
-            rotation_y_matrix->getRows().at(0).items.at(0) = cosf(rotate_y);
-            rotation_y_matrix->getRows().at(0).items.at(2) = -sinf(rotate_y);
-            rotation_y_matrix->getRows().at(2).items.at(0) = sinf(rotate_y);
-            rotation_y_matrix->getRows().at(2).items.at(2) = cosf(rotate_y);
+            rotation_y_matrix->adjust(0, 0, cosf(rotate_y));
+            rotation_y_matrix->adjust(0, 2, -sinf(rotate_y));
+            rotation_y_matrix->adjust(2, 0, sinf(rotate_y));
+            rotation_y_matrix->adjust(2, 2, cosf(rotate_y));
             break;
         }
         case ROTATE_Z: {
             rotate_z = _rotate;
-            rotation_z_matrix->getRows().at(0).items.at(0) = cosf(rotate_z);
-            rotation_z_matrix->getRows().at(0).items.at(1) = sinf(rotate_z);
-            rotation_z_matrix->getRows().at(1).items.at(0) = -sinf(rotate_z);
-            rotation_z_matrix->getRows().at(1).items.at(1) = cosf(rotate_z);
+            rotation_z_matrix->adjust(0, 0, cosf(rotate_z));
+            rotation_z_matrix->adjust(0, 1, sinf(rotate_z));
+            rotation_z_matrix->adjust(1, 0, -sinf(rotate_z));
+            rotation_z_matrix->adjust(1, 1, cosf(rotate_z));
             break;
         }
     }
