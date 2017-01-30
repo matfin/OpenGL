@@ -26,60 +26,46 @@ Matrices::~Matrices() {
 
 void Matrices::translate(AdjustmentType type, Adjustments adjustment) {
     
-    float _adjustment = 0.0f;
-    
     switch(type) {
         case TRANSLATE_X: {
             switch(adjustment) {
                 case LEFT: {
-                    _adjustment = -0.025f;
+                    translate_x -= 0.025f;
                     break;
                 }
                 case RIGHT: {
-                    _adjustment = 0.025f;
+                    translate_x += 0.025f;
                     break;
                 }
-                default: {
-                    _adjustment = 0.0f;
-                }
             }
-            translate_x += _adjustment;
             translation_matrix->adjust(3, 0, translate_x);
             break;
         }
         case TRANSLATE_Y: {
             switch(adjustment) {
                 case DOWN: {
-                    _adjustment = -0.025f;
+                    translate_y -= 0.025f;
                     break;
                 }
                 case UP: {
-                    _adjustment = 0.025f;
+                    translate_y += 0.025f;
                     break;
                 }
-                default: {
-                    _adjustment = 0.0f;
-                }
             }
-            translate_y += _adjustment;
             translation_matrix->adjust(3, 1, translate_y);
             break;
         }
         case TRANSLATE_Z: {
             switch(adjustment) {
                 case CLOSER: {
-                    _adjustment = 0.025f;
+                    translate_z += 0.025f;
                     break;
                 }
                 case FURTHER: {
-                    _adjustment = -0.025f;
+                    translate_z -= -0.025f;
                     break;
                 }
-                default: {
-                    _adjustment = 0.0f;
-                }
             }
-            translate_z += _adjustment;
             translation_matrix->adjust(3, 2, translate_z);
             break;
         }
@@ -107,9 +93,19 @@ void Matrices::translateTo(AdjustmentType type, const float _translate) {
 }
 
 void Matrices::rotate(AdjustmentType type, Adjustments adjustment) {
+    
     switch(type) {
         case ROTATE_X: {
-            rotate_x += adjustment;
+            switch(adjustment) {
+                case UP: {
+                    rotate_x += 0.025f;
+                    break;
+                }
+                case DOWN: {
+                    rotate_x -= 0.025f;
+                    break;
+                }
+            }
             rotation_x_matrix->adjust(1, 1, cosf(rotate_x));
             rotation_x_matrix->adjust(1, 2, sinf(rotate_x));
             rotation_x_matrix->adjust(2, 1, -sinf(rotate_x));
@@ -117,7 +113,16 @@ void Matrices::rotate(AdjustmentType type, Adjustments adjustment) {
             break;
         }
         case ROTATE_Y: {
-            rotate_y += adjustment;
+            switch(adjustment) {
+                case LEFT: {
+                    rotate_y += 0.025f;
+                    break;
+                }
+                case RIGHT: {
+                    rotate_y -= 0.025f;
+                    break;
+                }
+            }
             rotation_y_matrix->adjust(0, 0, cosf(rotate_y));
             rotation_y_matrix->adjust(0, 2, -sinf(rotate_y));
             rotation_y_matrix->adjust(2, 0, sinf(rotate_y));
@@ -125,7 +130,16 @@ void Matrices::rotate(AdjustmentType type, Adjustments adjustment) {
             break;
         }
         case ROTATE_Z: {
-            rotate_z += adjustment;
+            switch(adjustment) {
+                case LEFT: {
+                    rotate_z += 0.025f;
+                    break;
+                }
+                case RIGHT: {
+                    rotate_z -= 0.025f;
+                    break;
+                }
+            }
             rotation_z_matrix->adjust(0, 0, cosf(rotate_z));
             rotation_z_matrix->adjust(0, 1, sinf(rotate_z));
             rotation_z_matrix->adjust(1, 0, -sinf(rotate_z));

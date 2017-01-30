@@ -19,6 +19,8 @@ enum Adjustments {
     RIGHT,
     UP,
     DOWN,
+    LARGER,
+    SMALLER,
     CLOSER,
     FURTHER
 };
