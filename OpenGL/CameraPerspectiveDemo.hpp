@@ -38,7 +38,7 @@ private:
     void drawLoop() const;
     void keyActionListener(void) const;
     
-    void lookAt(const Position camera_position, const Position target_position, const GLfloat up_direction);
+    void lookAt() const;
     
 public:
     CameraPerspectiveDemo();

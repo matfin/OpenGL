@@ -30,7 +30,9 @@ enum MatrixType {
     ROTATION_Y,
     ROTATION_Z,
     TRANSLATION,
-    SCALING
+    SCALING,
+    IDENTITY_MAT3,
+    IDENTITY_MAT4
 };
 
 enum AdjustmentType {
@@ -76,6 +78,12 @@ public:
             }
             case SCALING: {
                 return scaling_matrix();
+            }
+            case IDENTITY_MAT3: {
+                return identity_mat3();
+            }
+            case IDENTITY_MAT4: {
+                return identity_mat4();
             }
         }
     }
@@ -165,41 +173,65 @@ public:
         });
     }
     
+    Matrix<float> identity_mat3() const {
+        return Matrix<float>({
+            Row<float>({1.0f, 0.0f, 0.0f}),
+            Row<float>({0.0f, 1.0f, 0.0f}),
+            Row<float>({0.0f, 0.0f, 1.0f}),
+        });
+    }
+    
+    Matrix<float> identity_mat4() const {
+        return Matrix<float>({
+            Row<float>({
+                1.0f, 0.0f, 0.0f, 0.0f
+            }),
+            Row<float>({
+                0.0f, 1.0f, 0.0f, 0.0f
+            }),
+            Row<float>({
+                0.0f, 0.0f, 1.0f, 0.0f
+            }),
+            Row<float>({
+                0.0f, 0.0f, 0.0f, 1.0f
+            })
+        });
+    }
+    
     std::vector<float> getMatrixUnwound(MatrixType type) const {
-        
-        Matrix<float> _to_convert;
-        std::vector<float> result;
-        
         switch(type) {
             case ROTATION_X: {
-                _to_convert = rotation_x_matrix();
+                return rotation_x_matrix().unwind();
                 break;
             }
             case ROTATION_Y: {
-                _to_convert = rotation_y_matrix();
+                return rotation_y_matrix().unwind();
                 break;
             }
             case ROTATION_Z: {
-                _to_convert = rotation_z_matrix();
+                return rotation_z_matrix().unwind();
                 break;
             }
             case TRANSLATION: {
-                _to_convert = translation_matrix();
+                return translation_matrix().unwind();
                 break;
             }
             case SCALING: {
-                _to_convert = scaling_matrix();
+                return scaling_matrix().unwind();
                 break;
             }
-        }
-        
-        for(const auto &row: _to_convert.getRows()) {
-            for(const auto &item: row.items) {
-                result.push_back(item);
+            case IDENTITY_MAT3: {
+                return identity_mat3().unwind();
+                break;
+            }
+            case IDENTITY_MAT4: {
+                return identity_mat4().unwind();
+                break;
+            }
+            default: {
+                return std::vector<float>{};
             }
         }
-        
-        return result;
     }
     
     const float getCurrentAdjustment(AdjustmentType type) const {

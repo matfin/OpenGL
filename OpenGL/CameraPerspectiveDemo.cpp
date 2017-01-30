@@ -10,6 +10,10 @@
 
 using namespace std;
 
+#define one_deg_in_rad (2.0 * M_PI) / 360.0f
+#define gl_viewport_w 1280
+#define gl_viewport_h 960
+
 CameraPerspectiveDemo::CameraPerspectiveDemo() {
     cout << "Construct: CameraPerspectiveDemo" << endl;
 }
@@ -40,7 +44,7 @@ bool CameraPerspectiveDemo::setupWindow(void) {
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     glfwWindowHint(GLFW_SAMPLES, 4);
     
-    window = glfwCreateWindow(1024, 1024, "Camera Perspective Demo", NULL, NULL);
+    window = glfwCreateWindow(gl_viewport_w, gl_viewport_h, "Camera Perspective Demo", NULL, NULL);
     if(!window) {
         glfwTerminate();
         throw runtime_error("GLFW failed to create a window.");
@@ -172,10 +176,8 @@ void CameraPerspectiveDemo::prepareMeshes(void) {
  *  add some meshes that we can later prepare.
  */
 void CameraPerspectiveDemo::addMesh(Mesh mesh, const Position position, const Rotation rotation) {
-    
-    mesh.getMatrices()->rotateTo(ROTATE_Z, 0.4f);
-    mesh.getMatrices()->translateTo(TRANSLATE_X, -0.2f);
-    
+    mesh.getMatrices()->rotateTo(ROTATE_Y, -45.0f);
+//    mesh.getMatrices()->translateTo(TRANSLATE_X, -0.2f);
     meshes.push_back(mesh);
 }
 
@@ -186,13 +188,14 @@ void CameraPerspectiveDemo::addMesh(Mesh mesh, const Position position, const Ro
 void CameraPerspectiveDemo::drawLoop() const {
     
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    glViewport(0, 0, 1024, 1024);
+    glViewport(0, 0, gl_viewport_w, gl_viewport_h);
     glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
     
     if(GL_TRUE == programReady()) {
         for(auto &mesh: meshes) {
             glBindVertexArray(mesh.getVao());
             mesh.applyMatrices(program);
+            lookAt();
             glDrawArrays(GL_TRIANGLES, 0, mesh.pointsSize());
         }
     }
@@ -207,17 +210,59 @@ void CameraPerspectiveDemo::keyActionListener(void) const {
     }
 }
 
-void CameraPerspectiveDemo::lookAt(const Position camera_position, const Position target_position, const GLfloat up_direction) {
+void CameraPerspectiveDemo::lookAt() const {
     
     /**
-     *  This function should modify the matrices associated with each mesh ?
-     *
-     *  go through each mesh and apply a Matrix transformation 
-     *  so we can adjust the positioning of each item.
+     *  This sets up the Projection Matrix
      */
-    for(auto &mesh: meshes) {
-        
-    }
+    float near = 0.1f;
+    float far = 100.0f;
+    float fov = 67.0f * one_deg_in_rad;
+    float aspect = (float)gl_viewport_w / (float)gl_viewport_h;
+    float range = tan(fov * 0.5f) * near;
+    
+    float Sx = (2.0 * near) / (range * aspect + range * aspect);
+    float Sy = near / range;
+    float Sz = -(far + near) / (far - near);
+    float Pz = -(2.0f * far * near) / (far - near);
+    
+    GLfloat proj_mat[] = {
+        Sx, 0.0f, 0.0f, 0.0f,
+        0.0f, Sy, 0.0f, 0.0f,
+        0.0f, 0.0f, Sz, -1.0f,
+        0.0f, 0.0f, Pz, 0.0f
+    };
+    
+    /**
+     *  This sets up the View Matrix
+     */
+    float cam_speed = 1.0f;
+    float cam_yaw_speed = 10.0f;
+    float cam_pos[] = {
+        0.0f,   // x
+        0.0f,   // y
+        2.0f    // z
+    };
+    float cam_yaw = 0.0f;
+    
+    
+    Matrices m;
+    m.translateTo(TRANSLATE_X, -cam_pos[0]);
+    m.translateTo(TRANSLATE_Y, -cam_pos[1]);
+    m.translateTo(TRANSLATE_Z, -cam_pos[2]);
+    m.rotateTo(ROTATE_Y, -cam_yaw);
+    
+    Matrix<float> T = m.translation_matrix();
+    Matrix<float> R = m.rotation_y_matrix();
+    Matrix<float> view_matrix = T * R;
+    
+    vector<float> view_matrix_unwound = view_matrix.unwind();
+    
+    GLuint view_loc = glGetUniformLocation(program, "view");
+    GLuint projection_loc = glGetUniformLocation(program, "projection");
+    
+    glUniformMatrix4fv(view_loc, 1, GL_FALSE, &view_matrix_unwound[0]);
+    glUniformMatrix4fv(projection_loc, 1, GL_FALSE, proj_mat);
 }
 
 int CameraPerspectiveDemo::run(void) {
@@ -233,6 +278,8 @@ int CameraPerspectiveDemo::run(void) {
         cout << e.what();
         return -1;
     }
+    
+    lookAt();
     
     /**
      *  We then need to grab the vertex and fragment shaders, compile

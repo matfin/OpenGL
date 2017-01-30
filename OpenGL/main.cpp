@@ -81,17 +81,13 @@ int runCameraPerspectiveDemo(void) {
     CameraPerspectiveDemo *demo = new CameraPerspectiveDemo();
     
     /**
-     *  Adding two cube vertices with the following parameters:
-     *
-     *  -   cube (see Meshes.h) is a Mesh object that contains an
-     *      array of Point and Colour structs, each with GLfloat 
-     *      values for vertex position (x, y, z) and colour (r, g, b).
+     *  Adding a triangle mesh with the following parameters:
      *
      *  -   the second parameter is a Position struct (x, y, z) GLfloat coords.
      *  -   the third parameter is a Rotation struct (x, y, z) GLfloat rotation values.
      */
     demo->addMesh(triangle, {0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f});
-
+    
     int run = demo->run();
     delete(demo);
     return run;

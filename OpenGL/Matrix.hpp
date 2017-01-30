@@ -46,6 +46,7 @@ public:
     ~Matrix();
     
     std::vector<Row<T>> getRows() const;
+    std::vector<T> unwind() const;
     void addRow(Row<T> row);
     void adjust(const int _row, const int _column, T value);
     
@@ -70,17 +71,28 @@ Matrix<T>::Matrix(){};
 
 template<typename T>
 Matrix<T>::Matrix(std::vector<Row<T>> _rows) : rows(_rows) {
-    std::cout << "Construct: Matrix" << std::endl;
+//    std::cout << "Construct: Matrix" << std::endl;
 }
 
 template<typename T>
 Matrix<T>::~Matrix() {
-    std::cout << "Destruct: Matrix" << std::endl;
+//    std::cout << "Destruct: Matrix" << std::endl;
 }
 
 template<typename T>
 std::vector<Row<T>> Matrix<T>::getRows() const {
     return rows;
+}
+
+template<typename T>
+std::vector<T> Matrix<T>::unwind() const {
+    std::vector<T> result;
+    for(const auto &row: rows) {
+        for(const auto &item: row.items) {
+            result.push_back(item);
+        }
+    }
+    return result;
 }
 
 template<typename T>

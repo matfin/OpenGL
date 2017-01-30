@@ -11,12 +11,14 @@
 
 using namespace std;
 
+#define one_deg_in_rad (2.0 * M_PI) / 360.0f
+
 Matrices::Matrices() {
-    cout << "Construct: Matrices." << std::endl;
+//    cout << "Construct: Matrices." << std::endl;
 }
 
 Matrices::~Matrices() {
-    cout << "Destruct: Matrices." << std::endl;
+//    cout << "Destruct: Matrices." << std::endl;
 }
 
 void Matrices::translate(AdjustmentType type, Adjustments adjustment) {
@@ -87,11 +89,11 @@ void Matrices::rotate(AdjustmentType type, Adjustments adjustment) {
         case ROTATE_X: {
             switch(adjustment) {
                 case UP: {
-                    rotate_x += 0.025f;
+                    rotate_x += 1.0f * one_deg_in_rad;
                     break;
                 }
                 case DOWN: {
-                    rotate_x -= 0.025f;
+                    rotate_x -= 1.0f * one_deg_in_rad;
                     break;
                 }
             }
@@ -100,11 +102,11 @@ void Matrices::rotate(AdjustmentType type, Adjustments adjustment) {
         case ROTATE_Y: {
             switch(adjustment) {
                 case LEFT: {
-                    rotate_y += 0.025f;
+                    rotate_y += 1.0f * one_deg_in_rad;
                     break;
                 }
                 case RIGHT: {
-                    rotate_y -= 0.025f;
+                    rotate_y -= 1.0f * one_deg_in_rad;
                     break;
                 }
             }
@@ -113,11 +115,11 @@ void Matrices::rotate(AdjustmentType type, Adjustments adjustment) {
         case ROTATE_Z: {
             switch(adjustment) {
                 case LEFT: {
-                    rotate_z += 0.025f;
+                    rotate_z += 1.0f * one_deg_in_rad;
                     break;
                 }
                 case RIGHT: {
-                    rotate_z -= 0.025f;
+                    rotate_z -= 1.0f * one_deg_in_rad;
                     break;
                 }
             }
@@ -129,15 +131,15 @@ void Matrices::rotate(AdjustmentType type, Adjustments adjustment) {
 void Matrices::rotateTo(AdjustmentType type, const float _rotate) {
     switch(type) {
         case ROTATE_X: {
-            rotate_x = _rotate;
+            rotate_x = _rotate * one_deg_in_rad;
             break;
         }
         case ROTATE_Y: {
-            rotate_y = _rotate;
+            rotate_y = _rotate * one_deg_in_rad;
             break;
         }
         case ROTATE_Z: {
-            rotate_z = _rotate;
+            rotate_z = _rotate * one_deg_in_rad;
             break;
         }
     }
