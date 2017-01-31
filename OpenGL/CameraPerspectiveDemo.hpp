@@ -22,22 +22,18 @@
 
 #define one_deg_in_rad (2.0 * M_PI) / 360.0f
 
-/**
- *  Temporary view/projection matrix
- *  member variables.
- */
-static float fov = 67.0f * one_deg_in_rad;
-static float cam_speed = 1.0f;
-static float cam_yaw_speed = 1.0f;
-static float cam_yaw = 0.0f;
-static float cam_pos_x = 0.0f;
-static float cam_pos_y = 0.0f;
-static float cam_pos_z = 4.0f;
-
 class CameraPerspectiveDemo {
 private:
     GLuint program;
     GLFWwindow *window;
+    
+    float fov;
+    float cam_t_speed;
+    float cam_r_speed;
+    float cam_pitch;
+    float cam_roll;
+    float cam_yaw;
+    Position cam_pos;
 
     std::vector<Mesh> meshes;
     ShaderLoader shader_loader;
@@ -50,9 +46,10 @@ private:
     void linkShaders(const GLuint vertex_shader, const GLuint fragment_shader);
     
     void drawLoop() const;
-    void keyActionListener(void) const;
+    void keyActionListener(void);
     
-    void applyPerspective() const;
+    void applyViewMatrix() const;
+    void applyProjectionMatrix() const;
     
 public:
     CameraPerspectiveDemo();
