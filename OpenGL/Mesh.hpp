@@ -24,6 +24,7 @@ private:
     GLuint vao;
     
 public:
+    Mesh();
     Mesh(std::vector<Point> _points, std::vector<Colour> _colours);
     ~Mesh();
     
@@ -34,6 +35,8 @@ public:
     
     std::vector<GLfloat> pointsUnwound();
     std::vector<GLfloat> coloursUnwound();
+    
+    void generateCube(float size);
     
     void applyMatrices(GLuint program) const;
     void setVao(GLuint _vao);

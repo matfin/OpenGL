@@ -26,13 +26,29 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "OpenGL/CameraPerspectiveDemo.cpp"
-            timestampString = "507566290.628001"
+            timestampString = "507593603.451968"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "426"
-            endingLineNumber = "426"
+            startingLineNumber = "458"
+            endingLineNumber = "458"
             landmarkName = "CameraPerspectiveDemo::run(void)"
             landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "OpenGL/main.cpp"
+            timestampString = "507576801.696991"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "223"
+            endingLineNumber = "223"
+            landmarkName = "runCameraPerspectiveDemo(void)"
+            landmarkType = "9">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

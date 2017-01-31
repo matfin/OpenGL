@@ -26,6 +26,7 @@ class CameraPerspectiveDemo {
 private:
     GLuint program;
     GLFWwindow *window;
+    GLenum drawing_method;
     
     float fov;
     float cam_t_speed;
