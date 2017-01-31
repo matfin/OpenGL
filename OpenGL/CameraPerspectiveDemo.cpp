@@ -57,7 +57,7 @@ bool CameraPerspectiveDemo::setupWindow(void) {
     
     glEnable(GL_CULL_FACE);
     glCullFace(GL_BACK);
-    glFrontFace(GL_CW);
+    glFrontFace(GL_CCW);
     
     return true;
 }
@@ -195,7 +195,7 @@ void CameraPerspectiveDemo::drawLoop() const {
             glBindVertexArray(mesh.getVao());
             mesh.applyMatrices(program);
             lookAt();
-            glDrawArrays(GL_LINE_LOOP, 0, mesh.pointsSize());
+            glDrawArrays(GL_TRIANGLES, 0, mesh.pointsSize());
         }
     }
     
