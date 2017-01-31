@@ -6,14 +6,15 @@
 //  Copyright © 2017 Matt Finucane. All rights reserved.
 //
 
-#include "Shaders.hpp"
 #include <iostream>
-#include <vector>
-#include <stdio.h>
 #include <OpenGL/gl3.h>
 #include <GLFW/glfw3.h>
+#include <vector>
+#include <stdio.h>
+#include "Shaders.hpp"
 #include "ShaderLoader.hpp"
 #include "GLParams.hpp"
+
 
 using namespace std;
 
