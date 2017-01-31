@@ -57,7 +57,7 @@ bool CameraPerspectiveDemo::setupWindow(void) {
     
     glEnable(GL_CULL_FACE);
     glCullFace(GL_BACK);
-    glFrontFace(GL_CCW);
+    glFrontFace(GL_CW);
     
     return true;
 }
@@ -200,6 +200,9 @@ void CameraPerspectiveDemo::drawLoop() const {
     if(GL_TRUE == programReady()) {
         for(auto &mesh: meshes) {
             glBindVertexArray(mesh.getVao());
+            
+            mesh.getMatrices()->rotate(ROTATE_Z, LEFT);
+            
             mesh.applyMatrices(program);
             glDrawArrays(GL_TRIANGLES, 0, mesh.pointsSize());
         }
@@ -254,7 +257,15 @@ void CameraPerspectiveDemo::keyActionListener(void) const {
 void CameraPerspectiveDemo::applyPerspective() const {
     
     /**
-     *  This sets up the Projection Matrix
+     *  This sets up the Projection Matrix.
+     *  
+     *  These are part of the mathematical formula 
+     *  needed to calculate the correct projection
+     *  to make the scene look more realistic. 
+     *  
+     *  This sets up the camera frustrum, the part of
+     *  the scene that the camera covers and is therefore
+     *  visible.
      */
     float near = 0.1f;
     float far = 100.0f;
@@ -266,13 +277,10 @@ void CameraPerspectiveDemo::applyPerspective() const {
     float Sz = -(far + near) / (far - near);
     float Pz = -(2.0f * far * near) / (far - near);
     
-    GLfloat proj_mat[] = {
-        Sx, 0.0f, 0.0f, 0.0f,
-        0.0f, Sy, 0.0f, 0.0f,
-        0.0f, 0.0f, Sz, -1.0f,
-        0.0f, 0.0f, Pz, 0.0f
-    };
-    
+    /**
+     *  With the above calculations completed, we can then put 
+     *  this projection matrix together.
+     */
     Matrix<float> projection_matrix({
         Row<float>({Sx, 0.0f, 0.0f, 0.0f}),
         Row<float>({0.0f, Sy, 0.0f, 0.0f}),
@@ -281,7 +289,13 @@ void CameraPerspectiveDemo::applyPerspective() const {
     });
     
     /**
-     *  This sets up the View Matrix
+     *  This is the camera position which updates 
+     *  for each repaint. This is used when we 
+     *  calculate the view matrix, which is then 
+     *  used to place each mesh on the x, y, z 
+     *  access, so we have the impression we are 
+     *  'moving' around the world even though the 
+     *  camera always remains at the origin (0,0,0).
      */
     float cam_pos[] = {
         cam_pos_x,
@@ -289,22 +303,64 @@ void CameraPerspectiveDemo::applyPerspective() const {
         cam_pos_z
     };
     
+    /**
+     *  Grab an instance of a Matrix and then apply
+     *  the translations we need to it for all axes,
+     *  based on the camera position.
+     */
     Matrices m;
+    
+    /**
+     *  These three will update the translation matrix,
+     *  which we will then use later when we pass them in
+     *  to the vertex shader. In there, it will be bound
+     *  to the shader variable "view" and multiplied with 
+     *  the other items that make up the final value for 
+     *  gl_Position.
+     */
     m.translateTo(TRANSLATE_X, -cam_pos[0]);
     m.translateTo(TRANSLATE_Y, -cam_pos[1]);
     m.translateTo(TRANSLATE_Z, -cam_pos[2]);
+    
+    /**
+     *  We apply rotation using a float variable called 
+     *  cam_yaw and the rotation matrix we get from this 
+     *  will be multiplied by the translation matrix above
+     *  to give us our final view matrix.
+     */
     m.rotateTo(ROTATE_Y, -cam_yaw);
     
+    /**
+     *  So now we have the translation matrix with our values
+     *  plugged in along with the rotation matrix with its 
+     *  values plugged in.
+     */
     Matrix<float> T = m.translation_matrix();
     Matrix<float> R = m.rotation_y_matrix();
+    
+    /**
+     *  We then multiply them together to get the view matrix.
+     */
     Matrix<float> view_matrix = T * R;
     
+    /**
+     *  We then unwind them from a Matrix to a vector of float values.
+     */
     vector<float> view_matrix_unwound = view_matrix.unwind();
     vector<float> projection_matrix_unwound = projection_matrix.unwind();
     
+    /**
+     *  We need a reference to the "view" and "projection" variables
+     *  inside the program. Both of these sit inside the vertex shader.
+     */
     GLuint view_loc = glGetUniformLocation(program, "view");
     GLuint projection_loc = glGetUniformLocation(program, "projection");
     
+    /**
+     *  And we apply our unwound vectors with the &vector[0] which 
+     *  means we can pass in a vector this way without needing to 
+     *  go to the trouble of converting it to an array of floats.
+     */
     glUniformMatrix4fv(view_loc, 1, GL_FALSE, &view_matrix_unwound[0]);
     glUniformMatrix4fv(projection_loc, 1, GL_FALSE, &projection_matrix_unwound[0]);
 }
