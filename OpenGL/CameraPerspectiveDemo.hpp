@@ -32,7 +32,7 @@ static float cam_yaw_speed = 1.0f;
 static float cam_yaw = 0.0f;
 static float cam_pos_x = 0.0f;
 static float cam_pos_y = 0.0f;
-static float cam_pos_z = 2.0f;
+static float cam_pos_z = 4.0f;
 
 class CameraPerspectiveDemo {
 private:
@@ -52,7 +52,7 @@ private:
     void drawLoop() const;
     void keyActionListener(void) const;
     
-    void lookAt() const;
+    void applyPerspective() const;
     
 public:
     CameraPerspectiveDemo();

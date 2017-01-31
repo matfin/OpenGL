@@ -175,8 +175,15 @@ void CameraPerspectiveDemo::prepareMeshes(void) {
  *  add some meshes that we can later prepare.
  */
 void CameraPerspectiveDemo::addMesh(Mesh mesh, const Position position, const Rotation rotation) {
-//    mesh.getMatrices()->rotateTo(ROTATE_Y, -45.0f);
-//    mesh.getMatrices()->translateTo(TRANSLATE_X, -0.2f);
+    
+    mesh.getMatrices()->rotateTo(ROTATE_X, rotation.rx);
+    mesh.getMatrices()->rotateTo(ROTATE_Y, rotation.ry);
+    mesh.getMatrices()->rotateTo(ROTATE_Z, rotation.rz);
+    
+    mesh.getMatrices()->translateTo(TRANSLATE_X, position.px);
+    mesh.getMatrices()->translateTo(TRANSLATE_Y, position.py);
+    mesh.getMatrices()->translateTo(TRANSLATE_Z, position.pz);
+    
     meshes.push_back(mesh);
 }
 
@@ -194,9 +201,10 @@ void CameraPerspectiveDemo::drawLoop() const {
         for(auto &mesh: meshes) {
             glBindVertexArray(mesh.getVao());
             mesh.applyMatrices(program);
-            lookAt();
             glDrawArrays(GL_TRIANGLES, 0, mesh.pointsSize());
         }
+        
+        applyPerspective();
     }
     
     glfwPollEvents();
@@ -210,27 +218,27 @@ void CameraPerspectiveDemo::keyActionListener(void) const {
     }
     
     if(glfwGetKey(window, GLFW_KEY_LEFT)) {
-        cam_pos_x -= 0.025f;
+        cam_pos_x -= 0.2f;
     }
     
     if(glfwGetKey(window, GLFW_KEY_RIGHT)) {
-        cam_pos_x += 0.025f;
+        cam_pos_x += 0.2f;
     }
     
     if(glfwGetKey(window, GLFW_KEY_DOWN)) {
-        cam_pos_y -= 0.025f;
+        cam_pos_y -= 0.2f;
     }
     
     if(glfwGetKey(window, GLFW_KEY_UP)) {
-        cam_pos_y += 0.025f;
+        cam_pos_y += 0.2f;
     }
     
     if(glfwGetKey(window, GLFW_KEY_W)) {
-        cam_pos_z -= 0.025f;
+        cam_pos_z -= 0.25f;
     }
     
     if(glfwGetKey(window, GLFW_KEY_S)) {
-        cam_pos_z += 0.025f;
+        cam_pos_z += 0.25f;
     }
     
     if(glfwGetKey(window, GLFW_KEY_A)) {
@@ -243,7 +251,7 @@ void CameraPerspectiveDemo::keyActionListener(void) const {
     
 }
 
-void CameraPerspectiveDemo::lookAt() const {
+void CameraPerspectiveDemo::applyPerspective() const {
     
     /**
      *  This sets up the Projection Matrix
@@ -265,6 +273,13 @@ void CameraPerspectiveDemo::lookAt() const {
         0.0f, 0.0f, Pz, 0.0f
     };
     
+    Matrix<float> projection_matrix({
+        Row<float>({Sx, 0.0f, 0.0f, 0.0f}),
+        Row<float>({0.0f, Sy, 0.0f, 0.0f}),
+        Row<float>({0.0f, 0.0f, Sz, -1.0f}),
+        Row<float>({0.0f, 0.0f, Pz, 0.0f})
+    });
+    
     /**
      *  This sets up the View Matrix
      */
@@ -281,16 +296,17 @@ void CameraPerspectiveDemo::lookAt() const {
     m.rotateTo(ROTATE_Y, -cam_yaw);
     
     Matrix<float> T = m.translation_matrix();
-    Matrix<float> Ry = m.rotation_y_matrix();
-    Matrix<float> view_matrix = T * Ry;
+    Matrix<float> R = m.rotation_y_matrix();
+    Matrix<float> view_matrix = T * R;
     
     vector<float> view_matrix_unwound = view_matrix.unwind();
+    vector<float> projection_matrix_unwound = projection_matrix.unwind();
     
     GLuint view_loc = glGetUniformLocation(program, "view");
     GLuint projection_loc = glGetUniformLocation(program, "projection");
     
     glUniformMatrix4fv(view_loc, 1, GL_FALSE, &view_matrix_unwound[0]);
-    glUniformMatrix4fv(projection_loc, 1, GL_FALSE, proj_mat);
+    glUniformMatrix4fv(projection_loc, 1, GL_FALSE, &projection_matrix_unwound[0]);
 }
 
 int CameraPerspectiveDemo::run(void) {
