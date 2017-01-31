@@ -60,61 +60,119 @@ vector<GLfloat> Mesh::coloursUnwound() {
 
 void Mesh::generateCube(float size) {
     
+    size *= 0.5f;
+    
     points = vector<Point> {
         // bottom face
-        {0.5f, -0.5f, -0.5f},
-        {0.5f, -0.5f, 0.5f},
-        {-0.5f, -0.5f, -0.5f},
+        {size, -size, -size},
+        {size, -size, size},
+        {-size, -size, -size},
         
-        {0.5f, -0.5f, 0.5f},
-        {-0.5f, -0.5f, 0.5f},
-        {-0.5f, -0.5f, -0.5f},
+        {size, -size, size},
+        {-size, -size, size},
+        {-size, -size, -size},
         
         // rear face
-        {0.5f, 0.5f, -0.5f},
-        {0.5f, -0.5f, -0.5f},
-        {-0.5f, -0.5f, -0.5f},
+        {size, size, -size},
+        {size, -size, -size},
+        {-size, -size, -size},
         
-        {0.5f, 0.5f, -0.5f},
-        {-0.5f, -0.5f, -0.5f},
-        {-0.5f, 0.5f, -0.5f},
+        {size, size, -size},
+        {-size, -size, -size},
+        {-size, size, -size},
         
         // left face
-        {-0.5f, -0.5f, -0.5f},
-        {-0.5f, -0.5f, 0.5f},
-        {-0.5f, 0.5f, -0.5f},
+        {-size, -size, -size},
+        {-size, -size, size},
+        {-size, size, -size},
         
-        {-0.5f, -0.5f, 0.5f},
-        {-0.5f, 0.5f, 0.5f},
-        {-0.5f, 0.5f, -0.5f},
+        {-size, -size, size},
+        {-size, size, size},
+        {-size, size, -size},
         
         // top face
-        {-0.5f, 0.5f, -0.5f},
-        {-0.5f, 0.5f, 0.5f},
-        {0.5f, 0.5f, 0.5f},
+        {-size, size, -size},
+        {-size, size, size},
+        {size, size, size},
         
-        {0.5f, 0.5f, 0.5f},
-        {0.5f, 0.5f, -0.5f},
-        {-0.5f, 0.5f, -0.5f},
+        {size, size, size},
+        {size, size, -size},
+        {-size, size, -size},
         
         // front face
-        {-0.5f, 0.5f, 0.5f},
-        {-0.5f, -0.5f, 0.5f},
-        {0.5f, -0.5f, 0.5f},
+        {-size, size, size},
+        {-size, -size, size},
+        {size, -size, size},
         
-        {0.5f, -0.5f, 0.5f},
-        {0.5f, 0.5f, 0.5f},
-        {-0.5f, 0.5f, 0.5f},
+        {size, -size, size},
+        {size, size, size},
+        {-size, size, size},
         
         // right face
-        {0.5f, 0.5f, 0.5f},
-        {0.5f, -0.5f, 0.5f},
-        {0.5f, -0.5f, -0.5f},
+        {size, size, size},
+        {size, -size, size},
+        {size, -size, -size},
         
-        {0.5f, -0.5f, -0.5f},
-        {0.5f, 0.5f, -0.5f},
-        {0.5f, 0.5f, 0.5f}
+        {size, -size, -size},
+        {size, size, -size},
+        {size, size, size}
     };
+    
+//    points = vector<Point> {
+//        // bottom face
+//        {0.5f, -0.5f, -0.5f},
+//        {0.5f, -0.5f, 0.5f},
+//        {-0.5f, -0.5f, -0.5f},
+//        
+//        {0.5f, -0.5f, 0.5f},
+//        {-0.5f, -0.5f, 0.5f},
+//        {-0.5f, -0.5f, -0.5f},
+//        
+//        // rear face
+//        {0.5f, 0.5f, -0.5f},
+//        {0.5f, -0.5f, -0.5f},
+//        {-0.5f, -0.5f, -0.5f},
+//        
+//        {0.5f, 0.5f, -0.5f},
+//        {-0.5f, -0.5f, -0.5f},
+//        {-0.5f, 0.5f, -0.5f},
+//        
+//        // left face
+//        {-0.5f, -0.5f, -0.5f},
+//        {-0.5f, -0.5f, 0.5f},
+//        {-0.5f, 0.5f, -0.5f},
+//        
+//        {-0.5f, -0.5f, 0.5f},
+//        {-0.5f, 0.5f, 0.5f},
+//        {-0.5f, 0.5f, -0.5f},
+//        
+//        // top face
+//        {-0.5f, 0.5f, -0.5f},
+//        {-0.5f, 0.5f, 0.5f},
+//        {0.5f, 0.5f, 0.5f},
+//        
+//        {0.5f, 0.5f, 0.5f},
+//        {0.5f, 0.5f, -0.5f},
+//        {-0.5f, 0.5f, -0.5f},
+//        
+//        // front face
+//        {-0.5f, 0.5f, 0.5f},
+//        {-0.5f, -0.5f, 0.5f},
+//        {0.5f, -0.5f, 0.5f},
+//        
+//        {0.5f, -0.5f, 0.5f},
+//        {0.5f, 0.5f, 0.5f},
+//        {-0.5f, 0.5f, 0.5f},
+//        
+//        // right face
+//        {0.5f, 0.5f, 0.5f},
+//        {0.5f, -0.5f, 0.5f},
+//        {0.5f, -0.5f, -0.5f},
+//        
+//        {0.5f, -0.5f, -0.5f},
+//        {0.5f, 0.5f, -0.5f},
+//        {0.5f, 0.5f, 0.5f}
+//    };
     
     colours = vector<Colour> {
         // bottom face

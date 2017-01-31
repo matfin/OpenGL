@@ -214,7 +214,7 @@ int runCameraPerspectiveDemo(void) {
     for(int i = 0; i < 99; i++) {
         
         Mesh mesh;
-        mesh.generateCube(2.0f);
+        mesh.generateCube(0.25f);
         
         if(i % 2 == 0) {
             demo->addMesh(mesh, {-3.0f, 0.0f, (float)i * 3.0f}, {0.0f, 0.0f, i * 1.0f});
