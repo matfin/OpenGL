@@ -211,19 +211,19 @@ int runCameraPerspectiveDemo(void) {
      *  -   the second parameter is a Position struct (x, y, z) GLfloat coords.
      *  -   the third parameter is a Rotation struct (x, y, z) GLfloat rotation values.
      */
-//    for(int i = 0; i < 99; i++) {
-//        if(i % 2 == 0) {
-//            demo->addMesh(cube, {-3.0f, 0.0f, (float)i * 3.0f}, {0.0f, 0.0f, i * 1.0f});
-//        }
-//        else {
-//            demo->addMesh(cube, {3.0f, 0.0f, (float)i * 3.0f}, {0.0f, 0.0f, i * -1.0f});
-//        }
-//    }
-    
-    Mesh *mesh = new Mesh();
-    mesh->generateCube(32.0f);
-    demo->addMesh(*mesh, {0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f});
-    
+    for(int i = 0; i < 99; i++) {
+        
+        Mesh mesh;
+        mesh.generateCube(2.0f);
+        
+        if(i % 2 == 0) {
+            demo->addMesh(mesh, {-3.0f, 0.0f, (float)i * 3.0f}, {0.0f, 0.0f, i * 1.0f});
+        }
+        else {
+            demo->addMesh(mesh, {3.0f, 0.0f, (float)i * 3.0f}, {0.0f, 0.0f, i * -1.0f});
+        }
+    }
+        
     int run = demo->run();
     delete(demo);
     return run;

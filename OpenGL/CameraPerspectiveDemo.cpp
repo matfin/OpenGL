@@ -213,6 +213,10 @@ void CameraPerspectiveDemo::drawLoop() const {
         for(auto &mesh: meshes) {
             glBindVertexArray(mesh.getVao());
             mesh.applyMatrices(program);
+            
+            mesh.getMatrices()->rotate(ROTATE_Z, LEFT);
+            mesh.getMatrices()->rotate(ROTATE_X, UP);
+            
             glDrawArrays(drawing_method, 0, mesh.pointsSize());
         }
         
