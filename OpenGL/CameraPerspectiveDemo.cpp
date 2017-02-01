@@ -16,6 +16,8 @@ using namespace std;
 CameraPerspectiveDemo::CameraPerspectiveDemo() {
     cout << "Construct: CameraPerspectiveDemo" << endl;
     
+    drawing_method = GL_TRIANGLES;
+    
     fov = 67.0f * one_deg_in_rad;
     cam_t_speed = 0.25f;
     cam_r_speed = 1.25f;
@@ -25,6 +27,7 @@ CameraPerspectiveDemo::CameraPerspectiveDemo() {
     cam_pos.px = 0.0f;
     cam_pos.py = 0.0f;
     cam_pos.pz = 5.0f;
+    camera_updating = false;
 }
 
 CameraPerspectiveDemo::~CameraPerspectiveDemo() {
@@ -51,7 +54,7 @@ bool CameraPerspectiveDemo::setupWindow(void) {
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-    glfwWindowHint(GLFW_SAMPLES, 4);
+//    glfwWindowHint(GLFW_SAMPLES, 16);
     
     window = glfwCreateWindow(gl_viewport_w, gl_viewport_h, "Camera Perspective Demo", NULL, NULL);
     if(!window) {
@@ -67,7 +70,7 @@ bool CameraPerspectiveDemo::setupWindow(void) {
     
     glEnable(GL_CULL_FACE);
     glCullFace(GL_BACK);
-    glFrontFace(GL_CW);
+    glFrontFace(GL_CCW);
     
     return true;
 }
@@ -210,14 +213,18 @@ void CameraPerspectiveDemo::drawLoop() const {
     if(GL_TRUE == programReady()) {
         for(auto &mesh: meshes) {
             glBindVertexArray(mesh.getVao());
-        
-//            mesh.getMatrices()->rotate(ROTATE_Z, LEFT);
-            
             mesh.applyMatrices(program);
-            glDrawArrays(GL_TRIANGLES, 0, mesh.pointsSize());
+            
+            if(camera_updating) {
+                mesh.getMatrices()->rotate(ROTATE_Z, LEFT);
+                mesh.getMatrices()->rotate(ROTATE_X, UP);
+            }
+            
+            glDrawArrays(drawing_method, 0, mesh.pointsSize());
         }
-        
-        applyViewMatrix();
+        if(camera_updating) {
+            applyViewMatrix();
+        }
     }
     
     glfwPollEvents();
@@ -225,6 +232,8 @@ void CameraPerspectiveDemo::drawLoop() const {
 }
 
 void CameraPerspectiveDemo::keyActionListener(void) {
+    
+    camera_updating = false;
     
     if(glfwGetKey(window, GLFW_KEY_ESCAPE)) {
         glfwSetWindowShouldClose(window, true);
@@ -235,18 +244,22 @@ void CameraPerspectiveDemo::keyActionListener(void) {
      */
     if(glfwGetKey(window, GLFW_KEY_DOWN)) {
         cam_pitch -= cam_r_speed;
+        camera_updating = true;
     }
     
     if(glfwGetKey(window, GLFW_KEY_UP)) {
         cam_pitch += cam_r_speed;
+        camera_updating = true;
     }
     
     if(glfwGetKey(window, GLFW_KEY_LEFT)) {
         cam_yaw += cam_r_speed;
+        camera_updating = true;
     }
     
     if(glfwGetKey(window, GLFW_KEY_RIGHT)) {
         cam_yaw -= cam_r_speed;
+        camera_updating = true;
     }
     
     /**
@@ -254,19 +267,56 @@ void CameraPerspectiveDemo::keyActionListener(void) {
      */
     if(glfwGetKey(window, GLFW_KEY_W)) {
         cam_pos.pz -= cam_t_speed;
+        camera_updating = true;
     }
     
     if(glfwGetKey(window, GLFW_KEY_S)) {
         cam_pos.pz += cam_t_speed;
+        camera_updating = true;
     }
     
     if(glfwGetKey(window, GLFW_KEY_A)) {
         cam_pos.px -= cam_t_speed;
+        camera_updating = true;
     }
     
     if(glfwGetKey(window, GLFW_KEY_D)) {
         cam_pos.px += cam_t_speed;
+        camera_updating = true;
     }
+    
+    /**
+     *  Switch the drawing method
+     */
+    if(glfwGetKey(window, GLFW_KEY_1)) {
+        glfwSetWindowTitle(window, "Rendering: GL_TRIANGLES");
+        drawing_method = GL_TRIANGLES;
+    }
+    if(glfwGetKey(window, GLFW_KEY_2)) {
+        glfwSetWindowTitle(window, "Rendering: GL_LINE_STRIP");
+        drawing_method = GL_LINE_STRIP;
+    }
+    if(glfwGetKey(window, GLFW_KEY_3)) {
+        glfwSetWindowTitle(window, "Rendering: GL_LINE_LOOP");
+        drawing_method = GL_LINE_LOOP;
+    }
+    if(glfwGetKey(window, GLFW_KEY_4)) {
+        glfwSetWindowTitle(window, "Rendering: GL_LINES");
+        drawing_method = GL_LINES;
+    }
+    if(glfwGetKey(window, GLFW_KEY_5)) {
+        glfwSetWindowTitle(window, "Rendering: GL_TRIANGLE_STRIP");
+        drawing_method = GL_TRIANGLE_STRIP;
+    }
+    if(glfwGetKey(window, GLFW_KEY_6)) {
+        glfwSetWindowTitle(window, "Rendering: GL_TRIANGLE_FAN");
+        drawing_method = GL_TRIANGLE_FAN;
+    }
+    if(glfwGetKey(window, GLFW_KEY_7)) {
+        glfwSetWindowTitle(window, "Rendering: GL_POINTS");
+        drawing_method = GL_POINTS;
+    }
+                           
 }
 
 void CameraPerspectiveDemo::applyProjectionMatrix() const {
@@ -366,7 +416,7 @@ void CameraPerspectiveDemo::applyViewMatrix() const {
      *  the view matrix and then unwind to get a vector
      *  of float values.
      */
-    Matrix<float> view_matrix = T * Rx * Ry * Rz;
+    Matrix<float> view_matrix = (Rx * Ry * Rz) * T;
     vector<float> view_matrix_unwound = view_matrix.unwind();
     
     /**
@@ -424,6 +474,7 @@ int CameraPerspectiveDemo::run(void) {
      */
     if(programReady()) {
         applyProjectionMatrix();
+        applyViewMatrix();
     }
     
     while(!glfwWindowShouldClose(window)) {

@@ -206,21 +206,25 @@ int runCameraPerspectiveDemo(void) {
     CameraPerspectiveDemo *demo = new CameraPerspectiveDemo();
     
     /**
-     *  Adding a triangle mesh with the following parameters:
-     *
-     *  -   the second parameter is a Position struct (x, y, z) GLfloat coords.
-     *  -   the third parameter is a Rotation struct (x, y, z) GLfloat rotation values.
+     *  Generating a cube mesh and adding it to the world:
+     *  
+     *  - The first parameter is the generated mesh
+     *  - The second parameter is the world position
+     *  - The third parameter is the world rotation
      */
-    for(int i = 0; i < 99; i++) {
+    
+    for(int i = 0; i < 10; i++) {
+        
+        Mesh mesh;
+        mesh.generateCube(2.0f);
+        
         if(i % 2 == 0) {
-            demo->addMesh(cube, {-3.0f, 0.0f, (float)i * 3.0f}, {0.0f, 0.0f, i * 1.0f});
+            demo->addMesh(mesh, {3.0f, 0.0f, (float)i * 2.5f}, {0.0f, 0.0f, 0.0f});
         }
         else {
-            demo->addMesh(cube, {3.0f, 0.0f, (float)i * 3.0f}, {0.0f, 0.0f, i * -1.0f});
+            demo->addMesh(mesh, {-3.0f, 0.0f, (float)i * 2.5f}, {0.0f, 0.0f, 0.0f});
         }
     }
-    
-//    demo->addMesh(triangle, {0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f});
     
     int run = demo->run();
     delete(demo);
