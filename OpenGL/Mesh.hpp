@@ -37,7 +37,7 @@ public:
     std::vector<GLfloat> coloursUnwound();
     
     void generateCube(float size);
-    
+    void applyIdentityMatrix(GLuint program) const;
     void applyMatrices(GLuint program) const;
     void setVao(GLuint _vao);
 };

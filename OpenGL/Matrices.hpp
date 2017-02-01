@@ -198,6 +198,15 @@ public:
         });
     }
     
+    Matrix<float> identity_matrix() const {
+        return
+            rotation_x_matrix() *
+            rotation_y_matrix() *
+            rotation_z_matrix() *
+            translation_matrix() *
+            scaling_matrix();
+    }
+    
     std::vector<float> getMatrixUnwound(MatrixType type) const {
         switch(type) {
             case ROTATION_X: {

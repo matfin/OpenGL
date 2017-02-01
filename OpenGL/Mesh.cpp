@@ -232,6 +232,20 @@ void Mesh::generateCube(float size) {
     
 }
 
+void Mesh::applyIdentityMatrix(GLuint program) const {
+    GLuint identity_matrix_loc = glGetUniformLocation(program, "identity_matrix");
+    
+    Matrix<GLfloat> identity_matrix = m.identity_matrix();
+    vector<GLfloat> identity_matrix_unwound = identity_matrix.unwind();
+    
+    if(GL_TRUE != identity_matrix_loc) {
+        glUniformMatrix4fv(identity_matrix_loc, 1, GL_FALSE, &identity_matrix_unwound[0]);
+    }
+    else {
+        cout << "The identity matrix could not be applied to this mesh." << endl;
+    }
+}
+
 void Mesh::applyMatrices(GLuint program) const {
     GLuint rot_x_matrix = glGetUniformLocation(program, "rot_x_matrix");
     GLuint rot_y_matrix = glGetUniformLocation(program, "rot_y_matrix");

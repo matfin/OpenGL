@@ -213,7 +213,8 @@ void CameraPerspectiveDemo::drawLoop() const {
     if(GL_TRUE == programReady()) {
         for(auto &mesh: meshes) {
             glBindVertexArray(mesh.getVao());
-            mesh.applyMatrices(program);
+//            mesh.applyMatrices(program);
+            mesh.applyIdentityMatrix(program);
             
             if(camera_updating) {
                 mesh.getMatrices()->rotate(ROTATE_Z, LEFT);
