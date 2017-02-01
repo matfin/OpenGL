@@ -34,6 +34,7 @@ private:
     float cam_pitch;
     float cam_roll;
     float cam_yaw;
+    bool camera_updating;
     Position cam_pos;
 
     std::vector<Mesh> meshes;

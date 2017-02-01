@@ -27,6 +27,7 @@ CameraPerspectiveDemo::CameraPerspectiveDemo() {
     cam_pos.px = 0.0f;
     cam_pos.py = 0.0f;
     cam_pos.pz = 5.0f;
+    camera_updating = false;
 }
 
 CameraPerspectiveDemo::~CameraPerspectiveDemo() {
@@ -214,13 +215,16 @@ void CameraPerspectiveDemo::drawLoop() const {
             glBindVertexArray(mesh.getVao());
             mesh.applyMatrices(program);
             
-            mesh.getMatrices()->rotate(ROTATE_Z, LEFT);
-            mesh.getMatrices()->rotate(ROTATE_X, UP);
+            if(camera_updating) {
+                mesh.getMatrices()->rotate(ROTATE_Z, LEFT);
+                mesh.getMatrices()->rotate(ROTATE_X, UP);
+            }
             
             glDrawArrays(drawing_method, 0, mesh.pointsSize());
         }
-        
-        applyViewMatrix();
+        if(camera_updating) {
+            applyViewMatrix();
+        }
     }
     
     glfwPollEvents();
@@ -228,6 +232,8 @@ void CameraPerspectiveDemo::drawLoop() const {
 }
 
 void CameraPerspectiveDemo::keyActionListener(void) {
+    
+    camera_updating = false;
     
     if(glfwGetKey(window, GLFW_KEY_ESCAPE)) {
         glfwSetWindowShouldClose(window, true);
@@ -238,18 +244,22 @@ void CameraPerspectiveDemo::keyActionListener(void) {
      */
     if(glfwGetKey(window, GLFW_KEY_DOWN)) {
         cam_pitch -= cam_r_speed;
+        camera_updating = true;
     }
     
     if(glfwGetKey(window, GLFW_KEY_UP)) {
         cam_pitch += cam_r_speed;
+        camera_updating = true;
     }
     
     if(glfwGetKey(window, GLFW_KEY_LEFT)) {
         cam_yaw += cam_r_speed;
+        camera_updating = true;
     }
     
     if(glfwGetKey(window, GLFW_KEY_RIGHT)) {
         cam_yaw -= cam_r_speed;
+        camera_updating = true;
     }
     
     /**
@@ -257,18 +267,22 @@ void CameraPerspectiveDemo::keyActionListener(void) {
      */
     if(glfwGetKey(window, GLFW_KEY_W)) {
         cam_pos.pz -= cam_t_speed;
+        camera_updating = true;
     }
     
     if(glfwGetKey(window, GLFW_KEY_S)) {
         cam_pos.pz += cam_t_speed;
+        camera_updating = true;
     }
     
     if(glfwGetKey(window, GLFW_KEY_A)) {
         cam_pos.px -= cam_t_speed;
+        camera_updating = true;
     }
     
     if(glfwGetKey(window, GLFW_KEY_D)) {
         cam_pos.px += cam_t_speed;
+        camera_updating = true;
     }
     
     /**
@@ -402,7 +416,7 @@ void CameraPerspectiveDemo::applyViewMatrix() const {
      *  the view matrix and then unwind to get a vector
      *  of float values.
      */
-    Matrix<float> view_matrix = T * Rx * Ry * Rz;
+    Matrix<float> view_matrix = (Rx * Ry * Rz) * T;
     vector<float> view_matrix_unwound = view_matrix.unwind();
     
     /**
@@ -460,6 +474,7 @@ int CameraPerspectiveDemo::run(void) {
      */
     if(programReady()) {
         applyProjectionMatrix();
+        applyViewMatrix();
     }
     
     while(!glfwWindowShouldClose(window)) {
