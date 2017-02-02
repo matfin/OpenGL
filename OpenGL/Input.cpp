@@ -14,6 +14,13 @@
 using namespace std;
 
 Input::Input(void) {
+    mouseDown = nullptr;
+    mouseUp = nullptr;
+    mouseMove = nullptr;
+    mouseDrag = nullptr;
+    keyDown = nullptr;
+    keyStrobe = nullptr;
+    keyUp = nullptr;
     reset();
 }
 
@@ -23,31 +30,76 @@ Input::Input(Input const&) {}
 
 void Input::operator=(Input const&) {}
 
-void Input::mouseButtonCallbackFunction(GLFWwindow *window, int button, int action, int mods) {
-    downed.px = current.px;
-    downed.py = current.py;
-    buttonCallback(10);
+void Input::mouseButtonCallback(int button, int action, int mods) {
+    /**
+     *  Mouse click
+     */
+    if(action == 1) {
+        downed = current;
+        held = true;
+        if(mouseDown != nullptr) {
+            mouseDown(button, action, mods);
+        }
+    }
+    /**
+     *  Mouse release
+     */
+    else {
+        reset();
+        if(mouseUp != nullptr) {
+            mouseUp(button, action, mods);
+        }
+    }
 }
 
-void Input::mousePositionCallbackFunction(GLFWwindow *window, double x_pos, double y_pos) {
+void Input::mouseMoveCallback(double x_pos, double y_pos) {
+    /**
+     *  Always update the current position of the mouse.
+     */
     current.px = (float)x_pos;
     current.py = (float)y_pos;
+    
+    if(mouseMove != nullptr) {
+        mouseMove(current.px, current.py);
+    }
+    
+    if(held && mouseDrag != nullptr) {
+        updateDistanceAndDirection();
+        mouseDrag(current.px, current.py, distance_x, distance_y, direction);
+    }
 }
 
-void Input::keyInputCallbackFunction(GLFWwindow *window, int key, int scancode, int action, int mods) {
-    cout << "Key callback function: " << key << ", " << scancode << ", " << action << ", " << mods << endl;
+void Input::keyCallback(int key, int scancode, int action, int mods) {
+    switch(action) {
+        case 0: {
+            if(keyUp != nullptr) {
+                keyUp(key, scancode, action, mods);
+            }
+            break;
+        }
+        case 1: {
+            if(keyDown != nullptr) {
+                keyDown(key, scancode, action, mods);
+            }
+            break;
+        }
+        case 2: {
+            if(keyStrobe != nullptr) {
+                keyStrobe(key, scancode, action, mods);
+            }
+            break;
+        }
+    }
 }
 
 void Input::reset() {
-    primary_down = false;
-    secondary_down = false;
     downed.px = 0.0f;
     downed.py = 0.0f;
+    held = false;
     distance = 0.0f;
     distance_x = 0.0f;
     distance_y = 0.0f;
-    direction_x = NONE;
-    direction_y = NONE;
+    direction = NONE;
 }
 
 void Input::updateDistanceAndDirection(void) {
@@ -66,49 +118,11 @@ void Input::updateDistanceAndDirection(void) {
     /**
      *  Direction
      */
-    if(x2_mn_x1 < 0) direction_x = WEST;
-    else if(x2_mn_x1 > 0) direction_x = EAST;
-    else direction_x = NONE;
-    
-    if(y2_mn_y1 < 0) direction_y = NORTH;
-    else if(y2_mn_y1 > 0) direction_y = SOUTH;
-    else direction_y = NONE;
-}
-
-string Input::distanceAndDirection(void) const {
-    
-    ostringstream oss;
-    oss << " distance: " << distance;
-    oss << " distance x: " << distance_x;
-    oss << " distance y: " << distance_y;
-    
-    switch(direction_x) {
-        case EAST: {
-            oss << " - East";
-            break;
-        }
-        case WEST: {
-            oss << " - West";
-            break;
-        }
-        default: {
-            oss << " - None";
-            break;
-        }
-    }
-    switch(direction_y) {
-        case NORTH: {
-            oss << " - North";
-            break;
-        }
-        case SOUTH: {
-            oss << " - South";
-            break;
-        }
-        default: {
-            oss << " - None";
-            break;
-        }
-    }
-    return oss.str();
+//    if(x2_mn_x1 < 0) direction_x = WEST;
+//    else if(x2_mn_x1 > 0) direction_x = EAST;
+//    else direction_x = NONE;
+//    
+//    if(y2_mn_y1 < 0) direction_y = NORTH;
+//    else if(y2_mn_y1 > 0) direction_y = SOUTH;
+//    else direction_y = NONE;
 }

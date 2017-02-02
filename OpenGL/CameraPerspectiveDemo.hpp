@@ -57,16 +57,18 @@ private:
     void applyViewMatrix() const;
     void applyProjectionMatrix() const;
     
-//    static void mousePositionCallback(GLFWwindow *window, double x_pos, double y_pos);
-//    static void mouseDownCallback(GLFWwindow *window, int button, int action, int mods);
+    void onMouseDown(int button, int action, int mods);
+    void onMouseUp(int button, int action, int mods);
+    void onMouseMove(float pos_x, float pos_y);
+    void onMouseDrag(float pos_x, float pos_y, Direction direction);
+    void onKeyDown(int key, int scancode, int action, int mods);
+    void onKeyUp(int key, int scancode, int action, int mods);
     
 public:
     CameraPerspectiveDemo();
     ~CameraPerspectiveDemo();
     void addMesh(Mesh mesh, const Position position, const Rotation rotation);
     int run(void);
-    
-    void mouseButtonCallback(int x);
 };
 
 #endif /* CameraPerspectiveDemo_hpp */

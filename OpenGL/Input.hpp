@@ -16,9 +16,13 @@
 
 enum Direction {
     NORTH,
-    SOUTH,
-    WEST,
+    NORTH_EAST,
     EAST,
+    SOUTH_EAST,
+    SOUTH,
+    SOUTH_WEST,
+    WEST,
+    NORTH_WEST,
     NONE
 };
 
@@ -36,51 +40,124 @@ private:
     /**
      *  Member variables
      */
-    bool primary_down = false;
-    bool secondary_down = false;
     Position current;
     Position downed;
+    bool held;
     float distance;
     float distance_x;
     float distance_y;
-    Direction direction_x;
-    Direction direction_y;
+    Direction direction;
     
     /**
      *  Callback functions
      */
-    std::function<void(int)> buttonCallback;
+    std::function<void(int, int, int)> mouseDown;
+    std::function<void(int, int, int)> mouseUp;
+    std::function<void(float, float)> mouseMove;
+    std::function<void(float, float, float, float, Direction)> mouseDrag;
+    std::function<void(int, int, int, int)> keyDown;
+    std::function<void(int, int, int, int)> keyStrobe;
+    std::function<void(int, int, int, int)> keyUp;
     
 public:
     
+    /**
+     *  This uses the singleton pattern
+     *  to return a static instance of 
+     *  an Input.
+     */
     static Input &getInstance() {
         static Input instance;
         return instance;
     }
     
-    void addMouseButtonHandler(std::function<void(int)> callback) {
-        buttonCallback = callback;
-    }
-    
-    static void mousePositionCallback(GLFWwindow *window, double x_pos, double y_pos) {
-        getInstance().mousePositionCallbackFunction(window, x_pos, y_pos);
-    }
-    
-    static void mouseButtonCallback(GLFWwindow *window, int button, int action, int mods) {
-        getInstance().mouseButtonCallbackFunction(window, button, action, mods);
-    }
-    
-    static void keyInputCallback(GLFWwindow *window, int key, int scancode, int action, int mods) {
-        getInstance().keyInputCallbackFunction(window, key, scancode, action, mods);
-    }
-    
-    void mouseButtonCallbackFunction(GLFWwindow *window, int button, int action, int mods);
-    void mousePositionCallbackFunction(GLFWwindow *window, double x_pos, double y_pos);
-    void keyInputCallbackFunction(GLFWwindow *window, int key, int scancode, int action, int mods);
-    
-    void reset(void);
+    /**
+     *  These will set the member parameters.
+     */
     void updateDistanceAndDirection(void);
-    std::string distanceAndDirection(void) const;
+    void reset(void);
+    
+    /**
+     *  Assigning an std::function callback for the mouse 
+     *  button press.
+     */
+    void onMouseDown(std::function<void(int, int, int)> cb) {
+        mouseDown = cb;
+    };
+    
+    /**
+     *  Assigning an std::function callback for the mouse
+     *  button release.
+     */
+    void onMouseUp(std::function<void(int, int, int)> cb) {
+        mouseUp = cb;
+    };
+    
+    /**
+     *  Assigning an std::function callback for mouse movement.
+     */
+    void onMouseMove(std::function<void(float, float)> cb) {
+        mouseMove = cb;
+    }
+    
+    /**
+     *  Assigning an std::function callback for mouse 
+     *  button down and movement.
+     */
+    void onMouseDrag(std::function<void(float, float, float, float, Direction)> cb) {
+        mouseDrag = cb;
+    }
+    
+    /**
+     *  Assigning an std::function callback for keyboard key press.
+     */
+    void onKeyDown(std::function<void(int, int, int, int)> cb) {
+        keyDown = cb;
+    }
+    
+    /**
+     *  Assigning an std::function callback for keyboard key strobe.
+     */
+    void onKeyStrobe(std::function<void(int, int, int, int)> cb) {
+        keyStrobe = cb;
+    }
+    
+    /**
+     *  Assigning an std::function callback for keyboard key release.
+     */
+    void onKeyUp(std::function<void(int, int, int, int)> cb) {
+        keyUp = cb;
+    }
+    
+    /**
+     *  Static function passed in to GLFW and called when a mouse button is pressed/released.
+     */
+    static void glfwMouseButtonCallback(GLFWwindow *window, int button, int action, int mods) {
+        getInstance().mouseButtonCallback(button, action, mods);
+    }
+    
+    /**
+     *  Static function passed in to GLFW and called when the mouse is moved.
+     */
+    static void glfwMouseMoveCallback(GLFWwindow *window, double x_pos, double y_pos) {
+        getInstance().mouseMoveCallback(x_pos, y_pos);
+    }
+    
+    /**
+     *  Static function passed in to GLFW and called on keyboard key press/release.
+     */
+    static void glfwKeyCallback(GLFWwindow *window, int key, int scancode, int action, int mods) {
+        getInstance().keyCallback(key, scancode, action, mods);
+    }
+    
+    /**
+     *  Member functions of the instance of the class. 
+     *
+     *  These will fire the std::function callbacks.
+     */
+    void mouseButtonCallback(int button, int action, int mods);
+    void mouseMoveCallback(double x_pos, double y_pos);
+    void keyCallback(int key, int scancode, int action, int mods);
 };
 
 #endif /* Input_hpp */

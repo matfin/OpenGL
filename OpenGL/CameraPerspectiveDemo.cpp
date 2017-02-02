@@ -33,12 +33,6 @@ CameraPerspectiveDemo::CameraPerspectiveDemo() {
     camera_updating = false;
     
     Input::getInstance();
-    Input::getInstance().addMouseButtonHandler(std::bind(&CameraPerspectiveDemo::mouseButtonCallback, this, _1));
-}
-
-void CameraPerspectiveDemo::mouseButtonCallback(int x) {
-    cout << "CameraPerspectiveDemo was told to do something." << x << endl;
-    cout << "Accessing a member variable yields: " << cam_roll_speed << endl;
 }
 
 CameraPerspectiveDemo::~CameraPerspectiveDemo() {
@@ -235,93 +229,93 @@ void CameraPerspectiveDemo::drawLoop() const {
     glfwSwapBuffers(window);
 }
 
-void CameraPerspectiveDemo::keyActionListener(void) {
-    
-    camera_updating = false;
-    
-    if(glfwGetKey(window, GLFW_KEY_ESCAPE)) {
-        glfwSetWindowShouldClose(window, true);
-    }
-    
-    /**
-     *  Camera look (pitch & yaw)
-     */
-    if(glfwGetKey(window, GLFW_KEY_DOWN)) {
-        cam_pitch -= cam_pitch_speed;
-        camera_updating = true;
-    }
-    
-    if(glfwGetKey(window, GLFW_KEY_UP)) {
-        cam_pitch += cam_pitch_speed;
-        camera_updating = true;
-    }
-    
-    if(glfwGetKey(window, GLFW_KEY_LEFT)) {
-        cam_yaw += cam_yaw_speed;
-        camera_updating = true;
-    }
-    
-    if(glfwGetKey(window, GLFW_KEY_RIGHT)) {
-        cam_yaw -= cam_yaw_speed;
-        camera_updating = true;
-    }
-    
-    /**
-     *  Camera move
-     */
-    if(glfwGetKey(window, GLFW_KEY_W)) {
-        cam_pos.pz -= cam_t_speed;
-        camera_updating = true;
-    }
-    
-    if(glfwGetKey(window, GLFW_KEY_S)) {
-        cam_pos.pz += cam_t_speed;
-        camera_updating = true;
-    }
-    
-    if(glfwGetKey(window, GLFW_KEY_A)) {
-        cam_pos.px -= cam_t_speed;
-        camera_updating = true;
-    }
-    
-    if(glfwGetKey(window, GLFW_KEY_D)) {
-        cam_pos.px += cam_t_speed;
-        camera_updating = true;
-    }
-    
-    /**
-     *  Switch the drawing method
-     */
-    if(glfwGetKey(window, GLFW_KEY_1)) {
-        glfwSetWindowTitle(window, "Rendering: GL_TRIANGLES");
-        drawing_method = GL_TRIANGLES;
-    }
-    if(glfwGetKey(window, GLFW_KEY_2)) {
-        glfwSetWindowTitle(window, "Rendering: GL_LINE_STRIP");
-        drawing_method = GL_LINE_STRIP;
-    }
-    if(glfwGetKey(window, GLFW_KEY_3)) {
-        glfwSetWindowTitle(window, "Rendering: GL_LINE_LOOP");
-        drawing_method = GL_LINE_LOOP;
-    }
-    if(glfwGetKey(window, GLFW_KEY_4)) {
-        glfwSetWindowTitle(window, "Rendering: GL_LINES");
-        drawing_method = GL_LINES;
-    }
-    if(glfwGetKey(window, GLFW_KEY_5)) {
-        glfwSetWindowTitle(window, "Rendering: GL_TRIANGLE_STRIP");
-        drawing_method = GL_TRIANGLE_STRIP;
-    }
-    if(glfwGetKey(window, GLFW_KEY_6)) {
-        glfwSetWindowTitle(window, "Rendering: GL_TRIANGLE_FAN");
-        drawing_method = GL_TRIANGLE_FAN;
-    }
-    if(glfwGetKey(window, GLFW_KEY_7)) {
-        glfwSetWindowTitle(window, "Rendering: GL_POINTS");
-        drawing_method = GL_POINTS;
-    }
-                           
-}
+//void CameraPerspectiveDemo::keyActionListener(void) {
+//    
+//    camera_updating = false;
+//    
+//    if(glfwGetKey(window, GLFW_KEY_ESCAPE)) {
+//        glfwSetWindowShouldClose(window, true);
+//    }
+//    
+//    /**
+//     *  Camera look (pitch & yaw)
+//     */
+//    if(glfwGetKey(window, GLFW_KEY_DOWN)) {
+//        cam_pitch -= cam_pitch_speed;
+//        camera_updating = true;
+//    }
+//    
+//    if(glfwGetKey(window, GLFW_KEY_UP)) {
+//        cam_pitch += cam_pitch_speed;
+//        camera_updating = true;
+//    }
+//    
+//    if(glfwGetKey(window, GLFW_KEY_LEFT)) {
+//        cam_yaw += cam_yaw_speed;
+//        camera_updating = true;
+//    }
+//    
+//    if(glfwGetKey(window, GLFW_KEY_RIGHT)) {
+//        cam_yaw -= cam_yaw_speed;
+//        camera_updating = true;
+//    }
+//    
+//    /**
+//     *  Camera move
+//     */
+//    if(glfwGetKey(window, GLFW_KEY_W)) {
+//        cam_pos.pz -= cam_t_speed;
+//        camera_updating = true;
+//    }
+//    
+//    if(glfwGetKey(window, GLFW_KEY_S)) {
+//        cam_pos.pz += cam_t_speed;
+//        camera_updating = true;
+//    }
+//    
+//    if(glfwGetKey(window, GLFW_KEY_A)) {
+//        cam_pos.px -= cam_t_speed;
+//        camera_updating = true;
+//    }
+//    
+//    if(glfwGetKey(window, GLFW_KEY_D)) {
+//        cam_pos.px += cam_t_speed;
+//        camera_updating = true;
+//    }
+//    
+//    /**
+//     *  Switch the drawing method
+//     */
+//    if(glfwGetKey(window, GLFW_KEY_1)) {
+//        glfwSetWindowTitle(window, "Rendering: GL_TRIANGLES");
+//        drawing_method = GL_TRIANGLES;
+//    }
+//    if(glfwGetKey(window, GLFW_KEY_2)) {
+//        glfwSetWindowTitle(window, "Rendering: GL_LINE_STRIP");
+//        drawing_method = GL_LINE_STRIP;
+//    }
+//    if(glfwGetKey(window, GLFW_KEY_3)) {
+//        glfwSetWindowTitle(window, "Rendering: GL_LINE_LOOP");
+//        drawing_method = GL_LINE_LOOP;
+//    }
+//    if(glfwGetKey(window, GLFW_KEY_4)) {
+//        glfwSetWindowTitle(window, "Rendering: GL_LINES");
+//        drawing_method = GL_LINES;
+//    }
+//    if(glfwGetKey(window, GLFW_KEY_5)) {
+//        glfwSetWindowTitle(window, "Rendering: GL_TRIANGLE_STRIP");
+//        drawing_method = GL_TRIANGLE_STRIP;
+//    }
+//    if(glfwGetKey(window, GLFW_KEY_6)) {
+//        glfwSetWindowTitle(window, "Rendering: GL_TRIANGLE_FAN");
+//        drawing_method = GL_TRIANGLE_FAN;
+//    }
+//    if(glfwGetKey(window, GLFW_KEY_7)) {
+//        glfwSetWindowTitle(window, "Rendering: GL_POINTS");
+//        drawing_method = GL_POINTS;
+//    }
+//                           
+//}
 
 //void CameraPerspectiveDemo::mousePositionCallback(GLFWwindow *window, double x_pos, double y_pos) {
 //    
@@ -563,11 +557,19 @@ int CameraPerspectiveDemo::run(void) {
     glUseProgram(program);
     
     /**
-     *  Mouse input 
+     *  Mouse and key input that will be routed 
+     *  to our Input instance. GFLW only accepts 
+     *  static methods as callbacks. We specify
+     *  some static functions which can then get 
+     *  our instance and call its member variables.
+     *
+     *  This is a long-winded way to allow us to 
+     *  call member functions inside this class 
+     *  from GLFW - using function pointers.
      */
-    glfwSetCursorPosCallback(window, &Input::mousePositionCallback);
-    glfwSetMouseButtonCallback(window, &Input::mouseButtonCallback);
-    glfwSetKeyCallback(window, &Input::keyInputCallback);
+    glfwSetMouseButtonCallback(window, &Input::glfwMouseButtonCallback);
+    glfwSetCursorPosCallback(window, &Input::glfwMouseMoveCallback);
+    glfwSetKeyCallback(window, &Input::glfwKeyCallback);
     
     /**
      *  Apply perspective, which is something we 
@@ -580,7 +582,7 @@ int CameraPerspectiveDemo::run(void) {
     
     while(!glfwWindowShouldClose(window)) {
         drawLoop();
-        keyActionListener();
+//        keyActionListener();
     }
     return 0;
 }
