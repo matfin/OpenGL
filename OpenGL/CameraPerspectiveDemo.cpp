@@ -9,6 +9,7 @@
 #include "CameraPerspectiveDemo.hpp"
 
 using namespace std;
+using namespace std::placeholders;
 
 #define gl_viewport_w 1280
 #define gl_viewport_h 960
@@ -19,15 +20,25 @@ CameraPerspectiveDemo::CameraPerspectiveDemo() {
     drawing_method = GL_TRIANGLES;
     
     fov = 67.0f * one_deg_in_rad;
-    cam_t_speed = 0.25f;
-    cam_r_speed = 1.25f;
     cam_pitch = 0.0f;
     cam_roll = 0.0f;
     cam_yaw = 0.0f;
+    cam_pitch_speed = 2.0f;
+    cam_yaw_speed = 2.0f;
+    cam_roll_speed = 2.0f;
+    
     cam_pos.px = 0.0f;
     cam_pos.py = 0.0f;
     cam_pos.pz = 5.0f;
     camera_updating = false;
+    
+    Input::getInstance();
+    Input::getInstance().addMouseButtonHandler(std::bind(&CameraPerspectiveDemo::mouseButtonCallback, this, _1));
+}
+
+void CameraPerspectiveDemo::mouseButtonCallback(int x) {
+    cout << "CameraPerspectiveDemo was told to do something." << x << endl;
+    cout << "Accessing a member variable yields: " << cam_roll_speed << endl;
 }
 
 CameraPerspectiveDemo::~CameraPerspectiveDemo() {
@@ -54,7 +65,6 @@ bool CameraPerspectiveDemo::setupWindow(void) {
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-//    glfwWindowHint(GLFW_SAMPLES, 16);
     
     window = glfwCreateWindow(gl_viewport_w, gl_viewport_h, "Camera Perspective Demo", NULL, NULL);
     if(!window) {
@@ -213,14 +223,7 @@ void CameraPerspectiveDemo::drawLoop() const {
     if(GL_TRUE == programReady()) {
         for(auto &mesh: meshes) {
             glBindVertexArray(mesh.getVao());
-//            mesh.applyMatrices(program);
             mesh.applyIdentityMatrix(program);
-            
-            if(camera_updating) {
-                mesh.getMatrices()->rotate(ROTATE_Z, LEFT);
-                mesh.getMatrices()->rotate(ROTATE_X, UP);
-            }
-            
             glDrawArrays(drawing_method, 0, mesh.pointsSize());
         }
         if(camera_updating) {
@@ -241,25 +244,25 @@ void CameraPerspectiveDemo::keyActionListener(void) {
     }
     
     /**
-     *  Camera look
+     *  Camera look (pitch & yaw)
      */
     if(glfwGetKey(window, GLFW_KEY_DOWN)) {
-        cam_pitch -= cam_r_speed;
+        cam_pitch -= cam_pitch_speed;
         camera_updating = true;
     }
     
     if(glfwGetKey(window, GLFW_KEY_UP)) {
-        cam_pitch += cam_r_speed;
+        cam_pitch += cam_pitch_speed;
         camera_updating = true;
     }
     
     if(glfwGetKey(window, GLFW_KEY_LEFT)) {
-        cam_yaw += cam_r_speed;
+        cam_yaw += cam_yaw_speed;
         camera_updating = true;
     }
     
     if(glfwGetKey(window, GLFW_KEY_RIGHT)) {
-        cam_yaw -= cam_r_speed;
+        cam_yaw -= cam_yaw_speed;
         camera_updating = true;
     }
     
@@ -319,6 +322,96 @@ void CameraPerspectiveDemo::keyActionListener(void) {
     }
                            
 }
+
+//void CameraPerspectiveDemo::mousePositionCallback(GLFWwindow *window, double x_pos, double y_pos) {
+//    
+//    /**
+//     *  When the mouse is moving, we should keep track
+//     *  of it's current position in the mouse_status so
+//     *  we can use this to make calculations, such as 
+//     *  distance and direction.
+//     */
+////    mouse_status.current.px = (float)x_pos;
+////    mouse_status.current.py = (float)y_pos;
+//    
+//    /**
+//     *  And when the button is down, we should rotate the camera.
+//     */
+//    if(mouse_status.primary_down) {
+//        /**
+//         *  Refresh the mouse_status so we can keep track 
+//         *  of things like direction and distance on the 
+//         *  x and y axes.
+//         */
+//        mouse_status.updateDistanceAndDirection();
+//        
+//        /**
+//         *  Set camera updating to true so we can
+//         *  apply the view matrix transforms
+//         */
+//        camera_updating = true;
+//        
+//        /**
+//         *  Then update the camera accordingly.
+//         */
+//        switch(mouse_status.direction_x) {
+//            case EAST: {
+//                cam_yaw += cam_yaw_speed;
+//                break;
+//            }
+//            case WEST: {
+//                cam_yaw -= cam_yaw_speed;
+//                break;
+//            }
+//        }
+//        
+//        switch(mouse_status.direction_y) {
+//            case NORTH: {
+//                cam_pitch += cam_pitch_speed;
+//                break;
+//            }
+//            case SOUTH: {
+//                cam_pitch -= cam_pitch_speed;
+//            }
+//        }
+//        glfwSetWindowTitle(window, mouse_status.distanceAndDirection().c_str());
+//    }
+//}
+
+//void CameraPerspectiveDemo::mouseDownCallback(GLFWwindow *window, int button, int action, int mods) {
+//    
+//    /**
+//     *  Reset the mouse status by default
+//     */
+//    mouse_status.reset();
+//    
+//    /**
+//     *  Left mouse button/trackpad pressed.
+//     */
+//    if(button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS && mods == 0) {
+//        mouse_status.primary_down = true;
+//        mouse_status.downed = mouse_status.current;
+//    }
+//    /**
+//     *  Left mouse button/trackpad pressed with CTRL.
+//     */
+//    else if(button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS && mods == 2) {
+//        mouse_status.secondary_down = true;
+//        mouse_status.downed = mouse_status.current;
+//    }
+//    /**
+//     *  Mouse released so let's reset it and reset the
+//     *  camera speed for pitch and yaw to their defaults.
+//     */
+//    else if(action == GLFW_RELEASE) {
+//        mouse_status.reset();
+//        cam_pitch_speed = 1.0f;
+//        cam_yaw_speed = 1.0f;
+//        cam_roll_speed = 1.0f;
+//    }
+//    
+//    cout << mouse_status.repr();
+//}
 
 void CameraPerspectiveDemo::applyProjectionMatrix() const {
     /**
@@ -468,6 +561,13 @@ int CameraPerspectiveDemo::run(void) {
      *  Then we use the compiled program.
      */
     glUseProgram(program);
+    
+    /**
+     *  Mouse input 
+     */
+    glfwSetCursorPosCallback(window, &Input::mousePositionCallback);
+    glfwSetMouseButtonCallback(window, &Input::mouseButtonCallback);
+    glfwSetKeyCallback(window, &Input::keyInputCallback);
     
     /**
      *  Apply perspective, which is something we 

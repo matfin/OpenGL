@@ -213,18 +213,22 @@ int runCameraPerspectiveDemo(void) {
      *  - The third parameter is the world rotation
      */
     
-    for(int i = 0; i < 10; i++) {
-        
-        Mesh mesh;
-        mesh.generateCube(2.0f);
-        
-        if(i % 2 == 0) {
-            demo->addMesh(mesh, {3.0f, 0.0f, (float)i * 2.5f}, {0.0f, 0.0f, 0.0f});
-        }
-        else {
-            demo->addMesh(mesh, {-3.0f, 0.0f, (float)i * 2.5f}, {0.0f, 0.0f, 0.0f});
-        }
-    }
+//    for(int i = 0; i < 10; i++) {
+//        
+//        Mesh mesh;
+//        mesh.generateCube(2.0f);
+//        
+//        if(i % 2 == 0) {
+//            demo->addMesh(mesh, {3.0f, 0.0f, (float)i * 2.5f}, {0.0f, 0.0f, 0.0f});
+//        }
+//        else {
+//            demo->addMesh(mesh, {-3.0f, 0.0f, (float)i * 2.5f}, {0.0f, 0.0f, 0.0f});
+//        }
+//    }
+    
+    Mesh mesh;
+    mesh.generateCube(2.0f);
+    demo->addMesh(mesh, {0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f});
     
     int run = demo->run();
     delete(demo);
