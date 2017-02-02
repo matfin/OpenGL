@@ -64,8 +64,8 @@ void Input::mouseMoveCallback(double x_pos, double y_pos) {
     }
     
     if(held && mouseDrag != nullptr) {
-        updateDistanceAndDirection();
-        mouseDrag(current.px, current.py, distance_x, distance_y, direction);
+        updateDistanceAndAngle();
+        mouseDrag(current.px, current.py, distance, angle);
     }
 }
 
@@ -97,12 +97,10 @@ void Input::reset() {
     downed.py = 0.0f;
     held = false;
     distance = 0.0f;
-    distance_x = 0.0f;
-    distance_y = 0.0f;
-    direction = NONE;
+    angle = 0.0f;
 }
 
-void Input::updateDistanceAndDirection(void) {
+void Input::updateDistanceAndAngle(void) {
     /**
      *  Distance calculation formula.
      */
@@ -112,17 +110,5 @@ void Input::updateDistanceAndDirection(void) {
     float sqr_y = y2_mn_y1 * y2_mn_y1;
     
     distance = sqrtf(sqr_x + sqr_y);
-    distance_x = abs(x2_mn_x1);
-    distance_y = abs(y2_mn_y1);
-    
-    /**
-     *  Direction
-     */
-//    if(x2_mn_x1 < 0) direction_x = WEST;
-//    else if(x2_mn_x1 > 0) direction_x = EAST;
-//    else direction_x = NONE;
-//    
-//    if(y2_mn_y1 < 0) direction_y = NORTH;
-//    else if(y2_mn_y1 > 0) direction_y = SOUTH;
-//    else direction_y = NONE;
+    angle = atan2(y2_mn_y1, x2_mn_x1) * one_deg_in_rad;
 }

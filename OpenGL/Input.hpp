@@ -14,17 +14,7 @@
 #include <iostream>
 #include "Structs.h"
 
-enum Direction {
-    NORTH,
-    NORTH_EAST,
-    EAST,
-    SOUTH_EAST,
-    SOUTH,
-    SOUTH_WEST,
-    WEST,
-    NORTH_WEST,
-    NONE
-};
+#define one_deg_in_rad (2.0 * M_PI) / 360.0f
 
 class Input {
     
@@ -44,9 +34,7 @@ private:
     Position downed;
     bool held;
     float distance;
-    float distance_x;
-    float distance_y;
-    Direction direction;
+    float angle;
     
     /**
      *  Callback functions
@@ -54,7 +42,7 @@ private:
     std::function<void(int, int, int)> mouseDown;
     std::function<void(int, int, int)> mouseUp;
     std::function<void(float, float)> mouseMove;
-    std::function<void(float, float, float, float, Direction)> mouseDrag;
+    std::function<void(float, float, float, float)> mouseDrag;
     std::function<void(int, int, int, int)> keyDown;
     std::function<void(int, int, int, int)> keyStrobe;
     std::function<void(int, int, int, int)> keyUp;
@@ -74,7 +62,7 @@ public:
     /**
      *  These will set the member parameters.
      */
-    void updateDistanceAndDirection(void);
+    void updateDistanceAndAngle(void);
     void reset(void);
     
     /**
@@ -104,7 +92,7 @@ public:
      *  Assigning an std::function callback for mouse 
      *  button down and movement.
      */
-    void onMouseDrag(std::function<void(float, float, float, float, Direction)> cb) {
+    void onMouseDrag(std::function<void(float, float, float, float)> cb) {
         mouseDrag = cb;
     }
     
@@ -153,7 +141,11 @@ public:
     /**
      *  Member functions of the instance of the class. 
      *
-     *  These will fire the std::function callbacks.
+     *  These will fire the std::function callbacks by checking
+     *  the input parameters and calling the correct callbacks
+     *  ie: if the mouse button is pressed and we are moving the 
+     *  mouse pointer, we fire the mouseDrag event.
+     *
      */
     void mouseButtonCallback(int button, int action, int mods);
     void mouseMoveCallback(double x_pos, double y_pos);

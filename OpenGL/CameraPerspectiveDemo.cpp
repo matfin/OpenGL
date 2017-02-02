@@ -43,6 +43,24 @@ CameraPerspectiveDemo::~CameraPerspectiveDemo() {
     glfwTerminate();
 }
 
+void CameraPerspectiveDemo::setupCallbacks() {
+    Input::getInstance().onMouseDown(std::bind(&CameraPerspectiveDemo::mouseDown, this, _1, _2, _3));
+    Input::getInstance().onMouseDrag(std::bind(&CameraPerspectiveDemo::mouseDrag, this, _1, _2, _3, _4));
+}
+
+void CameraPerspectiveDemo::mouseDown(int button, int action, int mods) {
+    cout << "Mouse button down!" << endl;
+};
+
+void CameraPerspectiveDemo::mouseUp(int button, int action, int mods) {};
+
+void CameraPerspectiveDemo::mouseMove(float pos_x, float pos_y) {};
+
+void CameraPerspectiveDemo::mouseDrag(float pos_x, float pos_y, float distance, float angle) {
+    
+    
+};
+
 /**
  *  This is where we need to set the window up
  *  and tee up GLFW. We need to do this first
@@ -372,41 +390,6 @@ void CameraPerspectiveDemo::drawLoop() const {
 //    }
 //}
 
-//void CameraPerspectiveDemo::mouseDownCallback(GLFWwindow *window, int button, int action, int mods) {
-//    
-//    /**
-//     *  Reset the mouse status by default
-//     */
-//    mouse_status.reset();
-//    
-//    /**
-//     *  Left mouse button/trackpad pressed.
-//     */
-//    if(button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS && mods == 0) {
-//        mouse_status.primary_down = true;
-//        mouse_status.downed = mouse_status.current;
-//    }
-//    /**
-//     *  Left mouse button/trackpad pressed with CTRL.
-//     */
-//    else if(button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS && mods == 2) {
-//        mouse_status.secondary_down = true;
-//        mouse_status.downed = mouse_status.current;
-//    }
-//    /**
-//     *  Mouse released so let's reset it and reset the
-//     *  camera speed for pitch and yaw to their defaults.
-//     */
-//    else if(action == GLFW_RELEASE) {
-//        mouse_status.reset();
-//        cam_pitch_speed = 1.0f;
-//        cam_yaw_speed = 1.0f;
-//        cam_roll_speed = 1.0f;
-//    }
-//    
-//    cout << mouse_status.repr();
-//}
-
 void CameraPerspectiveDemo::applyProjectionMatrix() const {
     /**
      *  This sets up the Projection Matrix.
@@ -527,6 +510,28 @@ int CameraPerspectiveDemo::run(void) {
          *  with preparing VBOs and VAOs or we will get a Thread access exception.
          */
         setupWindow();
+        /**
+         *  We can then set up some event listeners using the 
+         *  Input class.
+         *
+         *  Mouse and key input that will be routed
+         *  to our Input instance. GFLW only accepts
+         *  static methods as callbacks. We specify
+         *  some static functions which can then get
+         *  our instance and call its member variables.
+         *
+         *  This is a long-winded way to allow us to
+         *  call member functions inside this class
+         *  from GLFW - using function pointers.
+         */
+        glfwSetMouseButtonCallback(window, &Input::glfwMouseButtonCallback);
+        glfwSetCursorPosCallback(window, &Input::glfwMouseMoveCallback);
+        glfwSetKeyCallback(window, &Input::glfwKeyCallback);
+        
+        /**
+         *  Set up the callbacks
+         */
+        setupCallbacks();
     }
     catch(exception &e) {
         cout << e.what();
@@ -555,21 +560,6 @@ int CameraPerspectiveDemo::run(void) {
      *  Then we use the compiled program.
      */
     glUseProgram(program);
-    
-    /**
-     *  Mouse and key input that will be routed 
-     *  to our Input instance. GFLW only accepts 
-     *  static methods as callbacks. We specify
-     *  some static functions which can then get 
-     *  our instance and call its member variables.
-     *
-     *  This is a long-winded way to allow us to 
-     *  call member functions inside this class 
-     *  from GLFW - using function pointers.
-     */
-    glfwSetMouseButtonCallback(window, &Input::glfwMouseButtonCallback);
-    glfwSetCursorPosCallback(window, &Input::glfwMouseMoveCallback);
-    glfwSetKeyCallback(window, &Input::glfwKeyCallback);
     
     /**
      *  Apply perspective, which is something we 

@@ -57,16 +57,19 @@ private:
     void applyViewMatrix() const;
     void applyProjectionMatrix() const;
     
-    void onMouseDown(int button, int action, int mods);
-    void onMouseUp(int button, int action, int mods);
-    void onMouseMove(float pos_x, float pos_y);
-    void onMouseDrag(float pos_x, float pos_y, Direction direction);
-    void onKeyDown(int key, int scancode, int action, int mods);
-    void onKeyUp(int key, int scancode, int action, int mods);
+    void mouseDown(int button, int action, int mods);
+    void mouseUp(int button, int action, int mods);
+    void mouseMove(float pos_x, float pos_y);
+    void mouseDrag(float pos_x, float pos_y, float distance, float angle);
+    void keyDown(int key, int scancode, int action, int mods);
+    void keyUp(int key, int scancode, int action, int mods);
+        
+    void setupCallbacks(void);
     
 public:
     CameraPerspectiveDemo();
     ~CameraPerspectiveDemo();
+    
     void addMesh(Mesh mesh, const Position position, const Rotation rotation);
     int run(void);
 };
