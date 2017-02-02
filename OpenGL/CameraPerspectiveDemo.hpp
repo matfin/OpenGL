@@ -39,6 +39,9 @@ private:
     float cam_yaw_speed;
     float cam_roll_speed;
     
+    float mouse_distance;
+    float mouse_angle;
+    
     Position cam_pos;
     bool camera_updating;
 
@@ -52,7 +55,7 @@ private:
     GLint programReady() const;
     void linkShaders(const GLuint vertex_shader, const GLuint fragment_shader);
     
-    void drawLoop() const;
+    void drawLoop();
     void keyActionListener(void);
     void applyViewMatrix() const;
     void applyProjectionMatrix() const;
@@ -63,7 +66,8 @@ private:
     void mouseDrag(float pos_x, float pos_y, float distance, float angle);
     void keyDown(int key, int scancode, int action, int mods);
     void keyUp(int key, int scancode, int action, int mods);
-        
+    
+    void updateCamera(void);
     void setupCallbacks(void);
     
 public:

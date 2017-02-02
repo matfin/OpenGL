@@ -27,9 +27,13 @@ CameraPerspectiveDemo::CameraPerspectiveDemo() {
     cam_yaw_speed = 2.0f;
     cam_roll_speed = 2.0f;
     
+    mouse_distance = 0.0f;
+    mouse_angle = 0.0f;
+    
     cam_pos.px = 0.0f;
     cam_pos.py = 0.0f;
     cam_pos.pz = 5.0f;
+    
     camera_updating = false;
     
     Input::getInstance();
@@ -45,21 +49,34 @@ CameraPerspectiveDemo::~CameraPerspectiveDemo() {
 
 void CameraPerspectiveDemo::setupCallbacks() {
     Input::getInstance().onMouseDown(std::bind(&CameraPerspectiveDemo::mouseDown, this, _1, _2, _3));
+    Input::getInstance().onMouseUp(std::bind(&CameraPerspectiveDemo::mouseUp, this, _1, _2, _3));
     Input::getInstance().onMouseDrag(std::bind(&CameraPerspectiveDemo::mouseDrag, this, _1, _2, _3, _4));
 }
 
 void CameraPerspectiveDemo::mouseDown(int button, int action, int mods) {
-    cout << "Mouse button down!" << endl;
+    camera_updating = true;
 };
 
-void CameraPerspectiveDemo::mouseUp(int button, int action, int mods) {};
+void CameraPerspectiveDemo::mouseUp(int button, int action, int mods) {
+    camera_updating = false;
+    mouse_distance = 0.0f;
+    mouse_angle = 0.0f;
+};
 
 void CameraPerspectiveDemo::mouseMove(float pos_x, float pos_y) {};
 
 void CameraPerspectiveDemo::mouseDrag(float pos_x, float pos_y, float distance, float angle) {
-    
-    
+    mouse_distance = distance;
+    mouse_angle = angle;
 };
+
+void CameraPerspectiveDemo::keyDown(int key, int scancode, int action, int mods) {};
+
+void CameraPerspectiveDemo::keyUp(int key, int scancode, int action, int mods) {};
+
+void CameraPerspectiveDemo::updateCamera(void) {
+    cout << "Update the camera! " << mouse_distance << endl;
+}
 
 /**
  *  This is where we need to set the window up
@@ -226,7 +243,7 @@ void CameraPerspectiveDemo::addMesh(Mesh mesh, const Position position, const Ro
  *  The main drawing loop where we go through each mesh
  *  and draw it to the screen.
  */
-void CameraPerspectiveDemo::drawLoop() const {
+void CameraPerspectiveDemo::drawLoop() {
     
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glViewport(0, 0, gl_viewport_w, gl_viewport_h);
@@ -237,9 +254,6 @@ void CameraPerspectiveDemo::drawLoop() const {
             glBindVertexArray(mesh.getVao());
             mesh.applyIdentityMatrix(program);
             glDrawArrays(drawing_method, 0, mesh.pointsSize());
-        }
-        if(camera_updating) {
-            applyViewMatrix();
         }
     }
     
@@ -572,7 +586,10 @@ int CameraPerspectiveDemo::run(void) {
     
     while(!glfwWindowShouldClose(window)) {
         drawLoop();
-//        keyActionListener();
+        if(camera_updating) {
+            updateCamera();
+            applyViewMatrix();
+        }
     }
     return 0;
 }

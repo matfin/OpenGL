@@ -110,5 +110,5 @@ void Input::updateDistanceAndAngle(void) {
     float sqr_y = y2_mn_y1 * y2_mn_y1;
     
     distance = sqrtf(sqr_x + sqr_y);
-    angle = atan2(y2_mn_y1, x2_mn_x1) * one_deg_in_rad;
+    angle = atan2(y2_mn_y1, x2_mn_x1) * (180 / M_PI);
 }
