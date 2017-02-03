@@ -2,7 +2,7 @@
 
 The purpose of this project is to explore the basics of OpenGL programming on MacOS using C++. I will be following [this guide](https://capnramses.github.io/opengl/hellotriangle.html).
 
-The code contained in here is by no means optimised but is engineers more towards making the concepts of 3D programming clearer for educational purposes. 
+The code contained in here is by no means optimised but is engineered more towards making the concepts of 3D programming clearer for educational purposes. 
 
 ## Requirements
 
