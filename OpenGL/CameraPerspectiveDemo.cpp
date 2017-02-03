@@ -73,46 +73,48 @@ void CameraPerspectiveDemo::mouseDrag(float pos_x, float pos_y, float distance, 
     mouse_angle = angle;
 };
 
-void CameraPerspectiveDemo::keyDown(int key, int scancode, int action, int mods) {};
-
-void CameraPerspectiveDemo::keyUp(int key, int scancode, int action, int mods) {};
-
 void CameraPerspectiveDemo::updateCameraFromMouse(void) {
 
-    int quartile = 0;
+    /**
+     *  We need to get the angle of the mouse
+     *  and use this to determine the ratio of
+     *  pitch and yaw to be applied when we 
+     *  transform the camera.
+     */
     float attack = abs(fmod(mouse_angle, 90.0f));
-    
     float r1 = (attack / 90.0f);
     float r2 = 1.0f - r1;
     
+    /**
+     *  Depending on which quartile of the 2D 
+     *  coordinate plane we are in, we should 
+     *  adjust the camera to give the appearance
+     *  that the shape is moving in the direction
+     *  the mouse pointer is at.
+     */
     if(mouse_angle >= 0.0f && mouse_angle < 90.0f) {
         cam_pitch_speed = (mouse_distance / 100.0f) * r1;
         cam_yaw_speed = (mouse_distance / 100.0f) * r2;
         cam_pitch -= cam_pitch_speed;
         cam_yaw -= cam_yaw_speed;
-        quartile = 2;
     }
     else if(mouse_angle >= 90.0f && mouse_angle < 180.0f) {
         cam_pitch_speed = (mouse_distance / 100.0f) * r2;
         cam_yaw_speed = (mouse_distance / 100.0f) * r1;
         cam_pitch -= cam_pitch_speed;
         cam_yaw += cam_yaw_speed;
-        quartile = 3;
     }
     else if(mouse_angle >= -180.0f && mouse_angle < -90.0f) {
         cam_pitch_speed = (mouse_distance / 100.0f) * r2;
         cam_yaw_speed = (mouse_distance / 100.0f) * r1;
         cam_pitch += cam_pitch_speed;
         cam_yaw += cam_yaw_speed;
-        quartile = 4;
     }
     else if(mouse_angle >= -90.0f && mouse_angle < 0.0f) {
-        quartile = 1;
         cam_pitch_speed = (mouse_distance / 100.0f) * r1;
         cam_yaw_speed = (mouse_distance / 100.0f) * r2;
         cam_pitch += cam_pitch_speed;
         cam_yaw -= cam_yaw_speed;
-        quartile = 2;
     }
 }
 
@@ -385,61 +387,6 @@ void CameraPerspectiveDemo::drawLoop() {
 //        drawing_method = GL_POINTS;
 //    }
 //                           
-//}
-
-//void CameraPerspectiveDemo::mousePositionCallback(GLFWwindow *window, double x_pos, double y_pos) {
-//    
-//    /**
-//     *  When the mouse is moving, we should keep track
-//     *  of it's current position in the mouse_status so
-//     *  we can use this to make calculations, such as 
-//     *  distance and direction.
-//     */
-////    mouse_status.current.px = (float)x_pos;
-////    mouse_status.current.py = (float)y_pos;
-//    
-//    /**
-//     *  And when the button is down, we should rotate the camera.
-//     */
-//    if(mouse_status.primary_down) {
-//        /**
-//         *  Refresh the mouse_status so we can keep track 
-//         *  of things like direction and distance on the 
-//         *  x and y axes.
-//         */
-//        mouse_status.updateDistanceAndDirection();
-//        
-//        /**
-//         *  Set camera updating to true so we can
-//         *  apply the view matrix transforms
-//         */
-//        camera_updating = true;
-//        
-//        /**
-//         *  Then update the camera accordingly.
-//         */
-//        switch(mouse_status.direction_x) {
-//            case EAST: {
-//                cam_yaw += cam_yaw_speed;
-//                break;
-//            }
-//            case WEST: {
-//                cam_yaw -= cam_yaw_speed;
-//                break;
-//            }
-//        }
-//        
-//        switch(mouse_status.direction_y) {
-//            case NORTH: {
-//                cam_pitch += cam_pitch_speed;
-//                break;
-//            }
-//            case SOUTH: {
-//                cam_pitch -= cam_pitch_speed;
-//            }
-//        }
-//        glfwSetWindowTitle(window, mouse_status.distanceAndDirection().c_str());
-//    }
 //}
 
 void CameraPerspectiveDemo::applyProjectionMatrix() const {
