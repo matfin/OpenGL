@@ -51,6 +51,7 @@ void CameraPerspectiveDemo::setupCallbacks() {
     Input::getInstance().onMouseDown(std::bind(&CameraPerspectiveDemo::mouseDown, this, _1, _2, _3));
     Input::getInstance().onMouseUp(std::bind(&CameraPerspectiveDemo::mouseUp, this, _1, _2, _3));
     Input::getInstance().onMouseDrag(std::bind(&CameraPerspectiveDemo::mouseDrag, this, _1, _2, _3, _4));
+    Input::getInstance().onKeyDown(std::bind(&CameraPerspectiveDemo::keyDown, this, _1, _2, _3, _4));
 }
 
 void CameraPerspectiveDemo::mouseDown(int button, int action, int mods) {
@@ -301,93 +302,49 @@ void CameraPerspectiveDemo::drawLoop() {
     glfwSwapBuffers(window);
 }
 
-//void CameraPerspectiveDemo::keyActionListener(void) {
-//    
-//    camera_updating = false;
-//    
-//    if(glfwGetKey(window, GLFW_KEY_ESCAPE)) {
-//        glfwSetWindowShouldClose(window, true);
-//    }
-//    
-//    /**
-//     *  Camera look (pitch & yaw)
-//     */
-//    if(glfwGetKey(window, GLFW_KEY_DOWN)) {
-//        cam_pitch -= cam_pitch_speed;
-//        camera_updating = true;
-//    }
-//    
-//    if(glfwGetKey(window, GLFW_KEY_UP)) {
-//        cam_pitch += cam_pitch_speed;
-//        camera_updating = true;
-//    }
-//    
-//    if(glfwGetKey(window, GLFW_KEY_LEFT)) {
-//        cam_yaw += cam_yaw_speed;
-//        camera_updating = true;
-//    }
-//    
-//    if(glfwGetKey(window, GLFW_KEY_RIGHT)) {
-//        cam_yaw -= cam_yaw_speed;
-//        camera_updating = true;
-//    }
-//    
-//    /**
-//     *  Camera move
-//     */
-//    if(glfwGetKey(window, GLFW_KEY_W)) {
-//        cam_pos.pz -= cam_t_speed;
-//        camera_updating = true;
-//    }
-//    
-//    if(glfwGetKey(window, GLFW_KEY_S)) {
-//        cam_pos.pz += cam_t_speed;
-//        camera_updating = true;
-//    }
-//    
-//    if(glfwGetKey(window, GLFW_KEY_A)) {
-//        cam_pos.px -= cam_t_speed;
-//        camera_updating = true;
-//    }
-//    
-//    if(glfwGetKey(window, GLFW_KEY_D)) {
-//        cam_pos.px += cam_t_speed;
-//        camera_updating = true;
-//    }
-//    
-//    /**
-//     *  Switch the drawing method
-//     */
-//    if(glfwGetKey(window, GLFW_KEY_1)) {
-//        glfwSetWindowTitle(window, "Rendering: GL_TRIANGLES");
-//        drawing_method = GL_TRIANGLES;
-//    }
-//    if(glfwGetKey(window, GLFW_KEY_2)) {
-//        glfwSetWindowTitle(window, "Rendering: GL_LINE_STRIP");
-//        drawing_method = GL_LINE_STRIP;
-//    }
-//    if(glfwGetKey(window, GLFW_KEY_3)) {
-//        glfwSetWindowTitle(window, "Rendering: GL_LINE_LOOP");
-//        drawing_method = GL_LINE_LOOP;
-//    }
-//    if(glfwGetKey(window, GLFW_KEY_4)) {
-//        glfwSetWindowTitle(window, "Rendering: GL_LINES");
-//        drawing_method = GL_LINES;
-//    }
-//    if(glfwGetKey(window, GLFW_KEY_5)) {
-//        glfwSetWindowTitle(window, "Rendering: GL_TRIANGLE_STRIP");
-//        drawing_method = GL_TRIANGLE_STRIP;
-//    }
-//    if(glfwGetKey(window, GLFW_KEY_6)) {
-//        glfwSetWindowTitle(window, "Rendering: GL_TRIANGLE_FAN");
-//        drawing_method = GL_TRIANGLE_FAN;
-//    }
-//    if(glfwGetKey(window, GLFW_KEY_7)) {
-//        glfwSetWindowTitle(window, "Rendering: GL_POINTS");
-//        drawing_method = GL_POINTS;
-//    }
-//                           
-//}
+void CameraPerspectiveDemo::keyDown(int key, int scancode, int action, int mods) {
+    switch(key) {
+        case GLFW_KEY_ESCAPE: {
+            glfwSetWindowShouldClose(window, true);
+            break;
+        }
+        case GLFW_KEY_1: {
+            glfwSetWindowTitle(window, "Rendering: GL_TRIANGLES");
+            drawing_method = GL_TRIANGLES;
+            break;
+        }
+        case GLFW_KEY_2: {
+            glfwSetWindowTitle(window, "Rendering: GL_LINE_STRIP");
+            drawing_method = GL_LINE_STRIP;
+            break;
+        }
+        case GLFW_KEY_3: {
+            glfwSetWindowTitle(window, "Rendering: GL_LINE_LOOP");
+            drawing_method = GL_LINE_LOOP;
+            break;
+        }
+        case GLFW_KEY_4: {
+            glfwSetWindowTitle(window, "Rendering: GL_LINES");
+            drawing_method = GL_LINES;
+            break;
+        }
+        case GLFW_KEY_5: {
+            glfwSetWindowTitle(window, "Rendering: GL_TRIANGLE_STRIP");
+            drawing_method = GL_TRIANGLE_STRIP;
+            break;
+        }
+        case GLFW_KEY_6: {
+            glfwSetWindowTitle(window, "Rendering: GL_TRIANGLE_FAN");
+            drawing_method = GL_TRIANGLE_FAN;
+            break;
+        }
+        case GLFW_KEY_7: {
+            glfwSetWindowTitle(window, "Rendering: GL_POINTS");
+            drawing_method = GL_POINTS;
+            break;
+        }
+    }
+}
 
 void CameraPerspectiveDemo::applyProjectionMatrix() const {
     /**
@@ -526,6 +483,7 @@ int CameraPerspectiveDemo::run(void) {
         glfwSetMouseButtonCallback(window, &Input::glfwMouseButtonCallback);
         glfwSetCursorPosCallback(window, &Input::glfwMouseMoveCallback);
         glfwSetKeyCallback(window, &Input::glfwKeyCallback);
+        glfwSetCharCallback(window, &Input::glfwKeyCharCallback);
         
         /**
          *  Set up the callbacks

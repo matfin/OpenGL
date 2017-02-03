@@ -138,6 +138,9 @@ public:
         getInstance().keyCallback(key, scancode, action, mods);
     }
     
+    static void glfwKeyCharCallback(GLFWwindow *window, unsigned int codepoint) {
+    }
+    
     /**
      *  Member functions of the instance of the class. 
      *
@@ -150,6 +153,7 @@ public:
     void mouseButtonCallback(int button, int action, int mods);
     void mouseMoveCallback(double x_pos, double y_pos);
     void keyCallback(int key, int scancode, int action, int mods);
+    void keyCharCallback();
 };
 
 #endif /* Input_hpp */
