@@ -64,6 +64,8 @@ private:
     void mouseMove(float pos_x, float pos_y);
     void mouseDrag(float pos_x, float pos_y, float distance, float angle);
     void keyDown(int key, int scancode, int action, int mods);
+    void keyStrobe(int key, int scancode, int action, int mods);
+    void keyUp(int key, int scancode, int action, int mods);
     
     void updateCameraFromMouse(void);
     void setupCallbacks(void);

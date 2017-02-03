@@ -52,6 +52,8 @@ void CameraPerspectiveDemo::setupCallbacks() {
     Input::getInstance().onMouseUp(std::bind(&CameraPerspectiveDemo::mouseUp, this, _1, _2, _3));
     Input::getInstance().onMouseDrag(std::bind(&CameraPerspectiveDemo::mouseDrag, this, _1, _2, _3, _4));
     Input::getInstance().onKeyDown(std::bind(&CameraPerspectiveDemo::keyDown, this, _1, _2, _3, _4));
+    Input::getInstance().onKeyStrobe(std::bind(&CameraPerspectiveDemo::keyStrobe, this, _1, _2, _3, _4));
+    Input::getInstance().onKeyUp(std::bind(&CameraPerspectiveDemo::keyUp, this, _1, _2, _3, _4));
 }
 
 void CameraPerspectiveDemo::mouseDown(int button, int action, int mods) {
@@ -343,7 +345,59 @@ void CameraPerspectiveDemo::keyDown(int key, int scancode, int action, int mods)
             drawing_method = GL_POINTS;
             break;
         }
+        case GLFW_KEY_DOWN: {
+            cam_pitch -= 10.0f;
+            camera_updating = true;
+            break;
+        }
+        case GLFW_KEY_UP: {
+            cam_pitch += 10.0f;
+            camera_updating = true;
+            break;
+        }
+        case GLFW_KEY_LEFT: {
+            cam_yaw += 10.0f;
+            camera_updating = true;
+            break;
+        }
+        case GLFW_KEY_RIGHT: {
+            cam_yaw -= 10.0f;
+            camera_updating = true;
+            break;
+        }
     }
+}
+
+void CameraPerspectiveDemo::keyStrobe(int key, int scancode, int action, int mods) {
+    
+    camera_updating = true;
+    
+    switch(key) {
+        case GLFW_KEY_DOWN: {
+            cam_pitch -= 5.0f;
+            camera_updating = true;
+            break;
+        }
+        case GLFW_KEY_UP: {
+            cam_pitch += 5.0f;
+            camera_updating = true;
+            break;
+        }
+        case GLFW_KEY_LEFT: {
+            cam_yaw += 5.0f;
+            camera_updating = true;
+            break;
+        }
+        case GLFW_KEY_RIGHT: {
+            cam_yaw -= 5.0f;
+            camera_updating = true;
+            break;
+        }
+    }
+}
+
+void CameraPerspectiveDemo::keyUp(int key, int scancode, int action, int mods) {
+    camera_updating = false;
 }
 
 void CameraPerspectiveDemo::applyProjectionMatrix() const {

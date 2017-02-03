@@ -71,19 +71,19 @@ void Input::mouseMoveCallback(double x_pos, double y_pos) {
 
 void Input::keyCallback(int key, int scancode, int action, int mods) {
     switch(action) {
-        case 0: {
+        case GLFW_RELEASE: {
             if(keyUp != nullptr) {
                 keyUp(key, scancode, action, mods);
             }
             break;
         }
-        case 1: {
+        case GLFW_PRESS: {
             if(keyDown != nullptr) {
                 keyDown(key, scancode, action, mods);
             }
             break;
         }
-        case 2: {
+        case GLFW_REPEAT: {
             if(keyStrobe != nullptr) {
                 keyStrobe(key, scancode, action, mods);
             }
