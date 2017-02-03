@@ -67,7 +67,7 @@ private:
     void keyDown(int key, int scancode, int action, int mods);
     void keyUp(int key, int scancode, int action, int mods);
     
-    void updateCamera(void);
+    void updateCameraFromMouse(void);
     void setupCallbacks(void);
     
 public:

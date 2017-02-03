@@ -61,6 +61,9 @@ void CameraPerspectiveDemo::mouseUp(int button, int action, int mods) {
     camera_updating = false;
     mouse_distance = 0.0f;
     mouse_angle = 0.0f;
+    cam_pitch_speed = 2.0f;
+    cam_yaw_speed = 2.0f;
+    cam_roll_speed = 2.0f;
 };
 
 void CameraPerspectiveDemo::mouseMove(float pos_x, float pos_y) {};
@@ -74,8 +77,43 @@ void CameraPerspectiveDemo::keyDown(int key, int scancode, int action, int mods)
 
 void CameraPerspectiveDemo::keyUp(int key, int scancode, int action, int mods) {};
 
-void CameraPerspectiveDemo::updateCamera(void) {
-    cout << "Update the camera! " << mouse_distance << endl;
+void CameraPerspectiveDemo::updateCameraFromMouse(void) {
+
+    int quartile = 0;
+    float attack = abs(fmod(mouse_angle, 90.0f));
+    
+    float r1 = (attack / 90.0f);
+    float r2 = 1.0f - r1;
+    
+    if(mouse_angle >= 0.0f && mouse_angle < 90.0f) {
+        cam_pitch_speed = (mouse_distance / 100.0f) * r1;
+        cam_yaw_speed = (mouse_distance / 100.0f) * r2;
+        cam_pitch -= cam_pitch_speed;
+        cam_yaw -= cam_yaw_speed;
+        quartile = 2;
+    }
+    else if(mouse_angle >= 90.0f && mouse_angle < 180.0f) {
+        cam_pitch_speed = (mouse_distance / 100.0f) * r2;
+        cam_yaw_speed = (mouse_distance / 100.0f) * r1;
+        cam_pitch -= cam_pitch_speed;
+        cam_yaw += cam_yaw_speed;
+        quartile = 3;
+    }
+    else if(mouse_angle >= -180.0f && mouse_angle < -90.0f) {
+        cam_pitch_speed = (mouse_distance / 100.0f) * r2;
+        cam_yaw_speed = (mouse_distance / 100.0f) * r1;
+        cam_pitch += cam_pitch_speed;
+        cam_yaw += cam_yaw_speed;
+        quartile = 4;
+    }
+    else if(mouse_angle >= -90.0f && mouse_angle < 0.0f) {
+        quartile = 1;
+        cam_pitch_speed = (mouse_distance / 100.0f) * r1;
+        cam_yaw_speed = (mouse_distance / 100.0f) * r2;
+        cam_pitch += cam_pitch_speed;
+        cam_yaw -= cam_yaw_speed;
+        quartile = 2;
+    }
 }
 
 /**
@@ -587,7 +625,7 @@ int CameraPerspectiveDemo::run(void) {
     while(!glfwWindowShouldClose(window)) {
         drawLoop();
         if(camera_updating) {
-            updateCamera();
+            updateCameraFromMouse();
             applyViewMatrix();
         }
     }
