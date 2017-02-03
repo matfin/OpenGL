@@ -15,6 +15,7 @@
 		582FB5C61E36A13600C031C6 /* camera_perspective_demo.vert in CopyFiles */ = {isa = PBXBuildFile; fileRef = 582FB5C41E36A11A00C031C6 /* camera_perspective_demo.vert */; };
 		582FB5C71E36A13600C031C6 /* camera_perspective_demo.frag in CopyFiles */ = {isa = PBXBuildFile; fileRef = 582FB5C51E36A12D00C031C6 /* camera_perspective_demo.frag */; };
 		582FB5CC1E378BA600C031C6 /* Mesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 582FB5CA1E378BA600C031C6 /* Mesh.cpp */; };
+		583EDA4B1E42680A00B012D9 /* Input.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 583EDA491E42680A00B012D9 /* Input.cpp */; };
 		5862C8CD1E323C4A00D0ADEF /* cube_transform_demo.vert in CopyFiles */ = {isa = PBXBuildFile; fileRef = 5862C8CB1E32390100D0ADEF /* cube_transform_demo.vert */; };
 		5862C8CE1E323C4A00D0ADEF /* cube_transform_demo.frag in CopyFiles */ = {isa = PBXBuildFile; fileRef = 5862C8CC1E32391300D0ADEF /* cube_transform_demo.frag */; };
 		5869ACB61E27C97100182916 /* VertexBufferObjects.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5869ACB41E27C97000182916 /* VertexBufferObjects.cpp */; };
@@ -87,6 +88,8 @@
 		582FB5C91E36BEEB00C031C6 /* Structs.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Structs.h; sourceTree = "<group>"; };
 		582FB5CA1E378BA600C031C6 /* Mesh.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Mesh.cpp; sourceTree = "<group>"; };
 		582FB5CB1E378BA600C031C6 /* Mesh.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Mesh.hpp; sourceTree = "<group>"; };
+		583EDA491E42680A00B012D9 /* Input.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Input.cpp; sourceTree = "<group>"; };
+		583EDA4A1E42680A00B012D9 /* Input.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Input.hpp; sourceTree = "<group>"; };
 		5862C8CB1E32390100D0ADEF /* cube_transform_demo.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = cube_transform_demo.vert; sourceTree = "<group>"; };
 		5862C8CC1E32391300D0ADEF /* cube_transform_demo.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = cube_transform_demo.frag; sourceTree = "<group>"; };
 		5869ACB41E27C97000182916 /* VertexBufferObjects.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = VertexBufferObjects.cpp; sourceTree = "<group>"; };
@@ -195,6 +198,8 @@
 				582FB5CA1E378BA600C031C6 /* Mesh.cpp */,
 				582FB5CB1E378BA600C031C6 /* Mesh.hpp */,
 				58754FF41E39288F0012AAC7 /* Matrix.hpp */,
+				583EDA491E42680A00B012D9 /* Input.cpp */,
+				583EDA4A1E42680A00B012D9 /* Input.hpp */,
 			);
 			path = OpenGL;
 			sourceTree = "<group>";
@@ -290,6 +295,7 @@
 				58B8F0BC1E1FA61F005C5C5F /* Logger.cpp in Sources */,
 				58B8F0A71E1CEF0F005C5C5F /* Detect.cpp in Sources */,
 				582FB5CC1E378BA600C031C6 /* Mesh.cpp in Sources */,
+				583EDA4B1E42680A00B012D9 /* Input.cpp in Sources */,
 				58B8F0C21E212D6A005C5C5F /* Shaders.cpp in Sources */,
 				58B8F0991E1CE8D1005C5C5F /* main.cpp in Sources */,
 				58B8F0BF1E20F2A7005C5C5F /* GLParams.cpp in Sources */,

@@ -10,6 +10,8 @@
 
 using namespace std;
 
+Mesh::Mesh(){}
+
 Mesh::Mesh(std::vector<Point> _points, std::vector<Colour> _colours) : points(_points), colours(_colours) {
     cout << "Construct: Mesh" << endl;
 }
@@ -54,6 +56,138 @@ vector<GLfloat> Mesh::coloursUnwound() {
         colours_unwound.push_back(colour.b);
     }
     return colours_unwound;
+}
+
+void Mesh::generateCube(float size) {
+    
+    size *= 0.5f;
+    
+    points = vector<Point> {
+        // bottom face
+        {size, -size, -size},
+        {size, -size, size},
+        {-size, -size, -size},
+        
+        {size, -size, size},
+        {-size, -size, size},
+        {-size, -size, -size},
+        
+        // rear face
+        {size, size, -size},
+        {size, -size, -size},
+        {-size, -size, -size},
+        
+        {size, size, -size},
+        {-size, -size, -size},
+        {-size, size, -size},
+        
+        // left face
+        {-size, -size, -size},
+        {-size, -size, size},
+        {-size, size, -size},
+        
+        {-size, -size, size},
+        {-size, size, size},
+        {-size, size, -size},
+        
+        // top face
+        {-size, size, -size},
+        {-size, size, size},
+        {size, size, size},
+        
+        {size, size, size},
+        {size, size, -size},
+        {-size, size, -size},
+        
+        // front face
+        {-size, size, size},
+        {-size, -size, size},
+        {size, -size, size},
+        
+        {size, -size, size},
+        {size, size, size},
+        {-size, size, size},
+        
+        // right face
+        {size, size, size},
+        {size, -size, size},
+        {size, -size, -size},
+        
+        {size, -size, -size},
+        {size, size, -size},
+        {size, size, size}
+    };
+    
+    colours = vector<Colour> {
+        // bottom face
+        {1.0f, 0.75f, 0.75f},
+        {1.0f, 0.75f, 0.75f},
+        {1.0f, 0.75f, 0.75f},
+        
+        {1.0f, 0.75f, 0.75f},
+        {1.0f, 0.75f, 0.75f},
+        {1.0f, 0.75f, 0.75f},
+        
+        // rear face
+        {0.5f, 1.0f, 0.75f},
+        {0.5f, 1.0f, 0.75f},
+        {0.5f, 1.0f, 0.75f},
+        
+        {0.5f, 1.0f, 0.75f},
+        {0.5f, 1.0f, 0.75f},
+        {0.5f, 1.0f, 0.75f},
+        
+        // left face
+        {0.25f, 0.5f, 1.0f},
+        {0.25f, 0.5f, 1.0f},
+        {0.25f, 0.5f, 1.0f},
+        
+        {0.25f, 0.5f, 1.0f},
+        {0.25f, 0.5f, 1.0f},
+        {0.25f, 0.5f, 1.0f},
+        
+        // top face
+        {1.0f, 0.75f, 0.75f},
+        {1.0f, 0.75f, 0.75f},
+        {1.0f, 0.75f, 0.75f},
+        
+        {1.0f, 0.75f, 0.75f},
+        {1.0f, 0.75f, 0.75f},
+        {1.0f, 0.75f, 0.75f},
+        
+        // front face
+        {0.5f, 1.0f, 0.75f},
+        {0.5f, 1.0f, 0.75f},
+        {0.5f, 1.0f, 0.75f},
+        
+        {0.5f, 1.0f, 0.75f},
+        {0.5f, 1.0f, 0.75f},
+        {0.5f, 1.0f, 0.75f},
+        
+        // right face
+        {0.25f, 0.5f, 1.0f},
+        {0.25f, 0.5f, 1.0f},
+        {0.25f, 0.5f, 1.0f},
+        
+        {0.25f, 0.5f, 1.0f},
+        {0.25f, 0.5f, 1.0f},
+        {0.25f, 0.5f, 1.0f},
+    };
+    
+}
+
+void Mesh::applyIdentityMatrix(GLuint program) const {
+    GLuint identity_matrix_loc = glGetUniformLocation(program, "identity_matrix");
+    
+    Matrix<GLfloat> identity_matrix = m.identity_matrix();
+    vector<GLfloat> identity_matrix_unwound = identity_matrix.unwind();
+    
+    if(GL_TRUE != identity_matrix_loc) {
+        glUniformMatrix4fv(identity_matrix_loc, 1, GL_FALSE, &identity_matrix_unwound[0]);
+    }
+    else {
+        cout << "The identity matrix could not be applied to this mesh." << endl;
+    }
 }
 
 void Mesh::applyMatrices(GLuint program) const {

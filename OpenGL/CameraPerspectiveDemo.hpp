@@ -12,6 +12,7 @@
 #include <OpenGL/gl3.h>
 #include <GLFW/glfw3.h>
 #include <string>
+#include <sstream>
 #include <vector>
 #include <cmath>
 #include "ShaderLoader.hpp"
@@ -19,25 +20,30 @@
 #include "Matrices.hpp"
 #include "Structs.h"
 #include "Mesh.hpp"
+#include "Input.hpp"
 
 #define one_deg_in_rad (2.0 * M_PI) / 360.0f
-
-/**
- *  Temporary view/projection matrix
- *  member variables.
- */
-static float fov = 67.0f * one_deg_in_rad;
-static float cam_speed = 1.0f;
-static float cam_yaw_speed = 1.0f;
-static float cam_yaw = 0.0f;
-static float cam_pos_x = 0.0f;
-static float cam_pos_y = 0.0f;
-static float cam_pos_z = 4.0f;
 
 class CameraPerspectiveDemo {
 private:
     GLuint program;
     GLFWwindow *window;
+    GLenum drawing_method;
+    
+    float fov;
+    float cam_t_speed;
+    float cam_pitch;
+    float cam_roll;
+    float cam_yaw;
+    float cam_pitch_speed;
+    float cam_yaw_speed;
+    float cam_roll_speed;
+    
+    float mouse_distance;
+    float mouse_angle;
+    
+    Position cam_pos;
+    bool camera_updating;
 
     std::vector<Mesh> meshes;
     ShaderLoader shader_loader;
@@ -49,14 +55,25 @@ private:
     GLint programReady() const;
     void linkShaders(const GLuint vertex_shader, const GLuint fragment_shader);
     
-    void drawLoop() const;
-    void keyActionListener(void) const;
+    void drawLoop();
+    void applyViewMatrix() const;
+    void applyProjectionMatrix() const;
     
-    void applyPerspective() const;
+    void mouseDown(int button, int action, int mods);
+    void mouseUp(int button, int action, int mods);
+    void mouseMove(float pos_x, float pos_y);
+    void mouseDrag(float pos_x, float pos_y, float distance, float angle);
+    void keyDown(int key, int scancode, int action, int mods);
+    void keyStrobe(int key, int scancode, int action, int mods);
+    void keyUp(int key, int scancode, int action, int mods);
+    
+    void updateCameraFromMouse(void);
+    void setupCallbacks(void);
     
 public:
     CameraPerspectiveDemo();
     ~CameraPerspectiveDemo();
+    
     void addMesh(Mesh mesh, const Position position, const Rotation rotation);
     int run(void);
 };

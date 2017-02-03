@@ -9,12 +9,34 @@
 #include "CameraPerspectiveDemo.hpp"
 
 using namespace std;
+using namespace std::placeholders;
 
 #define gl_viewport_w 1280
 #define gl_viewport_h 960
 
 CameraPerspectiveDemo::CameraPerspectiveDemo() {
     cout << "Construct: CameraPerspectiveDemo" << endl;
+    
+    drawing_method = GL_TRIANGLES;
+    
+    fov = 67.0f * one_deg_in_rad;
+    cam_pitch = 0.0f;
+    cam_roll = 0.0f;
+    cam_yaw = 0.0f;
+    cam_pitch_speed = 2.0f;
+    cam_yaw_speed = 2.0f;
+    cam_roll_speed = 2.0f;
+    
+    mouse_distance = 0.0f;
+    mouse_angle = 0.0f;
+    
+    cam_pos.px = 0.0f;
+    cam_pos.py = 0.0f;
+    cam_pos.pz = 5.0f;
+    
+    camera_updating = false;
+    
+    Input::getInstance();
 }
 
 CameraPerspectiveDemo::~CameraPerspectiveDemo() {
@@ -23,6 +45,80 @@ CameraPerspectiveDemo::~CameraPerspectiveDemo() {
     window = 0;
     meshes.clear();
     glfwTerminate();
+}
+
+void CameraPerspectiveDemo::setupCallbacks() {
+    Input::getInstance().onMouseDown(std::bind(&CameraPerspectiveDemo::mouseDown, this, _1, _2, _3));
+    Input::getInstance().onMouseUp(std::bind(&CameraPerspectiveDemo::mouseUp, this, _1, _2, _3));
+    Input::getInstance().onMouseDrag(std::bind(&CameraPerspectiveDemo::mouseDrag, this, _1, _2, _3, _4));
+    Input::getInstance().onKeyDown(std::bind(&CameraPerspectiveDemo::keyDown, this, _1, _2, _3, _4));
+    Input::getInstance().onKeyStrobe(std::bind(&CameraPerspectiveDemo::keyStrobe, this, _1, _2, _3, _4));
+    Input::getInstance().onKeyUp(std::bind(&CameraPerspectiveDemo::keyUp, this, _1, _2, _3, _4));
+}
+
+void CameraPerspectiveDemo::mouseDown(int button, int action, int mods) {
+    camera_updating = true;
+};
+
+void CameraPerspectiveDemo::mouseUp(int button, int action, int mods) {
+    camera_updating = false;
+    mouse_distance = 0.0f;
+    mouse_angle = 0.0f;
+    cam_pitch_speed = 2.0f;
+    cam_yaw_speed = 2.0f;
+    cam_roll_speed = 2.0f;
+};
+
+void CameraPerspectiveDemo::mouseMove(float pos_x, float pos_y) {};
+
+void CameraPerspectiveDemo::mouseDrag(float pos_x, float pos_y, float distance, float angle) {
+    mouse_distance = distance;
+    mouse_angle = angle;
+};
+
+void CameraPerspectiveDemo::updateCameraFromMouse(void) {
+
+    /**
+     *  We need to get the angle of the mouse
+     *  and use this to determine the ratio of
+     *  pitch and yaw to be applied when we 
+     *  transform the camera.
+     */
+    float attack = abs(fmod(mouse_angle, 90.0f));
+    float r1 = (attack / 90.0f);
+    float r2 = 1.0f - r1;
+    
+    /**
+     *  Depending on which quartile of the 2D 
+     *  coordinate plane we are in, we should 
+     *  adjust the camera to give the appearance
+     *  that the shape is moving in the direction
+     *  the mouse pointer is at.
+     */
+    if(mouse_angle >= 0.0f && mouse_angle < 90.0f) {
+        cam_pitch_speed = (mouse_distance / 100.0f) * r1;
+        cam_yaw_speed = (mouse_distance / 100.0f) * r2;
+        cam_pitch -= cam_pitch_speed;
+        cam_yaw -= cam_yaw_speed;
+    }
+    else if(mouse_angle >= 90.0f && mouse_angle < 180.0f) {
+        cam_pitch_speed = (mouse_distance / 100.0f) * r2;
+        cam_yaw_speed = (mouse_distance / 100.0f) * r1;
+        cam_pitch -= cam_pitch_speed;
+        cam_yaw += cam_yaw_speed;
+    }
+    else if(mouse_angle >= -180.0f && mouse_angle < -90.0f) {
+        cam_pitch_speed = (mouse_distance / 100.0f) * r2;
+        cam_yaw_speed = (mouse_distance / 100.0f) * r1;
+        cam_pitch += cam_pitch_speed;
+        cam_yaw += cam_yaw_speed;
+    }
+    else if(mouse_angle >= -90.0f && mouse_angle < 0.0f) {
+        cam_pitch_speed = (mouse_distance / 100.0f) * r1;
+        cam_yaw_speed = (mouse_distance / 100.0f) * r2;
+        cam_pitch += cam_pitch_speed;
+        cam_yaw -= cam_yaw_speed;
+    }
 }
 
 /**
@@ -41,7 +137,6 @@ bool CameraPerspectiveDemo::setupWindow(void) {
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-    glfwWindowHint(GLFW_SAMPLES, 4);
     
     window = glfwCreateWindow(gl_viewport_w, gl_viewport_h, "Camera Perspective Demo", NULL, NULL);
     if(!window) {
@@ -191,7 +286,7 @@ void CameraPerspectiveDemo::addMesh(Mesh mesh, const Position position, const Ro
  *  The main drawing loop where we go through each mesh
  *  and draw it to the screen.
  */
-void CameraPerspectiveDemo::drawLoop() const {
+void CameraPerspectiveDemo::drawLoop() {
     
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glViewport(0, 0, gl_viewport_w, gl_viewport_h);
@@ -200,79 +295,137 @@ void CameraPerspectiveDemo::drawLoop() const {
     if(GL_TRUE == programReady()) {
         for(auto &mesh: meshes) {
             glBindVertexArray(mesh.getVao());
-            mesh.applyMatrices(program);
-            glDrawArrays(GL_TRIANGLES, 0, mesh.pointsSize());
+            mesh.applyIdentityMatrix(program);
+            glDrawArrays(drawing_method, 0, mesh.pointsSize());
         }
-        
-        applyPerspective();
     }
     
     glfwPollEvents();
     glfwSwapBuffers(window);
 }
 
-void CameraPerspectiveDemo::keyActionListener(void) const {
-    
-    if(glfwGetKey(window, GLFW_KEY_ESCAPE)) {
-        glfwSetWindowShouldClose(window, true);
+void CameraPerspectiveDemo::keyDown(int key, int scancode, int action, int mods) {
+    switch(key) {
+        case GLFW_KEY_ESCAPE: {
+            glfwSetWindowShouldClose(window, true);
+            break;
+        }
+        case GLFW_KEY_1: {
+            glfwSetWindowTitle(window, "Rendering: GL_TRIANGLES");
+            drawing_method = GL_TRIANGLES;
+            break;
+        }
+        case GLFW_KEY_2: {
+            glfwSetWindowTitle(window, "Rendering: GL_LINE_STRIP");
+            drawing_method = GL_LINE_STRIP;
+            break;
+        }
+        case GLFW_KEY_3: {
+            glfwSetWindowTitle(window, "Rendering: GL_LINE_LOOP");
+            drawing_method = GL_LINE_LOOP;
+            break;
+        }
+        case GLFW_KEY_4: {
+            glfwSetWindowTitle(window, "Rendering: GL_LINES");
+            drawing_method = GL_LINES;
+            break;
+        }
+        case GLFW_KEY_5: {
+            glfwSetWindowTitle(window, "Rendering: GL_TRIANGLE_STRIP");
+            drawing_method = GL_TRIANGLE_STRIP;
+            break;
+        }
+        case GLFW_KEY_6: {
+            glfwSetWindowTitle(window, "Rendering: GL_TRIANGLE_FAN");
+            drawing_method = GL_TRIANGLE_FAN;
+            break;
+        }
+        case GLFW_KEY_7: {
+            glfwSetWindowTitle(window, "Rendering: GL_POINTS");
+            drawing_method = GL_POINTS;
+            break;
+        }
+        case GLFW_KEY_DOWN: {
+            cam_pitch -= 10.0f;
+            camera_updating = true;
+            break;
+        }
+        case GLFW_KEY_UP: {
+            cam_pitch += 10.0f;
+            camera_updating = true;
+            break;
+        }
+        case GLFW_KEY_LEFT: {
+            cam_yaw += 10.0f;
+            camera_updating = true;
+            break;
+        }
+        case GLFW_KEY_RIGHT: {
+            cam_yaw -= 10.0f;
+            camera_updating = true;
+            break;
+        }
     }
-    
-    if(glfwGetKey(window, GLFW_KEY_LEFT)) {
-        cam_pos_x -= 0.2f;
-    }
-    
-    if(glfwGetKey(window, GLFW_KEY_RIGHT)) {
-        cam_pos_x += 0.2f;
-    }
-    
-    if(glfwGetKey(window, GLFW_KEY_DOWN)) {
-        cam_pos_y -= 0.2f;
-    }
-    
-    if(glfwGetKey(window, GLFW_KEY_UP)) {
-        cam_pos_y += 0.2f;
-    }
-    
-    if(glfwGetKey(window, GLFW_KEY_W)) {
-        cam_pos_z -= 0.25f;
-    }
-    
-    if(glfwGetKey(window, GLFW_KEY_S)) {
-        cam_pos_z += 0.25f;
-    }
-    
-    if(glfwGetKey(window, GLFW_KEY_A)) {
-        cam_yaw += 1.0f;
-    }
-    
-    if(glfwGetKey(window, GLFW_KEY_D)) {
-        cam_yaw -= 1.0f;
-    }
-    
 }
 
-void CameraPerspectiveDemo::applyPerspective() const {
+void CameraPerspectiveDemo::keyStrobe(int key, int scancode, int action, int mods) {
     
+    camera_updating = true;
+    
+    switch(key) {
+        case GLFW_KEY_DOWN: {
+            cam_pitch -= 5.0f;
+            camera_updating = true;
+            break;
+        }
+        case GLFW_KEY_UP: {
+            cam_pitch += 5.0f;
+            camera_updating = true;
+            break;
+        }
+        case GLFW_KEY_LEFT: {
+            cam_yaw += 5.0f;
+            camera_updating = true;
+            break;
+        }
+        case GLFW_KEY_RIGHT: {
+            cam_yaw -= 5.0f;
+            camera_updating = true;
+            break;
+        }
+    }
+}
+
+void CameraPerspectiveDemo::keyUp(int key, int scancode, int action, int mods) {
+    camera_updating = false;
+}
+
+void CameraPerspectiveDemo::applyProjectionMatrix() const {
     /**
-     *  This sets up the Projection Matrix
+     *  This sets up the Projection Matrix.
+     *
+     *  These are part of the mathematical formula
+     *  needed to calculate the correct projection
+     *  to make the scene look more realistic.
+     *
+     *  This sets up the camera frustrum, the part of
+     *  the scene that the camera covers and is therefore
+     *  visible.
      */
     float near = 0.1f;
     float far = 100.0f;
     float aspect = (float)gl_viewport_w / (float)gl_viewport_h;
     float range = tan(fov * 0.5f) * near;
     
-    float Sx = (2.0 * near) / (range * aspect + range * aspect);
+    float Sx = (2.0f * near) / ((range * aspect) + (range * aspect));
     float Sy = near / range;
     float Sz = -(far + near) / (far - near);
     float Pz = -(2.0f * far * near) / (far - near);
     
-    GLfloat proj_mat[] = {
-        Sx, 0.0f, 0.0f, 0.0f,
-        0.0f, Sy, 0.0f, 0.0f,
-        0.0f, 0.0f, Sz, -1.0f,
-        0.0f, 0.0f, Pz, 0.0f
-    };
-    
+    /**
+     *  With the above calculations completed, we can then put
+     *  this projection matrix together.
+     */
     Matrix<float> projection_matrix({
         Row<float>({Sx, 0.0f, 0.0f, 0.0f}),
         Row<float>({0.0f, Sy, 0.0f, 0.0f}),
@@ -281,32 +434,82 @@ void CameraPerspectiveDemo::applyPerspective() const {
     });
     
     /**
-     *  This sets up the View Matrix
+     *  We then unwind them from a Matrix to a vector of float values which
+     *  we can then send through to the program, targeting the variable
+     *  in the compiled shader program "projection" and sending the values through.
      */
-    float cam_pos[] = {
-        cam_pos_x,
-        cam_pos_y,
-        cam_pos_z
-    };
-    
-    Matrices m;
-    m.translateTo(TRANSLATE_X, -cam_pos[0]);
-    m.translateTo(TRANSLATE_Y, -cam_pos[1]);
-    m.translateTo(TRANSLATE_Z, -cam_pos[2]);
-    m.rotateTo(ROTATE_Y, -cam_yaw);
-    
-    Matrix<float> T = m.translation_matrix();
-    Matrix<float> R = m.rotation_y_matrix();
-    Matrix<float> view_matrix = T * R;
-    
-    vector<float> view_matrix_unwound = view_matrix.unwind();
     vector<float> projection_matrix_unwound = projection_matrix.unwind();
-    
-    GLuint view_loc = glGetUniformLocation(program, "view");
     GLuint projection_loc = glGetUniformLocation(program, "projection");
-    
-    glUniformMatrix4fv(view_loc, 1, GL_FALSE, &view_matrix_unwound[0]);
     glUniformMatrix4fv(projection_loc, 1, GL_FALSE, &projection_matrix_unwound[0]);
+}
+
+void CameraPerspectiveDemo::applyViewMatrix() const {
+    /**
+     *  The member variable cam_pos updates
+     *  for each repaint. This is used when we
+     *  calculate the view matrix, which is then
+     *  used to place each mesh on the x, y, z
+     *  access, so we have the impression we are
+     *  'moving' around the world even though the
+     *  camera always remains at the origin (0,0,0).
+     *
+     *  Grab an instance of a Matrix and then apply
+     *  the translations we need to it for all axes,
+     *  based on the camera position.
+     */
+    Matrices m;
+ 
+    /**
+     *  These three will update the translation matrix,
+     *  which we will then use later when we pass them in
+     *  to the vertex shader. In there, it will be bound
+     *  to the shader variable "view" and multiplied with
+     *  the other items that make up the final value for
+     *  gl_Position.
+     */
+    m.translateTo(TRANSLATE_X, -cam_pos.px);
+    m.translateTo(TRANSLATE_Y, -cam_pos.py);
+    m.translateTo(TRANSLATE_Z, -cam_pos.pz);
+    
+    /**
+     *  We apply rotation using the member float variables
+     *  cam_pitch, cam_roll, and cam_yaw and the rotation 
+     *  matrix we get from this will be multiplied by the 
+     *  translation matrix above
+     *  to give us our final view matrix.
+     */
+    m.rotateTo(ROTATE_X, -cam_pitch);
+    m.rotateTo(ROTATE_Y, -cam_yaw);
+    m.rotateTo(ROTATE_Z, -cam_roll);
+    
+    /**
+     *  So now we have the translation and rotation matrices 
+     *  with our values plugged in along with the rotation 
+     *  matrix with its values plugged in.
+     */
+    Matrix<float> T = m.translation_matrix();
+    Matrix<float> Rx = m.rotation_x_matrix();
+    Matrix<float> Ry = m.rotation_y_matrix();
+    Matrix<float> Rz = m.rotation_z_matrix();
+    
+    /**
+     *  We then multiply these matrices together to get 
+     *  the view matrix and then unwind to get a vector
+     *  of float values.
+     */
+    Matrix<float> view_matrix = (Rx * Ry * Rz) * T;
+    vector<float> view_matrix_unwound = view_matrix.unwind();
+    
+    /**
+     *  Get the reference to the "view" variable inside the 
+     *  compiled program. The "view" variable sits inside the 
+     *  vertex shader and is used to calculate the final 
+     *  gl_Position for each vertex.
+     *
+     *  We then pass in the floats to the vertex shader.
+     */
+    GLuint view_loc = glGetUniformLocation(program, "view");
+    glUniformMatrix4fv(view_loc, 1, GL_FALSE, &view_matrix_unwound[0]);
 }
 
 int CameraPerspectiveDemo::run(void) {
@@ -317,6 +520,29 @@ int CameraPerspectiveDemo::run(void) {
          *  with preparing VBOs and VAOs or we will get a Thread access exception.
          */
         setupWindow();
+        /**
+         *  We can then set up some event listeners using the 
+         *  Input class.
+         *
+         *  Mouse and key input that will be routed
+         *  to our Input instance. GFLW only accepts
+         *  static methods as callbacks. We specify
+         *  some static functions which can then get
+         *  our instance and call its member variables.
+         *
+         *  This is a long-winded way to allow us to
+         *  call member functions inside this class
+         *  from GLFW - using function pointers.
+         */
+        glfwSetMouseButtonCallback(window, &Input::glfwMouseButtonCallback);
+        glfwSetCursorPosCallback(window, &Input::glfwMouseMoveCallback);
+        glfwSetKeyCallback(window, &Input::glfwKeyCallback);
+        glfwSetCharCallback(window, &Input::glfwKeyCharCallback);
+        
+        /**
+         *  Set up the callbacks
+         */
+        setupCallbacks();
     }
     catch(exception &e) {
         cout << e.what();
@@ -346,9 +572,21 @@ int CameraPerspectiveDemo::run(void) {
      */
     glUseProgram(program);
     
+    /**
+     *  Apply perspective, which is something we 
+     *  should only need to do once.
+     */
+    if(programReady()) {
+        applyProjectionMatrix();
+        applyViewMatrix();
+    }
+    
     while(!glfwWindowShouldClose(window)) {
         drawLoop();
-        keyActionListener();
+        if(camera_updating) {
+            updateCameraFromMouse();
+            applyViewMatrix();
+        }
     }
     return 0;
 }

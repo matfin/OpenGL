@@ -10,8 +10,6 @@
 #define Structs_h
 
 #include <GLFW/glfw3.h>
-#include <vector>
-#include <iostream>
 
 struct Point {
     GLfloat x;
