@@ -174,7 +174,7 @@ GLuint CameraPerspectiveDemo::compileShader(const string *shader_src_str, GLenum
     glGetShaderiv(shader, GL_COMPILE_STATUS, &status);
     if(GL_TRUE != status) {
         cout << "Failed to compile the shader with reference: " << shader << endl;
-        gl_params.print_shader_log(shader);
+        GLParams::print_shader_log(shader);
         return false;
     }
     
@@ -205,7 +205,7 @@ void CameraPerspectiveDemo::linkShaders(const GLuint vertex_shader, const GLuint
     
     if(GL_TRUE != programReady()) {
         cout << "Failed to link the program with reference: " << program << endl;
-        gl_params.print_program_info_log(program);
+        GLParams::print_program_info_log(program);
     }
 }
 
@@ -554,13 +554,13 @@ int CameraPerspectiveDemo::run(void) {
      *  both of them and then link them to form a program. We then
      *  print the program status.
      */
-    string vertex_shader_str = shader_loader.load("camera_perspective_demo.vert");
-    string fragment_shader_str = shader_loader.load("camera_perspective_demo.frag");
+    string vertex_shader_str = ShaderLoader::load("camera_perspective_demo.vert");
+    string fragment_shader_str = ShaderLoader::load("camera_perspective_demo.frag");
     
     GLuint vertex_shader = compileShader(&vertex_shader_str, GL_VERTEX_SHADER);
     GLuint fragment_shader = compileShader(&fragment_shader_str, GL_FRAGMENT_SHADER);
     linkShaders(vertex_shader, fragment_shader);
-    gl_params.print_program_info_log(program);
+    GLParams::print_program_info_log(program);
     
     /**
      *  This is where we tee up the meshes that have been added.

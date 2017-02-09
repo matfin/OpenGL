@@ -30,12 +30,6 @@ private:
     GLuint vao;
     
     /**
-     *  utility items
-     */
-    ShaderLoader shader_loader;
-    GLParams gl_params;
-    
-    /**
      *  Matrices for transformation and rotation.
      */
     Matrices *m = new Matrices();

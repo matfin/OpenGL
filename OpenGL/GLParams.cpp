@@ -145,7 +145,7 @@ void GLParams::print_program_info_log(GLuint program) {
     printf("Program info log for GL index %u:\n%s", program, log);
 }
 
-vector<string> GLParams::getGLParams() const {
+vector<string> GLParams::getGLParams() {
     vector<string> t;
     for(int i = 0; i < 10; i++) {
         int v = 0;
@@ -158,7 +158,7 @@ vector<string> GLParams::getGLParams() const {
     return t;
 }
 
-void GLParams::logGLParams(vector<string> params) const {
+void GLParams::logGLParams(vector<string> params) {
     Logger logger;
     logger.write("OpenGL context parameters:\n");
     for(auto &i : params) {

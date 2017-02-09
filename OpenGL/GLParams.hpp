@@ -15,14 +15,14 @@
 
 class GLParams {
 public:
-    std::vector<std::string> getGLParams() const;
-    const char *gl_type_to_string(GLenum type);
-    void logGLParams(std::vector<std::string> params) const;
-    void updateWindowFPSCounter(GLFWwindow *window);
-    void print_verbose(GLuint program);
-    void print_shader_log(GLuint shader_index);
-    void print_program_info_log(GLuint program);
-    bool is_valid(GLuint program);
+    static std::vector<std::string> getGLParams();
+    static const char *gl_type_to_string(GLenum type);
+    static void logGLParams(std::vector<std::string> params);
+    static void updateWindowFPSCounter(GLFWwindow *window);
+    static void print_verbose(GLuint program);
+    static void print_shader_log(GLuint shader_index);
+    static void print_program_info_log(GLuint program);
+    static bool is_valid(GLuint program);
 };
 
 #endif /* GLParams_hpp */

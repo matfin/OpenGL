@@ -46,8 +46,6 @@ private:
     bool camera_updating;
 
     std::vector<Mesh> meshes;
-    ShaderLoader shader_loader;
-    GLParams gl_params;
     
     void prepareMeshes(void);
     bool setupWindow(void);
