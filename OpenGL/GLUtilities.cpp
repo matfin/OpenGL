@@ -12,6 +12,11 @@
 
 using namespace std;
 
+/**
+ *  This is where we need to set the window up
+ *  and tee up GLFW. We need to do this first
+ *  before we do anything else.
+ */
 GLFWwindow* GLUtilities::setupWindow(const int gl_viewport_w, const int gl_viewport_h, const char *title) {
     
     GLFWwindow *window;
@@ -42,6 +47,11 @@ GLFWwindow* GLUtilities::setupWindow(const int gl_viewport_w, const int gl_viewp
     return window;
 }
 
+/**
+ *  This function will compile a shader (vertex/fragment) and
+ *  return the reference as a GLuint, so it can be attached
+ *  to a program for linking.
+ */
 GLuint GLUtilities::compileShader(const string shader_src_str, GLenum type) {
     
     GLuint shader = glCreateShader(type);
@@ -56,13 +66,17 @@ GLuint GLUtilities::compileShader(const string shader_src_str, GLenum type) {
     glGetShaderiv(shader, GL_COMPILE_STATUS, &status);
     if(GL_TRUE != status) {
         cout << "Failed to compile the shader with reference: " << shader << endl;
-//        gl_params.print_shader_log(shader);
+        GLParams::print_shader_log(shader);
         return false;
     }
     
     return shader;
 }
 
+/**
+ *  This takes in the reference to two shaders that have been compiled and
+ *  returns a reference to the linked program.
+ */
 GLuint GLUtilities::linkShaders(const GLuint vertex_shader, const GLuint fragment_shader) {
     
     GLuint program = glCreateProgram();
@@ -73,12 +87,16 @@ GLuint GLUtilities::linkShaders(const GLuint vertex_shader, const GLuint fragmen
     
     if(GL_TRUE != programReady(program)) {
         cout << "Failed to link the program with reference: " << program << endl;
-//        gl_params.print_program_info_log(program);
+        GLParams::print_program_info_log(program);
     }
     
     return program;
 }
 
+/**
+ *  Checks to see if the program is ready by
+ *  checking its GL_LINK_STATUS
+ */
 GLint GLUtilities::programReady(const GLuint program) {
     GLint status;
     glGetProgramiv(program, GL_LINK_STATUS, &status);

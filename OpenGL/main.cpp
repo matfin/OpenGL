@@ -240,10 +240,10 @@ int main(int argc, const char * argv[]) {
 //    return shaders_main();
 //    return vertex_buffer_objects_main();
 //    int run = runModelLoadDemo();
-    int run = runCubeTransformDemo();
+//    int run = runCubeTransformDemo();
 //    int matrix_run = matrixOperations();
 //    int mo_run = distanceCalculatorDemo();
-//    int run = runCameraPerspectiveDemo();
+    int run = runCameraPerspectiveDemo();
     
     return 0;
 }

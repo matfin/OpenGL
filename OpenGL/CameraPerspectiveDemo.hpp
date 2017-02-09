@@ -17,6 +17,7 @@
 #include <cmath>
 #include "ShaderLoader.hpp"
 #include "GLParams.hpp"
+#include "GLUtilities.hpp"
 #include "Matrices.hpp"
 #include "Structs.h"
 #include "Mesh.hpp"
@@ -47,12 +48,7 @@ private:
 
     std::vector<Mesh> meshes;
     
-    void prepareMeshes(void);
-    bool setupWindow(void);
-    GLuint compileShader(const std::string *shader_src_str, GLenum type);
-    GLint programReady() const;
-    void linkShaders(const GLuint vertex_shader, const GLuint fragment_shader);
-    
+    void prepareMeshes(void);    
     void drawLoop();
     void applyViewMatrix() const;
     void applyProjectionMatrix() const;
