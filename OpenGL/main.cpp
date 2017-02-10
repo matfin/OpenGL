@@ -17,6 +17,7 @@
 #include "VertexBufferObjects.hpp"
 #include "CubeTransformDemo.hpp"
 #include "CameraPerspectiveDemo.hpp"
+#include "QuaternionDemo.hpp"
 
 using namespace std;
 
@@ -235,6 +236,10 @@ int runCameraPerspectiveDemo(void) {
     return run;
 }
 
+int runQuaternionDemo(void) {
+    return QuaternionDemo::run();
+}
+
 int main(int argc, const char * argv[]) {
 //    return shapes_main();
 //    return shaders_main();
@@ -243,7 +248,8 @@ int main(int argc, const char * argv[]) {
 //    int run = runCubeTransformDemo();
 //    int matrix_run = matrixOperations();
 //    int mo_run = distanceCalculatorDemo();
-    int run = runCameraPerspectiveDemo();
+//    int run = runCameraPerspectiveDemo();
+    int run = runQuaternionDemo();
     
     return 0;
 }
