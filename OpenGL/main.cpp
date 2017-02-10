@@ -213,20 +213,6 @@ int runCameraPerspectiveDemo(void) {
      *  - The second parameter is the world position
      *  - The third parameter is the world rotation
      */
-    
-//    for(int i = 0; i < 10; i++) {
-//        
-//        Mesh mesh;
-//        mesh.generateCube(2.0f);
-//        
-//        if(i % 2 == 0) {
-//            demo->addMesh(mesh, {3.0f, 0.0f, (float)i * 2.5f}, {0.0f, 0.0f, 0.0f});
-//        }
-//        else {
-//            demo->addMesh(mesh, {-3.0f, 0.0f, (float)i * 2.5f}, {0.0f, 0.0f, 0.0f});
-//        }
-//    }
-    
     Mesh mesh;
     mesh.generateCube(2.0f);
     demo->addMesh(mesh, {0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f});
@@ -237,7 +223,11 @@ int runCameraPerspectiveDemo(void) {
 }
 
 int runQuaternionDemo(void) {
+    Mesh mesh;
+    mesh.generateCube(0.25f);
+    QuaternionDemo::addMesh(mesh, {0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f});
     return QuaternionDemo::run();
+    return 0;
 }
 
 int main(int argc, const char * argv[]) {

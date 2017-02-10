@@ -20,6 +20,41 @@ Mesh::~Mesh() {
     cout << "Destruct: Mesh" << endl;
 }
 
+void Mesh::prepareBuffers() {
+    vector<GLfloat> points = pointsUnwound();
+    vector<GLfloat> colours = coloursUnwound();
+    
+    /**
+     *  Buffer for the points
+     */
+    GLuint points_vbo;
+    glGenBuffers(1, &points_vbo);
+    glBindBuffer(GL_ARRAY_BUFFER, points_vbo);
+    glBufferData(GL_ARRAY_BUFFER, points.size() * sizeof(GLfloat), &points[0], GL_STATIC_DRAW);
+    
+    /**
+     *  Buffer for the colours
+     */
+    GLuint colours_vbo;
+    glGenBuffers(1, &colours_vbo);
+    glBindBuffer(GL_ARRAY_BUFFER, colours_vbo);
+    glBufferData(GL_ARRAY_BUFFER, colours.size() * sizeof(GLfloat), &colours[0], GL_STATIC_DRAW);
+    
+    /**
+     *  Teeing up the VAO (vertex array object)
+     */
+    glGenVertexArrays(1, &vao);
+    glBindVertexArray(vao);
+    
+    glBindBuffer(GL_ARRAY_BUFFER, points_vbo);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, NULL);
+    glBindBuffer(GL_ARRAY_BUFFER, colours_vbo);
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, NULL);
+    
+    glEnableVertexAttribArray(0);
+    glEnableVertexAttribArray(1);
+}
+
 GLuint Mesh::getVao() const {
     return vao;
 }
@@ -36,7 +71,7 @@ Matrices* Mesh::getMatrices() const {
     return &m;
 }
 
-vector<GLfloat> Mesh::pointsUnwound() {
+vector<GLfloat> Mesh::pointsUnwound() const {
     vector<GLfloat> points_unwound;
     points_unwound.reserve(points.size() * 3);
     for(const auto &point: points) {
@@ -47,7 +82,7 @@ vector<GLfloat> Mesh::pointsUnwound() {
     return points_unwound;
 }
 
-vector<GLfloat> Mesh::coloursUnwound() {
+vector<GLfloat> Mesh::coloursUnwound() const {
     std::vector<GLfloat> colours_unwound;
     colours_unwound.reserve(colours.size() * 3);
     for(const auto &colour: colours) {
@@ -213,10 +248,6 @@ void Mesh::applyMatrices(GLuint program) const {
     else {
         cout << "Unable to apply matrices to this mesh." << endl;
     }
-}
-
-void Mesh::setVao(GLuint _vao) {
-    vao = _vao;
 }
 
 

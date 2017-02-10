@@ -38,6 +38,8 @@
 		58B8F0C61E23A6F2005C5C5F /* shaders.frag in CopyFiles */ = {isa = PBXBuildFile; fileRef = 58B8F0C41E215757005C5C5F /* shaders.frag */; };
 		58C8F1AE1E4CBEA100A7851F /* GLUtilities.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 58C8F1AC1E4CBEA100A7851F /* GLUtilities.cpp */; };
 		58C8F1B11E4E100C00A7851F /* QuaternionDemo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 58C8F1AF1E4E100C00A7851F /* QuaternionDemo.cpp */; };
+		58C8F1B41E4E245B00A7851F /* quaternion_demo.vert in CopyFiles */ = {isa = PBXBuildFile; fileRef = 58C8F1B21E4E1E5000A7851F /* quaternion_demo.vert */; };
+		58C8F1B51E4E245B00A7851F /* quaternion_demo.frag in CopyFiles */ = {isa = PBXBuildFile; fileRef = 58C8F1B31E4E1E6600A7851F /* quaternion_demo.frag */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -56,6 +58,8 @@
 			dstPath = "";
 			dstSubfolderSpec = 16;
 			files = (
+				58C8F1B41E4E245B00A7851F /* quaternion_demo.vert in CopyFiles */,
+				58C8F1B51E4E245B00A7851F /* quaternion_demo.frag in CopyFiles */,
 				582FB5C61E36A13600C031C6 /* camera_perspective_demo.vert in CopyFiles */,
 				582FB5C71E36A13600C031C6 /* camera_perspective_demo.frag in CopyFiles */,
 				582FB5C01E36574400C031C6 /* structure.obj in CopyFiles */,
@@ -128,6 +132,8 @@
 		58C8F1AD1E4CBEA100A7851F /* GLUtilities.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GLUtilities.hpp; sourceTree = "<group>"; };
 		58C8F1AF1E4E100C00A7851F /* QuaternionDemo.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = QuaternionDemo.cpp; sourceTree = "<group>"; };
 		58C8F1B01E4E100C00A7851F /* QuaternionDemo.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = QuaternionDemo.hpp; sourceTree = "<group>"; };
+		58C8F1B21E4E1E5000A7851F /* quaternion_demo.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = quaternion_demo.vert; sourceTree = "<group>"; };
+		58C8F1B31E4E1E6600A7851F /* quaternion_demo.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = quaternion_demo.frag; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -238,6 +244,8 @@
 				5862C8CC1E32391300D0ADEF /* cube_transform_demo.frag */,
 				582FB5C41E36A11A00C031C6 /* camera_perspective_demo.vert */,
 				582FB5C51E36A12D00C031C6 /* camera_perspective_demo.frag */,
+				58C8F1B21E4E1E5000A7851F /* quaternion_demo.vert */,
+				58C8F1B31E4E1E6600A7851F /* quaternion_demo.frag */,
 			);
 			name = shaders;
 			sourceTree = "<group>";

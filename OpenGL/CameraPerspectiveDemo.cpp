@@ -133,47 +133,7 @@ void CameraPerspectiveDemo::updateCameraFromMouse(void) {
  */
 void CameraPerspectiveDemo::prepareMeshes(void) {
     for(auto &mesh: meshes) {
-        /**
-         *  Grab the points and colours.
-         */
-        vector<GLfloat> points = mesh.pointsUnwound();
-        vector<GLfloat> colours = mesh.coloursUnwound();
-        
-        /**
-         *  Tee uo the VBOs.
-         */
-        GLuint points_vbo;
-        glGenBuffers(1, &points_vbo);
-        glBindBuffer(GL_ARRAY_BUFFER, points_vbo);
-        glBufferData(GL_ARRAY_BUFFER, points.size() * sizeof(GLfloat), &points[0], GL_STATIC_DRAW);
-        
-        GLuint colours_vbo;
-        glGenBuffers(1, &colours_vbo);
-        glBindBuffer(GL_ARRAY_BUFFER, colours_vbo);
-        glBufferData(GL_ARRAY_BUFFER, colours.size() * sizeof(GLfloat), &colours[0], GL_STATIC_DRAW);
-        
-        /**
-         *  Tee up the VAO.
-         */
-        GLuint vao;
-        glGenVertexArrays(1, &vao);
-        glBindVertexArray(vao);
-        
-        /**
-         *  The set up the vertex attrib pointers.
-         */
-        glBindBuffer(GL_ARRAY_BUFFER, points_vbo);
-        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, NULL);
-        glBindBuffer(GL_ARRAY_BUFFER, colours_vbo);
-        glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, NULL);
-        
-        glEnableVertexAttribArray(0);
-        glEnableVertexAttribArray(1);
-        
-        /**
-         *  Then assign the mesh a reference to its VAO.
-         */
-        mesh.setVao(vao);
+        mesh.prepareBuffers();
     }
 }
 
