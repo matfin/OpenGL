@@ -224,7 +224,7 @@ int runCameraPerspectiveDemo(void) {
 
 int runQuaternionDemo(void) {
     Mesh mesh;
-    mesh.generateCube(0.25f);
+    mesh.generateCube(1.0f);
     QuaternionDemo::addMesh(mesh, {0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f});
     return QuaternionDemo::run();
     return 0;

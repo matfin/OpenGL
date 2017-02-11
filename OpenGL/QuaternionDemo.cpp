@@ -45,7 +45,8 @@ void QuaternionDemo::drawLoop(void) {
     
     if(GL_TRUE == GLUtilities::programReady(program)) {
         for(auto &mesh: meshes) {
-            mesh.applyMatrices(program);
+//            mesh.applyMatrices(program);
+            mesh.applyIdentityMatrix(program);
             glBindVertexArray(mesh.getVao());
             glDrawArrays(drawing_method, 0, mesh.pointsSize());
         }
@@ -56,6 +57,7 @@ void QuaternionDemo::drawLoop(void) {
 }
 
 void QuaternionDemo::addMesh(Mesh mesh, const Position position, const Rotation rotation) {
+    
     mesh.getMatrices()->rotateTo(ROTATE_X, rotation.rx);
     mesh.getMatrices()->rotateTo(ROTATE_Y, rotation.ry);
     mesh.getMatrices()->rotateTo(ROTATE_Z, rotation.rz);
