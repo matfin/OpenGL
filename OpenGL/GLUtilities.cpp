@@ -7,6 +7,7 @@
 //
 
 #include <iostream>
+#include <cmath>
 #include "GLUtilities.hpp"
 #include "GLParams.hpp"
 
@@ -101,4 +102,50 @@ GLint GLUtilities::programReady(const GLuint program) {
     GLint status;
     glGetProgramiv(program, GL_LINK_STATUS, &status);
     return status;
+}
+
+/**
+ *  Apply a projection matrix to a program
+ */
+void GLUtilities::applyProjectionMatrix(const int gl_viewport_w, const int gl_viewport_h, const float fov, const GLuint program, const char *uniform_location_name) {
+    /**
+     *  This sets up the Projection Matrix.
+     *
+     *  These are part of the mathematical formula
+     *  needed to calculate the correct projection
+     *  to make the scene look more realistic.
+     *
+     *  This sets up the camera frustrum, the part of
+     *  the scene that the camera covers and is therefore
+     *  visible.
+     */
+    float near = 0.1f;
+    float far = 100.0f;
+    float aspect = (float)gl_viewport_w / (float)gl_viewport_h;
+    float range = tan(fov * 0.5f) * near;
+    
+    float Sx = (2.0f * near) / ((range * aspect) + (range * aspect));
+    float Sy = near / range;
+    float Sz = -(far + near) / (far - near);
+    float Pz = -(2.0f * far * near) / (far - near);
+    
+    /**
+     *  With the above calculations completed, we can then put
+     *  this projection matrix together.
+     */
+    Matrix<float> projection_matrix({
+        Row<float>({Sx, 0.0f, 0.0f, 0.0f}),
+        Row<float>({0.0f, Sy, 0.0f, 0.0f}),
+        Row<float>({0.0f, 0.0f, Sz, -1.0f}),
+        Row<float>({0.0f, 0.0f, Pz, 0.0f})
+    });
+    
+    /**
+     *  We then unwind them from a Matrix to a vector of float values which
+     *  we can then send through to the program, targeting the variable
+     *  in the compiled shader program "projection" and sending the values through.
+     */
+    vector<float> projection_matrix_unwound = projection_matrix.unwind();
+    GLuint projection_loc = glGetUniformLocation(program, uniform_location_name);
+    glUniformMatrix4fv(projection_loc, 1, GL_FALSE, &projection_matrix_unwound[0]);
 }

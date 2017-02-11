@@ -238,8 +238,8 @@ int main(int argc, const char * argv[]) {
 //    int run = runCubeTransformDemo();
 //    int matrix_run = matrixOperations();
 //    int mo_run = distanceCalculatorDemo();
-//    int run = runCameraPerspectiveDemo();
-    int run = runQuaternionDemo();
+    int run = runCameraPerspectiveDemo();
+//    int run = runQuaternionDemo();
     
     return 0;
 }

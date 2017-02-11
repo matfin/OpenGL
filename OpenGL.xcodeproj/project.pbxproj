@@ -40,6 +40,7 @@
 		58C8F1B11E4E100C00A7851F /* QuaternionDemo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 58C8F1AF1E4E100C00A7851F /* QuaternionDemo.cpp */; };
 		58C8F1B41E4E245B00A7851F /* quaternion_demo.vert in CopyFiles */ = {isa = PBXBuildFile; fileRef = 58C8F1B21E4E1E5000A7851F /* quaternion_demo.vert */; };
 		58C8F1B51E4E245B00A7851F /* quaternion_demo.frag in CopyFiles */ = {isa = PBXBuildFile; fileRef = 58C8F1B31E4E1E6600A7851F /* quaternion_demo.frag */; };
+		58C8F1B81E4F242B00A7851F /* Quaternion.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 58C8F1B61E4F242B00A7851F /* Quaternion.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -134,6 +135,8 @@
 		58C8F1B01E4E100C00A7851F /* QuaternionDemo.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = QuaternionDemo.hpp; sourceTree = "<group>"; };
 		58C8F1B21E4E1E5000A7851F /* quaternion_demo.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = quaternion_demo.vert; sourceTree = "<group>"; };
 		58C8F1B31E4E1E6600A7851F /* quaternion_demo.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = quaternion_demo.frag; sourceTree = "<group>"; };
+		58C8F1B61E4F242B00A7851F /* Quaternion.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Quaternion.cpp; sourceTree = "<group>"; };
+		58C8F1B71E4F242B00A7851F /* Quaternion.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Quaternion.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -216,6 +219,8 @@
 				58C8F1AD1E4CBEA100A7851F /* GLUtilities.hpp */,
 				58C8F1AF1E4E100C00A7851F /* QuaternionDemo.cpp */,
 				58C8F1B01E4E100C00A7851F /* QuaternionDemo.hpp */,
+				58C8F1B61E4F242B00A7851F /* Quaternion.cpp */,
+				58C8F1B71E4F242B00A7851F /* Quaternion.hpp */,
 			);
 			path = OpenGL;
 			sourceTree = "<group>";
@@ -308,6 +313,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				58C8F1B81E4F242B00A7851F /* Quaternion.cpp in Sources */,
 				58B8F0A11E1CE92B005C5C5F /* Shapes.cpp in Sources */,
 				5869ACBD1E29033A00182916 /* CubeTransformDemo.cpp in Sources */,
 				58B8F0BC1E1FA61F005C5C5F /* Logger.cpp in Sources */,

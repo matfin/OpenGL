@@ -12,6 +12,7 @@
 #include <OpenGL/gl3.h>
 #include <GLFW/glfw3.h>
 #include <string>
+#include "Matrix.hpp"
 
 class GLUtilities {
 public:
@@ -19,6 +20,7 @@ public:
     static GLuint compileShader(const std::string shader_src_str, GLenum type);
     static GLuint linkShaders(const GLuint vertex_shader, const GLuint fragment_shader);
     static GLint programReady(const GLuint program);
+    static void applyProjectionMatrix(const int gl_viewport_w, const int gl_viewport_h, const float fov, const GLuint program, const char *uniform_location_name);
 };
 
 #endif /* GLUtilities_hpp */
