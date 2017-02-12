@@ -12,8 +12,18 @@
 #include "GLUtilities.hpp"
 #include "GLParams.hpp"
 #include "ShaderLoader.hpp"
+#include "Quaternion.hpp"
+
+#define gl_viewport_w 1280
+#define gl_viewport_h 960
 
 using namespace std;
+
+QuaternionDemo::QuaternionDemo() {
+    cam_pos.px = 0.0f;
+    cam_pos.py = 0.0f;
+    cam_pos.pz = 5.0f;
+}
 
 QuaternionDemo& QuaternionDemo::getInstance() {
     static QuaternionDemo instance;
@@ -37,16 +47,38 @@ void QuaternionDemo::prepareMeshes(void) {
     }
 }
 
+void QuaternionDemo::applyQuaternion(void) {
+    
+    Matrices m;
+    m.translateTo(TRANSLATE_X, -cam_pos.px);
+    m.translateTo(TRANSLATE_Y, -cam_pos.py);
+    m.translateTo(TRANSLATE_Z, -cam_pos.pz);
+    
+    Matrix<float> quaternion_mat4 = m.getMatrixOfType(ZERO_MAT4);
+    
+    float quaternion[4];
+    Quaternion::create_versor(quaternion, -cam_yaw, 0.0f, 1.0f, 0.0f);
+    Quaternion::quat_to_mat4(quaternion_mat4, quaternion);
+    
+    Matrix<float> translation_mat4 = m.translation_matrix();
+    Matrix<float> view_mat4 = translation_mat4 * quaternion_mat4;
+    
+    vector<float> view_mat4_unwound = view_mat4.unwind();
+    
+    GLuint view_loc = glGetUniformLocation(program, "view");
+    glUniformMatrix4fv(view_loc, 1, GL_FALSE, &view_mat4_unwound[0]);
+}
+
 void QuaternionDemo::drawLoop(void) {
     
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    glViewport(0, 0, 1280, 960);
+    glViewport(0, 0, gl_viewport_w, gl_viewport_h);
     glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
     
     if(GL_TRUE == GLUtilities::programReady(program)) {
         for(auto &mesh: meshes) {
-//            mesh.applyMatrices(program);
             mesh.applyIdentityMatrix(program);
+            applyQuaternion();
             glBindVertexArray(mesh.getVao());
             glDrawArrays(drawing_method, 0, mesh.pointsSize());
         }
@@ -72,12 +104,17 @@ void QuaternionDemo::addMesh(Mesh mesh, const Position position, const Rotation 
 int QuaternionDemo::start() {
     
     try {
-        window = GLUtilities::setupWindow(1280, 960, "Quaternion Demo");
+        window = GLUtilities::setupWindow(gl_viewport_w, gl_viewport_h, "Quaternion Demo");
     }
     catch(exception &e) {
         cout << e.what();
         return -1;
     }
+    
+    /**
+     *  Prepare the mesh buffers for all meshes
+     */
+    prepareMeshes();
     
     /**
      *  Load the vertex and fragment shaders, compile them,
@@ -87,10 +124,9 @@ int QuaternionDemo::start() {
     createProgram();
     glUseProgram(program);
     
-    /**
-     *  Prepare the mesh buffers for all meshes
-     */
-    prepareMeshes();
+    if(GLUtilities::programReady(program)) {
+        GLUtilities::applyProjectionMatrix(gl_viewport_w, gl_viewport_h, fov, program, "projection");
+    }
     
     while(!glfwWindowShouldClose(window)) {
         drawLoop();

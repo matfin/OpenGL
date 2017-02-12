@@ -149,3 +149,24 @@ void GLUtilities::applyProjectionMatrix(const int gl_viewport_w, const int gl_vi
     GLuint projection_loc = glGetUniformLocation(program, uniform_location_name);
     glUniformMatrix4fv(projection_loc, 1, GL_FALSE, &projection_matrix_unwound[0]);
 }
+
+Matrix<GLfloat> GLUtilities::calculateProjectionMatrix(const int gl_viewport_w, const int gl_viewport_h, const float fov) {
+    float near = 0.1f;
+    float far = 100.0f;
+    float aspect = (float)gl_viewport_w / (float)gl_viewport_h;
+    float range = tan(fov * 0.5f) * near;
+    
+    float Sx = (2.0f * near) / ((range * aspect) + (range * aspect));
+    float Sy = near / range;
+    float Sz = -(far + near) / (far - near);
+    float Pz = -(2.0f * far * near) / (far - near);
+    
+    Matrix<float> projection_matrix({
+        Row<float>({Sx, 0.0f, 0.0f, 0.0f}),
+        Row<float>({0.0f, Sy, 0.0f, 0.0f}),
+        Row<float>({0.0f, 0.0f, Sz, -1.0f}),
+        Row<float>({0.0f, 0.0f, Pz, 0.0f})
+    });
+    
+    return projection_matrix;
+}
