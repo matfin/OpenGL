@@ -167,7 +167,6 @@ void CameraPerspectiveDemo::drawLoop() {
     if(GL_TRUE == GLUtilities::programReady(program)) {
         for(auto &mesh: meshes) {
             glBindVertexArray(mesh.getVao());
-            mesh.applyIdentityMatrix(program);
             glDrawArrays(drawing_method, 0, mesh.pointsSize());
         }
     }

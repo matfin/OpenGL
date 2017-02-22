@@ -10,5 +10,6 @@ out vec3 colour;
 
 void main() {
     colour = vertex_colour;
-    gl_Position = projection * view * identity_matrix * vec4(vertex_position, 1.0f);
+//    gl_Position = projection * view * identity_matrix * vec4(vertex_position, 1.0f);
+    gl_Position = identity_matrix * vec4(vertex_position, 1.0f);
 }
