@@ -256,9 +256,11 @@ public:
     
     Matrix<float> identity_matrix() const {
         return
-            rotation_x_matrix() *
-            rotation_y_matrix() *
-            rotation_z_matrix() *
+            (
+                rotation_x_matrix() *
+                rotation_y_matrix() *
+                rotation_z_matrix()
+            ) *
             translation_matrix() *
             scaling_matrix();
     }

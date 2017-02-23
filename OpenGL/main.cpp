@@ -225,7 +225,7 @@ int runCameraPerspectiveDemo(void) {
 int runQuaternionDemo(void) {
     Mesh mesh;
     mesh.generateCube(0.5f);
-    QuaternionDemo::addMesh(mesh, {0.0f, 0.0f, 0.0f}, {0.0f, 45.0f, 0.0f});
+    QuaternionDemo::addMesh(mesh, {0.0f, 0.0f, -1.0f}, {0.0f, 45.0f, 0.0f});
     return QuaternionDemo::run();
     return 0;
 }
@@ -238,8 +238,8 @@ int main(int argc, const char * argv[]) {
 //    int run = runCubeTransformDemo();
 //    int matrix_run = matrixOperations();
 //    int mo_run = distanceCalculatorDemo();
-    int run = runCameraPerspectiveDemo();
-//    int run = runQuaternionDemo();
+//    int run = runCameraPerspectiveDemo();
+    int run = runQuaternionDemo();
     
     return 0;
 }
