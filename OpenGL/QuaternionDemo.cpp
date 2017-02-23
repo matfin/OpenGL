@@ -77,7 +77,7 @@ void QuaternionDemo::drawLoop(void) {
     
     if(GL_TRUE == GLUtilities::programReady(program)) {
         for(auto &mesh: meshes) {
-            mesh.applyIdentityMatrix(program);
+            mesh.applyTranslationMatrix(program);
 //            applyQuaternion();
             glBindVertexArray(mesh.getVao());
             glDrawArrays(drawing_method, 0, mesh.pointsSize());

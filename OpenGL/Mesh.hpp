@@ -40,6 +40,7 @@ public:
     
     void generateCube(float size);
     void applyIdentityMatrix(GLuint program) const;
+    void applyTranslationMatrix(GLuint program) const;
     void applyMatrices(GLuint program) const;
 };
 

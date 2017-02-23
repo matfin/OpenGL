@@ -211,6 +211,9 @@ void Mesh::generateCube(float size) {
     
 }
 
+/**
+ *  This will apply all transformation matrices (rotation, translation, scaling)
+ */
 void Mesh::applyIdentityMatrix(GLuint program) const {
     GLuint identity_matrix_loc = glGetUniformLocation(program, "identity_matrix");
     
@@ -222,6 +225,24 @@ void Mesh::applyIdentityMatrix(GLuint program) const {
     }
     else {
         cout << "The identity matrix could not be applied to this mesh." << endl;
+    }
+}
+
+/**
+ *  And this will apply the translation matrix only. We will try out 
+ *  Quaternion based rotation functions.
+ */
+void Mesh::applyTranslationMatrix(GLuint program) const {
+    GLuint translation_matrix_loc = glGetUniformLocation(program, "translation_matrix");
+    
+    Matrix<GLfloat> translation_matrix = m.translation_matrix();
+    vector<GLfloat> translation_matrix_unwound = translation_matrix.unwind();
+    
+    if(GL_TRUE != translation_matrix_loc) {
+        glUniformMatrix4fv(translation_matrix_loc, 1, GL_FALSE, &translation_matrix_unwound[0]);
+    }
+    else {
+        cout << "The translation matrix could not be applied to this mesh." << endl;
     }
 }
 
