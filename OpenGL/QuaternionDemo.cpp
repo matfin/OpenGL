@@ -48,7 +48,6 @@ void QuaternionDemo::prepareMeshes(void) {
 }
 
 void QuaternionDemo::applyQuaternion(void) {
-    
     Matrices m;
     m.translateTo(TRANSLATE_X, -cam_pos.px);
     m.translateTo(TRANSLATE_Y, -cam_pos.py);
@@ -73,7 +72,6 @@ void QuaternionDemo::applyQuaternion(void) {
     else {
         cout << "The view matrix could not be applied when applying the Quaternion." << endl;
     }
-    
 }
 
 void QuaternionDemo::drawLoop(void) {
@@ -84,8 +82,8 @@ void QuaternionDemo::drawLoop(void) {
     
     if(GL_TRUE == GLUtilities::programReady(program)) {
         for(auto &mesh: meshes) {
-            applyQuaternion();
             mesh.applyIdentityMatrix(program);
+            applyQuaternion();
             glBindVertexArray(mesh.getVao());
             glDrawArrays(drawing_method, 0, mesh.pointsSize());
         }
@@ -93,6 +91,50 @@ void QuaternionDemo::drawLoop(void) {
     
     glfwPollEvents();
     glfwSwapBuffers(window);
+}
+
+void QuaternionDemo::keyActionListener(void) {
+    
+    if(!window) {
+        return;
+    }
+    
+    if(GLFW_PRESS == glfwGetKey(window, GLFW_KEY_ESCAPE)) {
+        glfwSetWindowShouldClose(window, 1);
+    }
+    
+    if(GLFW_PRESS == glfwGetKey(window, GLFW_KEY_A)) {
+        cam_yaw += 3.0f;
+    }
+    
+    if(GLFW_PRESS == glfwGetKey(window, GLFW_KEY_D)) {
+        cam_yaw -= 3.0f;
+    }
+    
+    if(GLFW_PRESS == glfwGetKey(window, GLFW_KEY_W)) {
+        cam_pos.pz -= 0.1f;
+    }
+    
+    if(GLFW_PRESS == glfwGetKey(window, GLFW_KEY_S)) {
+        cam_pos.pz += 0.1f;
+    }
+    
+    if(GLFW_PRESS == glfwGetKey(window, GLFW_KEY_UP)) {
+        cam_pos.py += 0.1f;
+    }
+    
+    if(GLFW_PRESS == glfwGetKey(window, GLFW_KEY_DOWN)) {
+        cam_pos.py -= 0.1f;
+    }
+    
+    if(GLFW_PRESS == glfwGetKey(window, GLFW_KEY_LEFT)) {
+        cam_pos.px -= 0.1f;
+    }
+    
+    if(GLFW_PRESS == glfwGetKey(window, GLFW_KEY_RIGHT)) {
+        cam_pos.px += 0.1f;
+    }
+
 }
 
 void QuaternionDemo::addMesh(Mesh mesh, const Position position, const Rotation rotation) {
@@ -137,6 +179,7 @@ int QuaternionDemo::start() {
     
     while(!glfwWindowShouldClose(window)) {
         drawLoop();
+        keyActionListener();
     }
     
     return 0;

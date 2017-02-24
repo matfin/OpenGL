@@ -215,7 +215,7 @@ int runCameraPerspectiveDemo(void) {
      */
     Mesh mesh;
     mesh.generateCube(2.0f);
-    demo->addMesh(mesh, {0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f});
+    demo->addMesh(mesh, {0.0f, 0.0f, 3.0f}, {0.0f, 0.0f, 0.0f});
     
     int run = demo->run();
     delete(demo);
@@ -226,6 +226,9 @@ int runQuaternionDemo(void) {
     Mesh mesh;
     mesh.generateCube(2.0f);
     QuaternionDemo::addMesh(mesh, {0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f});
+    QuaternionDemo::addMesh(mesh, {-3.0f, 1.0f, 0.0f}, {45.0f, 0.0f, 0.0f});
+    QuaternionDemo::addMesh(mesh, {3.0f, -1.0f, 2.0f}, {0.0f, 0.0f, 45.0f});
+    
     return QuaternionDemo::run();
     return 0;
 }

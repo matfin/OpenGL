@@ -48,6 +48,7 @@ private:
     void prepareMeshes(void);
     void applyQuaternion(void);
     void drawLoop(void);
+    void keyActionListener(void);
     int start(void);
 
 public:
