@@ -19,7 +19,7 @@ void Quaternion::create_versor(float *q, float a, float x, float y, float z) {
     q[3] = sinf(radians / 2.0f) * z;
 }
 
-void Quaternion::quat_to_mat4(Matrix<float> m, float *quaternion) {
+void Quaternion::quat_to_mat4(Matrix<float> &m, float *quaternion) {
     float w = quaternion[0];
     float x = quaternion[1];
     float y = quaternion[2];
@@ -43,7 +43,7 @@ void Quaternion::quat_to_mat4(Matrix<float> m, float *quaternion) {
     m.adjust(3, 0, 0.0f);
     m.adjust(3, 1, 0.0f);
     m.adjust(3, 2, 0.0f);
-    m.adjust(3, 3, 0.0f);
+    m.adjust(3, 3, 1.0f);
 }
 
 void Quaternion::normalise_quat(float *q) {
@@ -58,7 +58,7 @@ void Quaternion::normalise_quat(float *q) {
     }
 }
 
-void Quaternion::mult_quat_quat(float * result, float *r, float *s) {
+void Quaternion::mult_quat_quat(float *result, float *r, float *s) {
     result[0] = s[0] * r[0] - s[1] * r[1] - s[2] * r[2] - s[3] * r[3];
     result[1] = s[0] * r[1] + s[1] * r[0] - s[2] * r[3] + s[3] * r[2];
     result[2] = s[0] * r[2] + s[1] * r[3] + s[2] * r[0] - s[3] * r[1];

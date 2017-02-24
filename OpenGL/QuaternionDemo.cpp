@@ -66,7 +66,14 @@ void QuaternionDemo::applyQuaternion(void) {
     vector<float> view_mat4_unwound = view_mat4.unwind();
     
     GLuint view_loc = glGetUniformLocation(program, "view");
-    glUniformMatrix4fv(view_loc, 1, GL_FALSE, &view_mat4_unwound[0]);
+    
+    if(GL_TRUE != view_loc) {
+        glUniformMatrix4fv(view_loc, 1, GL_FALSE, &view_mat4_unwound[0]);
+    }
+    else {
+        cout << "The view matrix could not be applied when applying the Quaternion." << endl;
+    }
+    
 }
 
 void QuaternionDemo::drawLoop(void) {
@@ -77,8 +84,8 @@ void QuaternionDemo::drawLoop(void) {
     
     if(GL_TRUE == GLUtilities::programReady(program)) {
         for(auto &mesh: meshes) {
-            mesh.applyTranslationMatrix(program);
-//            applyQuaternion();
+            applyQuaternion();
+            mesh.applyIdentityMatrix(program);
             glBindVertexArray(mesh.getVao());
             glDrawArrays(drawing_method, 0, mesh.pointsSize());
         }
