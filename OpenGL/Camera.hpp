@@ -35,6 +35,11 @@ enum CameraRotation {
     ROT_RIGHT
 };
 
+enum RotationType {
+    QUATERNION,
+    EULER
+};
+
 class Camera {
 
 private:
@@ -46,6 +51,7 @@ private:
     
     GLuint program;
     Matrices m;
+    RotationType r_type = QUATERNION;
     
     float cam_pos_x = 0.0f;
     float cam_pos_y = 0.0f;
@@ -63,6 +69,7 @@ private:
     float fov = 67.0f * one_deg_in_rad;
     
     void _applyProgram(GLuint _progam);
+    void _switchRotationType(RotationType _r_type);
     void applyViewQuaternion(void);
     void applyViewEuler(void);
     
@@ -114,6 +121,10 @@ public:
     
     static void moveTo(float _x, float _y, float _z) {
         getInstance()._moveTo(_x, _y, _z);
+    }
+    
+    static void switcRotationType(RotationType _r_type) {
+        getInstance()._switchRotationType(_r_type);
     }
     
     static std::string repr(void) {

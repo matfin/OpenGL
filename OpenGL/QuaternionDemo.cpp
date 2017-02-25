@@ -69,6 +69,16 @@ void QuaternionDemo::keyActionListener(void) {
         return;
     }
     
+    if(GLFW_PRESS == glfwGetKey(window, GLFW_KEY_1)) {
+        Camera::switcRotationType(QUATERNION);
+        glfwSetWindowTitle(window, "Rotating using Quaternions");
+    }
+    
+    if(GLFW_PRESS == glfwGetKey(window, GLFW_KEY_2)) {
+        Camera::switcRotationType(EULER);
+        glfwSetWindowTitle(window, "Rotating using Eulers");
+    }
+    
     if(GLFW_PRESS == glfwGetKey(window, GLFW_KEY_ESCAPE)) {
         glfwSetWindowShouldClose(window, 1);
     }

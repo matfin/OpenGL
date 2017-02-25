@@ -33,7 +33,16 @@ void Camera::_pitch(CameraRotation rotation) {
         }
     }
     
-    applyViewQuaternion();
+    switch(r_type) {
+        case QUATERNION: {
+            applyViewQuaternion();
+            break;
+        }
+        case EULER: {
+            applyViewEuler();
+            break;
+        }
+    }
 }
 
 void Camera::_yaw(CameraRotation rotation) {
@@ -48,7 +57,16 @@ void Camera::_yaw(CameraRotation rotation) {
         }
     }
     
-    applyViewQuaternion();
+    switch(r_type) {
+        case QUATERNION: {
+            applyViewQuaternion();
+            break;
+        }
+        case EULER: {
+            applyViewEuler();
+            break;
+        }
+    }
 }
 
 void Camera::_roll(CameraRotation rotation) {
@@ -63,7 +81,16 @@ void Camera::_roll(CameraRotation rotation) {
         }
     }
     
-    applyViewQuaternion();
+    switch(r_type) {
+        case QUATERNION: {
+            applyViewQuaternion();
+            break;
+        }
+        case EULER: {
+            applyViewEuler();
+            break;
+        }
+    }
 }
 
 void Camera::_move(CameraMovement movement) {
@@ -94,7 +121,16 @@ void Camera::_move(CameraMovement movement) {
         }
     }
     
-    applyViewQuaternion();
+    switch(r_type) {
+        case QUATERNION: {
+            applyViewQuaternion();
+            break;
+        }
+        case EULER: {
+            applyViewEuler();
+            break;
+        }
+    }
 }
 
 void Camera::_pitchTo(float deg) {
@@ -133,6 +169,10 @@ string Camera::_repr() {
 void Camera::_applyProgram(GLuint _program) {
     program = _program;
     applyViewQuaternion();
+}
+
+void Camera::_switchRotationType(RotationType _r_type) {
+    r_type = _r_type;
 }
 
 void Camera::applyViewQuaternion(void) {
@@ -176,4 +216,22 @@ void Camera::applyViewQuaternion(void) {
 }
 
 void Camera::applyViewEuler(void) {
+    m.translateTo(TRANSLATE_X, -cam_pos_x);
+    m.translateTo(TRANSLATE_Y, -cam_pos_y);
+    m.translateTo(TRANSLATE_Z, -cam_pos_z);
+    
+    m.rotateTo(ROTATE_X, -cam_pitch);
+    m.rotateTo(ROTATE_Y, -cam_yaw);
+    m.rotateTo(ROTATE_Z, -cam_roll);
+    
+    Matrix<float> T = m.translation_matrix();
+    Matrix<float> Rx = m.rotation_x_matrix();
+    Matrix<float> Ry = m.rotation_y_matrix();
+    Matrix<float> Rz = m.rotation_z_matrix();
+    
+    Matrix<float> view_matrix = (Rx * Ry * Rz) * T;
+    vector<float> view_matrix_unwound = view_matrix.unwind();
+    
+    GLuint view_loc = glGetUniformLocation(program, "view");
+    glUniformMatrix4fv(view_loc, 1, GL_FALSE, &view_matrix_unwound[0]);
 }
