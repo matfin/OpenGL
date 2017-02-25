@@ -14,7 +14,7 @@
 #include <iostream>
 #include <vector>
 #include "Structs.h"
-#include "Mesh.hpp" 
+#include "Mesh.hpp"
 
 #define one_deg_in_rad (2.0 * M_PI) / 360.0f
 
@@ -31,16 +31,6 @@ private:
     GLenum drawing_method = GL_TRIANGLES;
     
     float fov = 67.0f * one_deg_in_rad;
-    
-    Position cam_pos;
-    
-    float cam_pitch = 0.0f;
-    float cam_roll = 0.0f;
-    float cam_yaw = 0.0f;
-    
-    float cam_pitch_speed = 2.0f;
-    float cam_yaw_speed = 2.0f;
-    float cam_roll_speed = 2.0f;
     
     std::vector<Mesh> meshes;
     

@@ -42,13 +42,14 @@ private:
     ~Camera() {};
     Camera(Camera const &);
     void operator=(Camera const &);
+    static Camera& getInstance();
     
     GLuint program;
     Matrices m;
     
     float cam_pos_x = 0.0f;
     float cam_pos_y = 0.0f;
-    float cam_pos_z = 0.0f;
+    float cam_pos_z = 5.0f;
     
     float cam_pitch = 0.0f;
     float cam_yaw = 0.0f;
@@ -61,6 +62,7 @@ private:
     
     float fov = 67.0f * one_deg_in_rad;
     
+    void _applyProgram(GLuint _progam);
     void applyViewQuaternion(void);
     void applyViewEuler(void);
     
@@ -77,8 +79,10 @@ private:
     std::string _repr(void);
     
 public:
-    static Camera& getInstance();
-    static Camera& getInstance(GLuint _program);
+    
+    static void applyProgram(GLuint _program) {
+        getInstance()._applyProgram(_program);
+    }
     
     static void pitch(CameraRotation rotation) {
         getInstance()._pitch(rotation);

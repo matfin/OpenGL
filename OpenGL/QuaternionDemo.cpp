@@ -13,6 +13,7 @@
 #include "GLParams.hpp"
 #include "ShaderLoader.hpp"
 #include "Quaternion.hpp"
+#include "Camera.hpp"
 
 #define gl_viewport_w 1280
 #define gl_viewport_h 960
@@ -20,9 +21,6 @@
 using namespace std;
 
 QuaternionDemo::QuaternionDemo() {
-    cam_pos.px = 0.0f;
-    cam_pos.py = 0.0f;
-    cam_pos.pz = 5.0f;
 }
 
 QuaternionDemo& QuaternionDemo::getInstance() {
@@ -47,33 +45,6 @@ void QuaternionDemo::prepareMeshes(void) {
     }
 }
 
-void QuaternionDemo::applyQuaternion(void) {
-    Matrices m;
-    m.translateTo(TRANSLATE_X, -cam_pos.px);
-    m.translateTo(TRANSLATE_Y, -cam_pos.py);
-    m.translateTo(TRANSLATE_Z, -cam_pos.pz);
-    
-    Matrix<float> quaternion_mat4 = m.getMatrixOfType(ZERO_MAT4);
-    
-    float quaternion[4];
-    Quaternion::create_versor(quaternion, -cam_yaw, 0.0f, 1.0f, 0.0f);
-    Quaternion::quat_to_mat4(quaternion_mat4, quaternion);
-    
-    Matrix<float> translation_mat4 = m.translation_matrix();
-    Matrix<float> view_mat4 = translation_mat4 * quaternion_mat4;
-    
-    vector<float> view_mat4_unwound = view_mat4.unwind();
-    
-    GLuint view_loc = glGetUniformLocation(program, "view");
-    
-    if(GL_TRUE != view_loc) {
-        glUniformMatrix4fv(view_loc, 1, GL_FALSE, &view_mat4_unwound[0]);
-    }
-    else {
-        cout << "The view matrix could not be applied when applying the Quaternion." << endl;
-    }
-}
-
 void QuaternionDemo::drawLoop(void) {
     
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -83,7 +54,6 @@ void QuaternionDemo::drawLoop(void) {
     if(GL_TRUE == GLUtilities::programReady(program)) {
         for(auto &mesh: meshes) {
             mesh.applyIdentityMatrix(program);
-            applyQuaternion();
             glBindVertexArray(mesh.getVao());
             glDrawArrays(drawing_method, 0, mesh.pointsSize());
         }
@@ -104,35 +74,27 @@ void QuaternionDemo::keyActionListener(void) {
     }
     
     if(GLFW_PRESS == glfwGetKey(window, GLFW_KEY_A)) {
-        cam_yaw += 3.0f;
     }
     
     if(GLFW_PRESS == glfwGetKey(window, GLFW_KEY_D)) {
-        cam_yaw -= 3.0f;
     }
     
     if(GLFW_PRESS == glfwGetKey(window, GLFW_KEY_W)) {
-        //cam_pos.pz -= 0.1f;
     }
     
     if(GLFW_PRESS == glfwGetKey(window, GLFW_KEY_S)) {
-        //cam_pos.pz += 0.1f;
     }
     
     if(GLFW_PRESS == glfwGetKey(window, GLFW_KEY_UP)) {
-        cam_pos.pz -= 0.1f;
     }
     
     if(GLFW_PRESS == glfwGetKey(window, GLFW_KEY_DOWN)) {
-        cam_pos.pz += 0.1f;
     }
     
     if(GLFW_PRESS == glfwGetKey(window, GLFW_KEY_LEFT)) {
-        cam_pos.px -= 0.1f;
     }
     
     if(GLFW_PRESS == glfwGetKey(window, GLFW_KEY_RIGHT)) {
-        cam_pos.px += 0.1f;
     }
 
 }
@@ -174,6 +136,18 @@ int QuaternionDemo::start() {
     glUseProgram(program);
     
     if(GLUtilities::programReady(program)) {
+        
+        /**
+         *  Once the program is ready we need to do the following:
+         *
+         *  -   apply the projection matrix to the world.
+         *  -   assign a program to the camera which will also apply the cameras
+         *      Quaternion view matrix to the world.
+         */
+        Camera::applyProgram(program);
+        Camera::moveTo(0.0f, 0.0f, 15.0f);
+        cout << Camera::repr() << endl;
+        
         GLUtilities::applyProjectionMatrix(gl_viewport_w, gl_viewport_h, fov, program, "projection");
     }
     

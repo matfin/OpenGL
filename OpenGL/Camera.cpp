@@ -21,12 +21,6 @@ Camera& Camera::getInstance() {
     return instance;
 }
 
-Camera& Camera::getInstance(GLuint _program) {
-    static Camera instance;
-    instance.program = _program;
-    return instance;
-}
-
 void Camera::_pitch(CameraRotation rotation) {
     switch(rotation) {
         case ROT_UP: {
@@ -129,11 +123,16 @@ string Camera::_repr() {
     stringstream oss;
     
     oss << "Camera program: " << program << endl;
-    oss << "Camera pitch: " << cam_pitch << ", yaw: " << yaw << ", roll: " << roll << endl;
+    oss << "Camera pitch: " << cam_pitch << ", yaw: " << cam_yaw << ", roll: " << cam_roll << endl;
     oss << "Camera position x: " << cam_pos_x << ", y: " << cam_pos_y << ", z: " << cam_pos_z << endl;
     oss << "Camera fov: " << fov << endl;
     
     return oss.str();
+}
+
+void Camera::_applyProgram(GLuint _program) {
+    program = _program;
+    applyViewQuaternion();
 }
 
 void Camera::applyViewQuaternion(void) {
