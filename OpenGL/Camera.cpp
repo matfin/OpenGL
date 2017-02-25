@@ -69,27 +69,27 @@ void Camera::_roll(CameraRotation rotation) {
 void Camera::_move(CameraMovement movement) {
     switch(movement) {
         case MOVE_FORWARD: {
-            cam_pos_x += cam_move_speed;
+            cam_pos_z -= cam_move_speed;
             break;
         }
         case MOVE_BACKWARD: {
-            cam_pos_x -= cam_move_speed;
+            cam_pos_z += cam_move_speed;
             break;
         }
         case MOVE_LEFT: {
-            cam_pos_y += cam_move_speed;
-            break;
-        }
-        case MOVE_RIGHT: {
             cam_pos_x -= cam_move_speed;
             break;
         }
+        case MOVE_RIGHT: {
+            cam_pos_x += cam_move_speed;
+            break;
+        }
         case MOVE_UP: {
-            cam_pos_y += cam_move_speed;
+            cam_pos_y -= cam_move_speed;
             break;
         }
         case MOVE_DOWN: {
-            cam_pos_y -= cam_move_speed;
+            cam_pos_y += cam_move_speed;
             break;
         }
     }

@@ -74,29 +74,44 @@ void QuaternionDemo::keyActionListener(void) {
     }
     
     if(GLFW_PRESS == glfwGetKey(window, GLFW_KEY_A)) {
+        Camera::yaw(ROT_LEFT);
     }
     
     if(GLFW_PRESS == glfwGetKey(window, GLFW_KEY_D)) {
+        Camera::yaw(ROT_RIGHT);
     }
     
     if(GLFW_PRESS == glfwGetKey(window, GLFW_KEY_W)) {
+        Camera::pitch(ROT_UP);
     }
     
     if(GLFW_PRESS == glfwGetKey(window, GLFW_KEY_S)) {
+        Camera::pitch(ROT_DOWN);
+    }
+    
+    if(GLFW_PRESS == glfwGetKey(window, GLFW_KEY_Q)) {
+        Camera::roll(ROT_LEFT);
+    }
+    
+    if(GLFW_PRESS == glfwGetKey(window, GLFW_KEY_E)) {
+        Camera::roll(ROT_RIGHT);
     }
     
     if(GLFW_PRESS == glfwGetKey(window, GLFW_KEY_UP)) {
+        Camera::move(MOVE_FORWARD);
     }
     
     if(GLFW_PRESS == glfwGetKey(window, GLFW_KEY_DOWN)) {
+        Camera::move(MOVE_BACKWARD);
     }
     
     if(GLFW_PRESS == glfwGetKey(window, GLFW_KEY_LEFT)) {
+        Camera::move(MOVE_LEFT);
     }
     
     if(GLFW_PRESS == glfwGetKey(window, GLFW_KEY_RIGHT)) {
+        Camera::move(MOVE_RIGHT);
     }
-
 }
 
 void QuaternionDemo::addMesh(Mesh mesh, const Position position, const Rotation rotation) {
