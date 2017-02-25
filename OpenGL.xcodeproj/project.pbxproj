@@ -22,6 +22,7 @@
 		5869ACB91E27F0B000182916 /* vertex_buffer_objects.vert in CopyFiles */ = {isa = PBXBuildFile; fileRef = 5869ACB71E27E58600182916 /* vertex_buffer_objects.vert */; };
 		5869ACBA1E27F0B000182916 /* vertex_buffer_objects.frag in CopyFiles */ = {isa = PBXBuildFile; fileRef = 5869ACB81E27E59D00182916 /* vertex_buffer_objects.frag */; };
 		5869ACBD1E29033A00182916 /* CubeTransformDemo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5869ACBB1E29033A00182916 /* CubeTransformDemo.cpp */; };
+		587AE8381E60A4FE00881681 /* Camera.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 587AE8361E60A4FE00881681 /* Camera.cpp */; };
 		58B8F0991E1CE8D1005C5C5F /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 58B8F0981E1CE8D1005C5C5F /* main.cpp */; };
 		58B8F0A11E1CE92B005C5C5F /* Shapes.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 58B8F09F1E1CE92B005C5C5F /* Shapes.cpp */; };
 		58B8F0A41E1CED04005C5C5F /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 58B8F0A31E1CED04005C5C5F /* OpenGL.framework */; };
@@ -107,6 +108,8 @@
 		5869ACBC1E29033A00182916 /* CubeTransformDemo.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = CubeTransformDemo.hpp; sourceTree = "<group>"; };
 		5869ACD81E316EAD00182916 /* Points.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Points.hpp; sourceTree = "<group>"; };
 		58754FF41E39288F0012AAC7 /* Matrix.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Matrix.hpp; sourceTree = "<group>"; };
+		587AE8361E60A4FE00881681 /* Camera.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Camera.cpp; sourceTree = "<group>"; };
+		587AE8371E60A4FE00881681 /* Camera.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Camera.hpp; sourceTree = "<group>"; };
 		58B8F0951E1CE8D1005C5C5F /* OpenGL */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = OpenGL; sourceTree = BUILT_PRODUCTS_DIR; };
 		58B8F0981E1CE8D1005C5C5F /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		58B8F09F1E1CE92B005C5C5F /* Shapes.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Shapes.cpp; sourceTree = "<group>"; };
@@ -221,6 +224,8 @@
 				58C8F1B01E4E100C00A7851F /* QuaternionDemo.hpp */,
 				58C8F1B61E4F242B00A7851F /* Quaternion.cpp */,
 				58C8F1B71E4F242B00A7851F /* Quaternion.hpp */,
+				587AE8361E60A4FE00881681 /* Camera.cpp */,
+				587AE8371E60A4FE00881681 /* Camera.hpp */,
 			);
 			path = OpenGL;
 			sourceTree = "<group>";
@@ -317,6 +322,7 @@
 				58B8F0A11E1CE92B005C5C5F /* Shapes.cpp in Sources */,
 				5869ACBD1E29033A00182916 /* CubeTransformDemo.cpp in Sources */,
 				58B8F0BC1E1FA61F005C5C5F /* Logger.cpp in Sources */,
+				587AE8381E60A4FE00881681 /* Camera.cpp in Sources */,
 				58B8F0A71E1CEF0F005C5C5F /* Detect.cpp in Sources */,
 				582FB5CC1E378BA600C031C6 /* Mesh.cpp in Sources */,
 				583EDA4B1E42680A00B012D9 /* Input.cpp in Sources */,

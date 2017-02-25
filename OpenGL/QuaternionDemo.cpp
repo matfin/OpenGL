@@ -112,19 +112,19 @@ void QuaternionDemo::keyActionListener(void) {
     }
     
     if(GLFW_PRESS == glfwGetKey(window, GLFW_KEY_W)) {
-        cam_pos.pz -= 0.1f;
+        //cam_pos.pz -= 0.1f;
     }
     
     if(GLFW_PRESS == glfwGetKey(window, GLFW_KEY_S)) {
-        cam_pos.pz += 0.1f;
+        //cam_pos.pz += 0.1f;
     }
     
     if(GLFW_PRESS == glfwGetKey(window, GLFW_KEY_UP)) {
-        cam_pos.py += 0.1f;
+        cam_pos.pz -= 0.1f;
     }
     
     if(GLFW_PRESS == glfwGetKey(window, GLFW_KEY_DOWN)) {
-        cam_pos.py -= 0.1f;
+        cam_pos.pz += 0.1f;
     }
     
     if(GLFW_PRESS == glfwGetKey(window, GLFW_KEY_LEFT)) {
