@@ -9,6 +9,7 @@
 #ifndef Mesh_hpp
 #define Mesh_hpp
 
+#include <OpenGL/gl3.h>
 #include <GLFW/glfw3.h>
 #include <vector>
 #include <iostream>
@@ -28,18 +29,19 @@ public:
     Mesh(std::vector<Point> _points, std::vector<Colour> _colours);
     ~Mesh();
     
+    void prepareBuffers();
     GLuint getVao() const;
     int pointsSize() const;
     int coloursSize() const;
     Matrices* getMatrices() const;
     
-    std::vector<GLfloat> pointsUnwound();
-    std::vector<GLfloat> coloursUnwound();
+    std::vector<GLfloat> pointsUnwound() const;
+    std::vector<GLfloat> coloursUnwound() const;
     
     void generateCube(float size);
     void applyIdentityMatrix(GLuint program) const;
+    void applyTranslationMatrix(GLuint program) const;
     void applyMatrices(GLuint program) const;
-    void setVao(GLuint _vao);
 };
 
 #endif /* Mesh_hpp */

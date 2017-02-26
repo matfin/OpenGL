@@ -133,47 +133,7 @@ void CameraPerspectiveDemo::updateCameraFromMouse(void) {
  */
 void CameraPerspectiveDemo::prepareMeshes(void) {
     for(auto &mesh: meshes) {
-        /**
-         *  Grab the points and colours.
-         */
-        vector<GLfloat> points = mesh.pointsUnwound();
-        vector<GLfloat> colours = mesh.coloursUnwound();
-        
-        /**
-         *  Tee uo the VBOs.
-         */
-        GLuint points_vbo;
-        glGenBuffers(1, &points_vbo);
-        glBindBuffer(GL_ARRAY_BUFFER, points_vbo);
-        glBufferData(GL_ARRAY_BUFFER, points.size() * sizeof(GLfloat), &points[0], GL_STATIC_DRAW);
-        
-        GLuint colours_vbo;
-        glGenBuffers(1, &colours_vbo);
-        glBindBuffer(GL_ARRAY_BUFFER, colours_vbo);
-        glBufferData(GL_ARRAY_BUFFER, colours.size() * sizeof(GLfloat), &colours[0], GL_STATIC_DRAW);
-        
-        /**
-         *  Tee up the VAO.
-         */
-        GLuint vao;
-        glGenVertexArrays(1, &vao);
-        glBindVertexArray(vao);
-        
-        /**
-         *  The set up the vertex attrib pointers.
-         */
-        glBindBuffer(GL_ARRAY_BUFFER, points_vbo);
-        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, NULL);
-        glBindBuffer(GL_ARRAY_BUFFER, colours_vbo);
-        glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, NULL);
-        
-        glEnableVertexAttribArray(0);
-        glEnableVertexAttribArray(1);
-        
-        /**
-         *  Then assign the mesh a reference to its VAO.
-         */
-        mesh.setVao(vao);
+        mesh.prepareBuffers();
     }
 }
 
@@ -207,7 +167,6 @@ void CameraPerspectiveDemo::drawLoop() {
     if(GL_TRUE == GLUtilities::programReady(program)) {
         for(auto &mesh: meshes) {
             glBindVertexArray(mesh.getVao());
-            mesh.applyIdentityMatrix(program);
             glDrawArrays(drawing_method, 0, mesh.pointsSize());
         }
     }
@@ -310,49 +269,6 @@ void CameraPerspectiveDemo::keyStrobe(int key, int scancode, int action, int mod
 
 void CameraPerspectiveDemo::keyUp(int key, int scancode, int action, int mods) {
     camera_updating = false;
-}
-
-void CameraPerspectiveDemo::applyProjectionMatrix() const {
-    /**
-     *  This sets up the Projection Matrix.
-     *
-     *  These are part of the mathematical formula
-     *  needed to calculate the correct projection
-     *  to make the scene look more realistic.
-     *
-     *  This sets up the camera frustrum, the part of
-     *  the scene that the camera covers and is therefore
-     *  visible.
-     */
-    float near = 0.1f;
-    float far = 100.0f;
-    float aspect = (float)gl_viewport_w / (float)gl_viewport_h;
-    float range = tan(fov * 0.5f) * near;
-    
-    float Sx = (2.0f * near) / ((range * aspect) + (range * aspect));
-    float Sy = near / range;
-    float Sz = -(far + near) / (far - near);
-    float Pz = -(2.0f * far * near) / (far - near);
-    
-    /**
-     *  With the above calculations completed, we can then put
-     *  this projection matrix together.
-     */
-    Matrix<float> projection_matrix({
-        Row<float>({Sx, 0.0f, 0.0f, 0.0f}),
-        Row<float>({0.0f, Sy, 0.0f, 0.0f}),
-        Row<float>({0.0f, 0.0f, Sz, -1.0f}),
-        Row<float>({0.0f, 0.0f, Pz, 0.0f})
-    });
-    
-    /**
-     *  We then unwind them from a Matrix to a vector of float values which
-     *  we can then send through to the program, targeting the variable
-     *  in the compiled shader program "projection" and sending the values through.
-     */
-    vector<float> projection_matrix_unwound = projection_matrix.unwind();
-    GLuint projection_loc = glGetUniformLocation(program, "projection");
-    glUniformMatrix4fv(projection_loc, 1, GL_FALSE, &projection_matrix_unwound[0]);
 }
 
 void CameraPerspectiveDemo::applyViewMatrix() const {
@@ -490,7 +406,7 @@ int CameraPerspectiveDemo::run(void) {
      *  should only need to do once.
      */
     if(GLUtilities::programReady(program)) {
-        applyProjectionMatrix();
+        GLUtilities::applyProjectionMatrix(gl_viewport_w, gl_viewport_h, fov, program, "projection");
         applyViewMatrix();
     }
     

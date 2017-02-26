@@ -51,7 +51,6 @@ private:
     void prepareMeshes(void);    
     void drawLoop();
     void applyViewMatrix() const;
-    void applyProjectionMatrix() const;
     
     void mouseDown(int button, int action, int mods);
     void mouseUp(int button, int action, int mods);
