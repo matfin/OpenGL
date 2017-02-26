@@ -31,8 +31,12 @@ enum MatrixType {
     ROTATION_Z,
     TRANSLATION,
     SCALING,
+    ZERO_MAT3,
+    ZERO_MAT4,
     IDENTITY_MAT3,
-    IDENTITY_MAT4
+    IDENTITY_MAT4,
+    PRESET_MAT3,
+    PRESET_MAT4
 };
 
 enum AdjustmentType {
@@ -79,11 +83,20 @@ public:
             case SCALING: {
                 return scaling_matrix();
             }
+            case ZERO_MAT3: {
+                return zero_mat3();
+            }
             case IDENTITY_MAT3: {
                 return identity_mat3();
             }
+            case ZERO_MAT4: {
+                return zero_mat4();
+            }
             case IDENTITY_MAT4: {
                 return identity_mat4();
+            }
+            default: {
+                return Matrix<float>{};
             }
         }
     }
@@ -173,11 +186,40 @@ public:
         });
     }
     
+    Matrix<float> zero_mat3() const {
+        return Matrix<float>({
+            Row<float>({0.0f, 0.0f, 0.0f}),
+            Row<float>({0.0f, 0.0f, 0.0f}),
+            Row<float>({0.0f, 0.0f, 0.0f})
+        });
+    }
+    
     Matrix<float> identity_mat3() const {
         return Matrix<float>({
             Row<float>({1.0f, 0.0f, 0.0f}),
             Row<float>({0.0f, 1.0f, 0.0f}),
-            Row<float>({0.0f, 0.0f, 1.0f}),
+            Row<float>({0.0f, 0.0f, 1.0f})
+        });
+    }
+    
+    Matrix<float> preset_mat3(
+        float a, float b, float c,
+        float d, float e, float f,
+        float g, float h, float i
+    ) const {
+        return Matrix<float>({
+            Row<float>({a, b, c}),
+            Row<float>({d, e, f}),
+            Row<float>({g, h, i})
+        });
+    }
+    
+    Matrix<float> zero_mat4() const {
+        return Matrix<float>({
+            Row<float>({0.0f, 0.0f, 0.0f, 0.0f}),
+            Row<float>({0.0f, 0.0f, 0.0f, 0.0f}),
+            Row<float>({0.0f, 0.0f, 0.0f, 0.0f}),
+            Row<float>({0.0f, 0.0f, 0.0f, 0.0f})
         });
     }
     
@@ -198,11 +240,27 @@ public:
         });
     }
     
+    Matrix<float> preset_mat4(
+        float a, float b, float c, float d,
+        float e, float f, float g, float h,
+        float i, float j, float k, float l,
+        float m, float n, float o, float p
+    ) const {
+        return Matrix<float>({
+            Row<float>({a, b, c, d}),
+            Row<float>({e, f, g, h}),
+            Row<float>({i, j, k, l}),
+            Row<float>({m, n, o, p})
+        });
+    }
+    
     Matrix<float> identity_matrix() const {
         return
-            rotation_x_matrix() *
-            rotation_y_matrix() *
-            rotation_z_matrix() *
+            (
+                rotation_x_matrix() *
+                rotation_y_matrix() *
+                rotation_z_matrix()
+            ) *
             translation_matrix() *
             scaling_matrix();
     }

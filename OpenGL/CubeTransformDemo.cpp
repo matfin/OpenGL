@@ -35,13 +35,13 @@ CubeTransformDemo::CubeTransformDemo(vector<GLfloat> _vertex_floats, vector<GLfl
          *  - loadig the fragment shader and compiling it.
          *  - compiling and linking them to form a program.
          */
-        string vertex_shader_str = shader_loader.load("cube_transform_demo.vert");
-        string fragment_shader_str = shader_loader.load("cube_transform_demo.frag");
+        string vertex_shader_str = ShaderLoader::load("cube_transform_demo.vert");
+        string fragment_shader_str = ShaderLoader::load("cube_transform_demo.frag");
         
         GLuint vertex_shader = compileShader(vertex_shader_str, GL_VERTEX_SHADER);
         GLuint fragment_shader = compileShader(fragment_shader_str, GL_FRAGMENT_SHADER);
         program = linkShaders(vertex_shader, fragment_shader);
-        gl_params.print_program_info_log(program);
+        GLParams::print_program_info_log(program);
         
         /**
          *  Finally, we need to set the current adjustment 
@@ -157,7 +157,7 @@ GLuint CubeTransformDemo::compileShader(string shader_src_str, GLenum shader_typ
     glGetShaderiv(shader, GL_COMPILE_STATUS, &p);
     if(GL_TRUE != p){
         cout << "Failed to compile shader with reference: " << shader << endl;
-        gl_params.print_shader_log(shader);
+        GLParams::print_shader_log(shader);
         return false;
     }
     
@@ -187,7 +187,7 @@ GLuint CubeTransformDemo::linkShaders(const GLuint vertex_shader, const GLuint f
     glGetProgramiv(program, GL_LINK_STATUS, &p);
     if(GL_TRUE != p) {
         cout << "Failed to link the shaders with reference: " << program << endl;
-        gl_params.print_program_info_log(program);
+        GLParams::print_program_info_log(program);
         return false;
     }
     

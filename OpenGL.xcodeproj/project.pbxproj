@@ -22,6 +22,7 @@
 		5869ACB91E27F0B000182916 /* vertex_buffer_objects.vert in CopyFiles */ = {isa = PBXBuildFile; fileRef = 5869ACB71E27E58600182916 /* vertex_buffer_objects.vert */; };
 		5869ACBA1E27F0B000182916 /* vertex_buffer_objects.frag in CopyFiles */ = {isa = PBXBuildFile; fileRef = 5869ACB81E27E59D00182916 /* vertex_buffer_objects.frag */; };
 		5869ACBD1E29033A00182916 /* CubeTransformDemo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5869ACBB1E29033A00182916 /* CubeTransformDemo.cpp */; };
+		587AE8381E60A4FE00881681 /* Camera.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 587AE8361E60A4FE00881681 /* Camera.cpp */; };
 		58B8F0991E1CE8D1005C5C5F /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 58B8F0981E1CE8D1005C5C5F /* main.cpp */; };
 		58B8F0A11E1CE92B005C5C5F /* Shapes.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 58B8F09F1E1CE92B005C5C5F /* Shapes.cpp */; };
 		58B8F0A41E1CED04005C5C5F /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 58B8F0A31E1CED04005C5C5F /* OpenGL.framework */; };
@@ -36,6 +37,11 @@
 		58B8F0C21E212D6A005C5C5F /* Shaders.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 58B8F0C01E212D6A005C5C5F /* Shaders.cpp */; };
 		58B8F0C51E23A6F2005C5C5F /* shaders.vert in CopyFiles */ = {isa = PBXBuildFile; fileRef = 58B8F0C31E21570C005C5C5F /* shaders.vert */; };
 		58B8F0C61E23A6F2005C5C5F /* shaders.frag in CopyFiles */ = {isa = PBXBuildFile; fileRef = 58B8F0C41E215757005C5C5F /* shaders.frag */; };
+		58C8F1AE1E4CBEA100A7851F /* GLUtilities.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 58C8F1AC1E4CBEA100A7851F /* GLUtilities.cpp */; };
+		58C8F1B11E4E100C00A7851F /* QuaternionDemo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 58C8F1AF1E4E100C00A7851F /* QuaternionDemo.cpp */; };
+		58C8F1B41E4E245B00A7851F /* quaternion_demo.vert in CopyFiles */ = {isa = PBXBuildFile; fileRef = 58C8F1B21E4E1E5000A7851F /* quaternion_demo.vert */; };
+		58C8F1B51E4E245B00A7851F /* quaternion_demo.frag in CopyFiles */ = {isa = PBXBuildFile; fileRef = 58C8F1B31E4E1E6600A7851F /* quaternion_demo.frag */; };
+		58C8F1B81E4F242B00A7851F /* Quaternion.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 58C8F1B61E4F242B00A7851F /* Quaternion.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -54,6 +60,8 @@
 			dstPath = "";
 			dstSubfolderSpec = 16;
 			files = (
+				58C8F1B41E4E245B00A7851F /* quaternion_demo.vert in CopyFiles */,
+				58C8F1B51E4E245B00A7851F /* quaternion_demo.frag in CopyFiles */,
 				582FB5C61E36A13600C031C6 /* camera_perspective_demo.vert in CopyFiles */,
 				582FB5C71E36A13600C031C6 /* camera_perspective_demo.frag in CopyFiles */,
 				582FB5C01E36574400C031C6 /* structure.obj in CopyFiles */,
@@ -100,6 +108,8 @@
 		5869ACBC1E29033A00182916 /* CubeTransformDemo.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = CubeTransformDemo.hpp; sourceTree = "<group>"; };
 		5869ACD81E316EAD00182916 /* Points.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Points.hpp; sourceTree = "<group>"; };
 		58754FF41E39288F0012AAC7 /* Matrix.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Matrix.hpp; sourceTree = "<group>"; };
+		587AE8361E60A4FE00881681 /* Camera.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Camera.cpp; sourceTree = "<group>"; };
+		587AE8371E60A4FE00881681 /* Camera.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Camera.hpp; sourceTree = "<group>"; };
 		58B8F0951E1CE8D1005C5C5F /* OpenGL */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = OpenGL; sourceTree = BUILT_PRODUCTS_DIR; };
 		58B8F0981E1CE8D1005C5C5F /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		58B8F09F1E1CE92B005C5C5F /* Shapes.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Shapes.cpp; sourceTree = "<group>"; };
@@ -122,6 +132,14 @@
 		58B8F0C11E212D6A005C5C5F /* Shaders.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Shaders.hpp; sourceTree = "<group>"; };
 		58B8F0C31E21570C005C5C5F /* shaders.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = shaders.vert; sourceTree = "<group>"; };
 		58B8F0C41E215757005C5C5F /* shaders.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = shaders.frag; sourceTree = "<group>"; };
+		58C8F1AC1E4CBEA100A7851F /* GLUtilities.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLUtilities.cpp; sourceTree = "<group>"; };
+		58C8F1AD1E4CBEA100A7851F /* GLUtilities.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GLUtilities.hpp; sourceTree = "<group>"; };
+		58C8F1AF1E4E100C00A7851F /* QuaternionDemo.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = QuaternionDemo.cpp; sourceTree = "<group>"; };
+		58C8F1B01E4E100C00A7851F /* QuaternionDemo.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = QuaternionDemo.hpp; sourceTree = "<group>"; };
+		58C8F1B21E4E1E5000A7851F /* quaternion_demo.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = quaternion_demo.vert; sourceTree = "<group>"; };
+		58C8F1B31E4E1E6600A7851F /* quaternion_demo.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = quaternion_demo.frag; sourceTree = "<group>"; };
+		58C8F1B61E4F242B00A7851F /* Quaternion.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Quaternion.cpp; sourceTree = "<group>"; };
+		58C8F1B71E4F242B00A7851F /* Quaternion.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Quaternion.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -200,6 +218,14 @@
 				58754FF41E39288F0012AAC7 /* Matrix.hpp */,
 				583EDA491E42680A00B012D9 /* Input.cpp */,
 				583EDA4A1E42680A00B012D9 /* Input.hpp */,
+				58C8F1AC1E4CBEA100A7851F /* GLUtilities.cpp */,
+				58C8F1AD1E4CBEA100A7851F /* GLUtilities.hpp */,
+				58C8F1AF1E4E100C00A7851F /* QuaternionDemo.cpp */,
+				58C8F1B01E4E100C00A7851F /* QuaternionDemo.hpp */,
+				58C8F1B61E4F242B00A7851F /* Quaternion.cpp */,
+				58C8F1B71E4F242B00A7851F /* Quaternion.hpp */,
+				587AE8361E60A4FE00881681 /* Camera.cpp */,
+				587AE8371E60A4FE00881681 /* Camera.hpp */,
 			);
 			path = OpenGL;
 			sourceTree = "<group>";
@@ -228,6 +254,8 @@
 				5862C8CC1E32391300D0ADEF /* cube_transform_demo.frag */,
 				582FB5C41E36A11A00C031C6 /* camera_perspective_demo.vert */,
 				582FB5C51E36A12D00C031C6 /* camera_perspective_demo.frag */,
+				58C8F1B21E4E1E5000A7851F /* quaternion_demo.vert */,
+				58C8F1B31E4E1E6600A7851F /* quaternion_demo.frag */,
 			);
 			name = shaders;
 			sourceTree = "<group>";
@@ -290,9 +318,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				58C8F1B81E4F242B00A7851F /* Quaternion.cpp in Sources */,
 				58B8F0A11E1CE92B005C5C5F /* Shapes.cpp in Sources */,
 				5869ACBD1E29033A00182916 /* CubeTransformDemo.cpp in Sources */,
 				58B8F0BC1E1FA61F005C5C5F /* Logger.cpp in Sources */,
+				587AE8381E60A4FE00881681 /* Camera.cpp in Sources */,
 				58B8F0A71E1CEF0F005C5C5F /* Detect.cpp in Sources */,
 				582FB5CC1E378BA600C031C6 /* Mesh.cpp in Sources */,
 				583EDA4B1E42680A00B012D9 /* Input.cpp in Sources */,
@@ -301,8 +331,10 @@
 				58B8F0BF1E20F2A7005C5C5F /* GLParams.cpp in Sources */,
 				582FB5B51E32621600C031C6 /* Matrices.cpp in Sources */,
 				582FB5BE1E35E46100C031C6 /* ObjectLoader.cpp in Sources */,
+				58C8F1AE1E4CBEA100A7851F /* GLUtilities.cpp in Sources */,
 				5869ACB61E27C97100182916 /* VertexBufferObjects.cpp in Sources */,
 				582FB5C31E36778E00C031C6 /* CameraPerspectiveDemo.cpp in Sources */,
+				58C8F1B11E4E100C00A7851F /* QuaternionDemo.cpp in Sources */,
 				58B8F0B41E1D311C005C5C5F /* ShaderLoader.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -17,6 +17,7 @@
 #include "VertexBufferObjects.hpp"
 #include "CubeTransformDemo.hpp"
 #include "CameraPerspectiveDemo.hpp"
+#include "QuaternionDemo.hpp"
 
 using namespace std;
 
@@ -212,27 +213,33 @@ int runCameraPerspectiveDemo(void) {
      *  - The second parameter is the world position
      *  - The third parameter is the world rotation
      */
-    
-//    for(int i = 0; i < 10; i++) {
-//        
-//        Mesh mesh;
-//        mesh.generateCube(2.0f);
-//        
-//        if(i % 2 == 0) {
-//            demo->addMesh(mesh, {3.0f, 0.0f, (float)i * 2.5f}, {0.0f, 0.0f, 0.0f});
-//        }
-//        else {
-//            demo->addMesh(mesh, {-3.0f, 0.0f, (float)i * 2.5f}, {0.0f, 0.0f, 0.0f});
-//        }
-//    }
-    
     Mesh mesh;
     mesh.generateCube(2.0f);
-    demo->addMesh(mesh, {0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f});
+    demo->addMesh(mesh, {0.0f, 0.0f, 3.0f}, {0.0f, 0.0f, 0.0f});
     
     int run = demo->run();
     delete(demo);
     return run;
+}
+
+int runQuaternionDemo(void) {
+    Mesh mesh;
+    mesh.generateCube(2.0f);
+    QuaternionDemo::addMesh(mesh, {0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f});
+    QuaternionDemo::addMesh(mesh, {-3.0f, 1.0f, 0.0f}, {45.0f, 0.0f, 0.0f});
+    QuaternionDemo::addMesh(mesh, {3.0f, -1.0f, 2.0f}, {0.0f, 0.0f, 45.0f});
+
+    QuaternionDemo::addMesh(mesh, {0.0f, 4.0f, 6.0f}, {0.0f, 0.0f, 0.0f});
+    QuaternionDemo::addMesh(mesh, {-3.0f, 5.0f, 6.0f}, {45.0f, 0.0f, 0.0f});
+    QuaternionDemo::addMesh(mesh, {3.0f, 3.0f, 8.0f}, {0.0f, 0.0f, 45.0f});
+    
+    QuaternionDemo::addMesh(mesh, {0.0f, 0.0f, 6.0f}, {0.0f, 0.0f, 0.0f});
+    QuaternionDemo::addMesh(mesh, {-3.0f, 1.0f, 6.0f}, {45.0f, 0.0f, 0.0f});
+    QuaternionDemo::addMesh(mesh, {3.0f, -1.0f, 8.0f}, {0.0f, 0.0f, 45.0f});
+
+    
+    return QuaternionDemo::run();
+    return 0;
 }
 
 int main(int argc, const char * argv[]) {
@@ -243,7 +250,8 @@ int main(int argc, const char * argv[]) {
 //    int run = runCubeTransformDemo();
 //    int matrix_run = matrixOperations();
 //    int mo_run = distanceCalculatorDemo();
-    int run = runCameraPerspectiveDemo();
+//    int run = runCameraPerspectiveDemo();
+    int run = runQuaternionDemo();
     
     return 0;
 }

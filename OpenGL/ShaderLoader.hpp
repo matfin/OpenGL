@@ -15,9 +15,7 @@
 
 class ShaderLoader {
 public:
-    ShaderLoader();
-    ~ShaderLoader();
-    std::string load(const char *path) const;
+    static std::string load(const char *path);
 };
 
 #endif /* ShaderLoader_hpp */

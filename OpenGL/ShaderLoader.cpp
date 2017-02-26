@@ -10,10 +10,7 @@
 
 using namespace std;
 
-ShaderLoader::ShaderLoader(){};
-ShaderLoader::~ShaderLoader(){};
-
-string ShaderLoader::load(const char *path) const {
+string ShaderLoader::load(const char *path) {
     string content, line = "";
     ifstream fileStream(path, ios::in);
     
