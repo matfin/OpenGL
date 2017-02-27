@@ -18,6 +18,25 @@ Camera::Camera() {}
 
 Camera& Camera::getInstance() {
     static Camera instance;
+    
+    instance.fwd_mat4 = Matrix<float>({
+        Row<float>({0.0f, 0.0f, -1.0f, 0.0f})
+    });
+    
+    instance.rgt_mat4 = Matrix<float>({
+        Row<float>({1.0f, 0.0f, 0.0f, 0.0f})
+    });
+    
+    instance.up_mat4 = Matrix<float>({
+        Row<float>({0.0f, 1.0f, 0.0f, 0.0f})
+    });
+    
+    instance.quaternion_mat4 = Matrix<float>({
+        Row<float>({0.0f, 0.0f, 0.0f, 0.0f})
+    });
+    
+    instance.rotation_mat4 = instance.m.zero_mat4();
+    
     return instance;
 }
 
@@ -29,17 +48,6 @@ void Camera::_pitch(CameraRotation rotation) {
         }
         case ROT_DOWN: {
             cam_pitch -= cam_pitch_speed;
-            break;
-        }
-    }
-    
-    switch(r_type) {
-        case QUATERNION: {
-            applyViewQuaternion();
-            break;
-        }
-        case EULER: {
-            applyViewEuler();
             break;
         }
     }
@@ -56,17 +64,6 @@ void Camera::_yaw(CameraRotation rotation) {
             break;
         }
     }
-    
-    switch(r_type) {
-        case QUATERNION: {
-            applyViewQuaternion();
-            break;
-        }
-        case EULER: {
-            applyViewEuler();
-            break;
-        }
-    }
 }
 
 void Camera::_roll(CameraRotation rotation) {
@@ -77,17 +74,6 @@ void Camera::_roll(CameraRotation rotation) {
         }
         case ROT_RIGHT: {
             cam_roll -= cam_roll_speed;
-            break;
-        }
-    }
-    
-    switch(r_type) {
-        case QUATERNION: {
-            applyViewQuaternion();
-            break;
-        }
-        case EULER: {
-            applyViewEuler();
             break;
         }
     }
@@ -121,38 +107,25 @@ void Camera::_move(CameraMovement movement) {
         }
     }
     
-    switch(r_type) {
-        case QUATERNION: {
-            applyViewQuaternion();
-            break;
-        }
-        case EULER: {
-            applyViewEuler();
-            break;
-        }
-    }
+    _updateTranslation();
 }
 
 void Camera::_pitchTo(float deg) {
     cam_pitch = deg;
-    applyViewQuaternion();
 }
 
 void Camera::_yawTo(float deg) {
     cam_yaw = deg;
-    applyViewQuaternion();
 }
 
 void Camera::_rollTo(float deg) {
     cam_roll = deg;
-    applyViewQuaternion();
 }
 
 void Camera::_moveTo(float _x, float _y, float _z) {
     cam_pos_x = _x;
     cam_pos_y = _y;
     cam_pos_z = _z;
-    applyViewQuaternion();
 }
 
 string Camera::_repr() {
@@ -168,70 +141,64 @@ string Camera::_repr() {
 
 void Camera::_applyProgram(GLuint _program) {
     program = _program;
-    applyViewQuaternion();
 }
 
-void Camera::_switchRotationType(RotationType _r_type) {
-    r_type = _r_type;
-}
-
-void Camera::applyViewQuaternion(void) {
-    m.translateTo(TRANSLATE_X, -cam_pos_x);
-    m.translateTo(TRANSLATE_Y, -cam_pos_y);
-    m.translateTo(TRANSLATE_Z, -cam_pos_z);
+void Camera::_reset(void) {
     
-    Matrix<float> quat_mat4_pitch = m.getMatrixOfType(ZERO_MAT4);
-    Matrix<float> quat_mat4_yaw = m.getMatrixOfType(ZERO_MAT4);
-    Matrix<float> quat_mat4_roll = m.getMatrixOfType(ZERO_MAT4);
+    cam_pos_x = 0.0f;
+    cam_pos_y = 0.0f;
+    cam_pos_z = 15.0f;
     
-    float quaternion_pitch[4];
-    float quaternion_yaw[4];
-    float quaternion_roll[4];
+    cam_pitch = 0.0f;
+    cam_yaw = 0.0f;
+    cam_roll = 0.0f;
     
-    Quaternion::create_versor(quaternion_pitch, -cam_pitch, 1.0f, 0.0f, 0.0f);
-    Quaternion::quat_to_mat4(quat_mat4_pitch, quaternion_pitch);
+    _updateTranslation();
     
-    Quaternion::create_versor(quaternion_yaw, -cam_yaw, 0.0f, 1.0f, 0.0f);
-    Quaternion::quat_to_mat4(quat_mat4_yaw, quaternion_yaw);
-    
-    Quaternion::create_versor(quaternion_roll, -cam_roll, 0.0f, 0.0f, 1.0f);
-    Quaternion::quat_to_mat4(quat_mat4_roll, quaternion_roll);
+    Quaternion::create_versor(quaternion_mat4, -cam_yaw, 0.0f, 1.0f, 0.0f);
+    Quaternion::quat_to_mat4(rotation_mat4, quaternion_mat4);
     
     Matrix<float> translation_mat4 = m.getMatrixOfType(TRANSLATION);
-    
-    Matrix<float> view_mat4 = (
-        translation_mat4 *
-        quat_mat4_pitch *
-        quat_mat4_yaw *
-        quat_mat4_roll
-    );
-    
+    Matrix<float> view_mat4 = translation_mat4 * rotation_mat4;
     vector<float> view_mat4_unwound = view_mat4.unwind();
     
     GLuint view_loc = glGetUniformLocation(program, "view");
-    
     if(GL_TRUE != view_loc) {
         glUniformMatrix4fv(view_loc, 1, GL_FALSE, &view_mat4_unwound[0]);
     }
+    else {
+        cout << "Camera reset was unable to apply the view quaternion matrix." << endl;
+    }
 }
 
-void Camera::applyViewEuler(void) {
+void Camera::_updateTranslation(void) {
     m.translateTo(TRANSLATE_X, -cam_pos_x);
     m.translateTo(TRANSLATE_Y, -cam_pos_y);
     m.translateTo(TRANSLATE_Z, -cam_pos_z);
+}
+
+void Camera::_applyViewQuaternionOnAxis(RotationAxis axis) {
     
-    m.rotateTo(ROTATE_X, -cam_pitch);
-    m.rotateTo(ROTATE_Y, -cam_yaw);
-    m.rotateTo(ROTATE_Z, -cam_roll);
+    float q[4];
     
-    Matrix<float> T = m.translation_matrix();
-    Matrix<float> Rx = m.rotation_x_matrix();
-    Matrix<float> Ry = m.rotation_y_matrix();
-    Matrix<float> Rz = m.rotation_z_matrix();
+    switch(axis) {
+        case AXIS_X: {
+            break;
+        }
+        case AXIS_Y: {
+            break;
+        }
+        case AXIS_Z: {
+            vector<float> fwd_mat4_unwound = fwd_mat4.unwind();
+//            Quaternion::create_versor(q, cam_roll, &fwd_mat4_unwound[0], &fwd_mat4_unwound[1], &fwd_mat4_unwound[2]);
+            break;
+        }
+        case AXIS_ALL: {
+            break;
+        }
+    }
     
-    Matrix<float> view_matrix = (Rx * Ry * Rz) * T;
-    vector<float> view_matrix_unwound = view_matrix.unwind();
-    
-    GLuint view_loc = glGetUniformLocation(program, "view");
-    glUniformMatrix4fv(view_loc, 1, GL_FALSE, &view_matrix_unwound[0]);
+//    Quaternion::mult_quat_quat(quaternion, q, quaternion);
+//    Quaternion::quat_to_mat4(rotation_mat4, quaternion);
+//    fwd = rotation_mat4 * 
 }

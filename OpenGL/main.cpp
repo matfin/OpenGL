@@ -252,6 +252,4 @@ int main(int argc, const char * argv[]) {
 //    int mo_run = distanceCalculatorDemo();
 //    int run = runCameraPerspectiveDemo();
     int run = runQuaternionDemo();
-    
-    return 0;
 }

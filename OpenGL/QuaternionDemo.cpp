@@ -69,14 +69,8 @@ void QuaternionDemo::keyActionListener(void) {
         return;
     }
     
-    if(GLFW_PRESS == glfwGetKey(window, GLFW_KEY_1)) {
-        Camera::switcRotationType(QUATERNION);
-        glfwSetWindowTitle(window, "Rotating using Quaternions");
-    }
-    
-    if(GLFW_PRESS == glfwGetKey(window, GLFW_KEY_2)) {
-        Camera::switcRotationType(EULER);
-        glfwSetWindowTitle(window, "Rotating using Eulers");
+    if(GLFW_PRESS == glfwGetKey(window, GLFW_KEY_ENTER)) {
+        Camera::reset();
     }
     
     if(GLFW_PRESS == glfwGetKey(window, GLFW_KEY_ESCAPE)) {
@@ -170,7 +164,7 @@ int QuaternionDemo::start() {
          *      Quaternion view matrix to the world.
          */
         Camera::applyProgram(program);
-        Camera::moveTo(0.0f, 0.0f, 15.0f);
+        Camera::reset();
         cout << Camera::repr() << endl;
         
         GLUtilities::applyProjectionMatrix(gl_viewport_w, gl_viewport_h, fov, program, "projection");

@@ -35,9 +35,11 @@ enum CameraRotation {
     ROT_RIGHT
 };
 
-enum RotationType {
-    QUATERNION,
-    EULER
+enum RotationAxis {
+    AXIS_X,
+    AXIS_Y,
+    AXIS_Z,
+    AXIS_ALL
 };
 
 class Camera {
@@ -51,7 +53,6 @@ private:
     
     GLuint program;
     Matrices m;
-    RotationType r_type = QUATERNION;
     
     float cam_pos_x = 0.0f;
     float cam_pos_y = 0.0f;
@@ -66,12 +67,17 @@ private:
     float cam_roll_speed = 2.0f;
     float cam_move_speed = 0.1f;
     
+    Matrix<float> fwd_mat4;
+    Matrix<float> rgt_mat4;
+    Matrix<float> up_mat4;
+    Matrix<float> rotation_mat4;
+    Matrix<float> quaternion_mat4;
+    
     float fov = 67.0f * one_deg_in_rad;
     
     void _applyProgram(GLuint _progam);
-    void _switchRotationType(RotationType _r_type);
-    void applyViewQuaternion(void);
-    void applyViewEuler(void);
+    void _updateTranslation(void);
+    void _applyViewQuaternionOnAxis(RotationAxis axis);
     
     void _pitch(CameraRotation rotation);
     void _yaw(CameraRotation rotation);
@@ -82,6 +88,8 @@ private:
     void _yawTo(float deg);
     void _rollTo(float deg);
     void _moveTo(float _x, float _y, float _z);
+    
+    void _reset(void);
     
     std::string _repr(void);
     
@@ -123,8 +131,8 @@ public:
         getInstance()._moveTo(_x, _y, _z);
     }
     
-    static void switcRotationType(RotationType _r_type) {
-        getInstance()._switchRotationType(_r_type);
+    static void reset(void) {
+        getInstance()._reset();
     }
     
     static std::string repr(void) {

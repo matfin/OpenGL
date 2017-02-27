@@ -49,6 +49,7 @@ public:
     std::vector<T> unwind() const;
     void addRow(Row<T> row);
     void adjust(const int _row, const int _column, T value);
+    T getValue(int row, int index);
     
     bool operator==(const Matrix<T> &matrix) const;
     bool operator!=(const Matrix<T> &matrix) const;
@@ -103,6 +104,11 @@ void Matrix<T>::adjust(const int _row, const int _column, T value) {
     catch(std::exception &e) {
         std::cout << "Adjustment failed for row: " << _row << ", column: " << _column << std::endl;
     }
+}
+
+template<typename T>
+T Matrix<T>::getValue(int row, int index) {
+    return rows.at(row).items.at(index);
 }
 
 template<typename T>
