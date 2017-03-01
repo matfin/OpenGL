@@ -109,8 +109,6 @@ GLint GLUtilities::programReady(const GLuint program) {
  *  Apply a projection matrix to a program
  */
 void GLUtilities::applyProjectionMatrix(const int gl_viewport_w, const int gl_viewport_h, const float fov, const GLuint program, const char *uniform_location_name) {
-    
-    
     /**
      *  We need to first calculate the projection matrix.
      *  We then unwind them from a Matrix to a vector of float values which
@@ -130,8 +128,6 @@ void GLUtilities::applyProjectionMatrix(const int gl_viewport_w, const int gl_vi
 }
 
 Matrix<GLfloat> GLUtilities::calculateProjectionMatrix(const int gl_viewport_w, const int gl_viewport_h, const float fov) {
-    
-    
     /**
      *  This sets up the Projection Matrix.
      *

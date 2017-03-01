@@ -164,10 +164,11 @@ int QuaternionDemo::start() {
          *      Quaternion view matrix to the world.
          */
         Camera::applyProgram(program);
+        Camera::updateViewportSize(gl_viewport_w, gl_viewport_h);
         Camera::reset();
         cout << Camera::repr() << endl;
         
-        GLUtilities::applyProjectionMatrix(gl_viewport_w, gl_viewport_h, fov, program, "projection");
+//        GLUtilities::applyProjectionMatrix(gl_viewport_w, gl_viewport_h, fov, program, "projection");
     }
     
     while(!glfwWindowShouldClose(window)) {

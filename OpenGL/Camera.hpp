@@ -38,8 +38,7 @@ enum CameraRotation {
 enum RotationAxis {
     AXIS_X,
     AXIS_Y,
-    AXIS_Z,
-    AXIS_ALL
+    AXIS_Z
 };
 
 class Camera {
@@ -54,6 +53,10 @@ private:
     GLuint program;
     Matrices m;
     
+    int gl_viewport_h;
+    int gl_viewport_w;
+    float fov = 67.0f * one_deg_in_rad;
+    
     float cam_pos_x = 0.0f;
     float cam_pos_y = 0.0f;
     float cam_pos_z = 5.0f;
@@ -62,22 +65,25 @@ private:
     float cam_yaw = 0.0f;
     float cam_roll = 0.0f;
     
-    float cam_pitch_speed = 2.0f;
-    float cam_yaw_speed = 2.0f;
-    float cam_roll_speed = 2.0f;
+    float cam_pitch_speed = 0.1f;
+    float cam_yaw_speed = 0.1f;
+    float cam_roll_speed = 0.1f;
     float cam_move_speed = 0.1f;
+    float cam_heading = 0.0f;
     
     Matrix<float> fwd_mat4;
     Matrix<float> rgt_mat4;
     Matrix<float> up_mat4;
     Matrix<float> rotation_mat4;
     Matrix<float> quaternion_mat4;
-    
-    float fov = 67.0f * one_deg_in_rad;
+    Matrix<float> _calculateProjectionMatrix(void);
     
     void _applyProgram(GLuint _progam);
     void _updateTranslation(void);
-    void _applyViewQuaternionOnAxis(RotationAxis axis);
+    void _updateViewportSize(const int _gl_viewport_w, const int gl_viewport_h);
+    void _applyProjection(const char *uniform_location_name);
+    void _updateViewQuaternionOnAxis(RotationAxis axis);
+    void _applyView(void);
     
     void _pitch(CameraRotation rotation);
     void _yaw(CameraRotation rotation);
@@ -129,6 +135,10 @@ public:
     
     static void moveTo(float _x, float _y, float _z) {
         getInstance()._moveTo(_x, _y, _z);
+    }
+    
+    static void updateViewportSize(const int _gl_viewport_w, const int _gl_viewport_h) {
+        getInstance()._updateViewportSize(_gl_viewport_w, _gl_viewport_h);
     }
     
     static void reset(void) {
