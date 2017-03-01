@@ -28,11 +28,13 @@ enum CameraMovement {
     MOVE_DOWN
 };
 
-enum CameraRotation {
-    ROT_UP,
-    ROT_DOWN,
-    ROT_LEFT,
-    ROT_RIGHT
+enum CameraOrientation {
+    PITCH_UP,
+    PITCH_DOWN,
+    YAW_LEFT,
+    YAW_RIGHT,
+    ROLL_LEFT,
+    ROLL_RIGHT
 };
 
 enum RotationAxis {
@@ -57,45 +59,32 @@ private:
     int gl_viewport_w;
     float fov = 67.0f * one_deg_in_rad;
     
-    float cam_pos_x = 0.0f;
-    float cam_pos_y = 0.0f;
-    float cam_pos_z = 5.0f;
-    
-    float cam_pitch = 0.0f;
-    float cam_yaw = 0.0f;
-    float cam_roll = 0.0f;
-    
-    float cam_pitch_speed = 0.1f;
-    float cam_yaw_speed = 0.1f;
-    float cam_roll_speed = 0.1f;
-    float cam_move_speed = 0.1f;
+    float cam_pitch_speed = 0.4f;
+    float cam_yaw_speed = 0.4f;
+    float cam_roll_speed = 0.4f;
+    float cam_move_speed = 0.4f;
     float cam_heading = 0.0f;
     
-    Matrix<float> fwd_mat4;
-    Matrix<float> rgt_mat4;
-    Matrix<float> up_mat4;
+    Matrix<float> fwd;
+    Matrix<float> rgt;
+    Matrix<float> up;
+    
     Matrix<float> rotation_mat4;
-    Matrix<float> quaternion_mat4;
+    Matrix<float> quaternion;
+    
     Matrix<float> _calculateProjectionMatrix(void);
     
     void _applyProgram(GLuint _progam);
     void _updateTranslation(void);
     void _updateViewportSize(const int _gl_viewport_w, const int gl_viewport_h);
     void _applyProjection(const char *uniform_location_name);
-    void _updateViewQuaternionOnAxis(RotationAxis axis);
-    void _applyView(void);
     
-    void _pitch(CameraRotation rotation);
-    void _yaw(CameraRotation rotation);
-    void _roll(CameraRotation rotation);
+    void _pitch(CameraOrientation orientation);
+    void _yaw(CameraOrientation orientation);
+    void _roll(CameraOrientation orientation);
     void _move(CameraMovement movement);
     
-    void _pitchTo(float deg);
-    void _yawTo(float deg);
-    void _rollTo(float deg);
-    void _moveTo(float _x, float _y, float _z);
-    
-    void _reset(void);
+    void _create(void);
     
     std::string _repr(void);
     
@@ -105,44 +94,28 @@ public:
         getInstance()._applyProgram(_program);
     }
     
-    static void pitch(CameraRotation rotation) {
-        getInstance()._pitch(rotation);
+    static void pitch(CameraOrientation orientation) {
+        getInstance()._pitch(orientation);
     }
     
-    static void yaw(CameraRotation rotation) {
-        getInstance()._yaw(rotation);
+    static void yaw(CameraOrientation orientation) {
+        getInstance()._yaw(orientation);
     }
     
-    static void roll(CameraRotation rotation) {
-        getInstance()._roll(rotation);
+    static void roll(CameraOrientation orientation) {
+        getInstance()._roll(orientation);
     }
     
     static void move(CameraMovement movement) {
         getInstance()._move(movement);
     }
     
-    static void pitchTo(float deg) {
-        getInstance()._pitchTo(deg);
-    }
-    
-    static void yawTo(float deg) {
-        getInstance()._yawTo(deg);
-    }
-    
-    static void rollTo(float deg) {
-        getInstance()._rollTo(deg);
-    }
-    
-    static void moveTo(float _x, float _y, float _z) {
-        getInstance()._moveTo(_x, _y, _z);
-    }
-    
     static void updateViewportSize(const int _gl_viewport_w, const int _gl_viewport_h) {
         getInstance()._updateViewportSize(_gl_viewport_w, _gl_viewport_h);
     }
     
-    static void reset(void) {
-        getInstance()._reset();
+    static void create(void) {
+        getInstance()._create();
     }
     
     static std::string repr(void) {

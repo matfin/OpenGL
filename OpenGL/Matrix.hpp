@@ -16,6 +16,7 @@
 #include <algorithm>
 #include <iostream>
 #include <cassert>
+#include "VecMat.hpp"
 
 /**
  *  Interface

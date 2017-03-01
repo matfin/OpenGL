@@ -32,14 +32,11 @@ void Quaternion::normalise_quat(Matrix<float> &q) {
         int val = x / mag;
         q.adjust(0, i, val);
     }
-    
 }
 
 void Quaternion::create_versor(Matrix<float> &m, float a, float x, float y, float z) {
     
     float radians = one_deg_in_rad * a;
-    
-    cout << "Create versor a: " << a <<  ", x: " << x << ", y: " << y << ", z: " << z << endl;
     
     if(m.getRows().size() != 0) {
         m.adjust(0, 0, cosf(radians / 2.0f));
@@ -107,7 +104,7 @@ void Quaternion::mult_quat_quat(Matrix<float> &result, Matrix<float> r, Matrix<f
     result.adjust(0, 2, adj_3);
     result.adjust(0, 3, adj_4);
     
-    normalise_quat(result);
+//    normalise_quat(result);
 }
 
 

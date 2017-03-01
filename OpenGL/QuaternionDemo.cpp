@@ -70,7 +70,6 @@ void QuaternionDemo::keyActionListener(void) {
     }
     
     if(GLFW_PRESS == glfwGetKey(window, GLFW_KEY_ENTER)) {
-        Camera::reset();
     }
     
     if(GLFW_PRESS == glfwGetKey(window, GLFW_KEY_ESCAPE)) {
@@ -78,27 +77,27 @@ void QuaternionDemo::keyActionListener(void) {
     }
     
     if(GLFW_PRESS == glfwGetKey(window, GLFW_KEY_A)) {
-        Camera::yaw(ROT_LEFT);
+        Camera::yaw(YAW_LEFT);
     }
     
     if(GLFW_PRESS == glfwGetKey(window, GLFW_KEY_D)) {
-        Camera::yaw(ROT_RIGHT);
+        Camera::yaw(YAW_RIGHT);
     }
     
     if(GLFW_PRESS == glfwGetKey(window, GLFW_KEY_W)) {
-        Camera::pitch(ROT_UP);
+        Camera::pitch(PITCH_UP);
     }
     
     if(GLFW_PRESS == glfwGetKey(window, GLFW_KEY_S)) {
-        Camera::pitch(ROT_DOWN);
+        Camera::pitch(PITCH_DOWN);
     }
     
     if(GLFW_PRESS == glfwGetKey(window, GLFW_KEY_Q)) {
-        Camera::roll(ROT_LEFT);
+        Camera::roll(ROLL_LEFT);
     }
     
     if(GLFW_PRESS == glfwGetKey(window, GLFW_KEY_E)) {
-        Camera::roll(ROT_RIGHT);
+        Camera::roll(ROLL_RIGHT);
     }
     
     if(GLFW_PRESS == glfwGetKey(window, GLFW_KEY_UP)) {
@@ -165,10 +164,8 @@ int QuaternionDemo::start() {
          */
         Camera::applyProgram(program);
         Camera::updateViewportSize(gl_viewport_w, gl_viewport_h);
-        Camera::reset();
-        cout << Camera::repr() << endl;
-        
-//        GLUtilities::applyProjectionMatrix(gl_viewport_w, gl_viewport_h, fov, program, "projection");
+        Camera::create();
+        cout << Camera::repr() << endl;        
     }
     
     while(!glfwWindowShouldClose(window)) {
