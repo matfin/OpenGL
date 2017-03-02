@@ -10,8 +10,6 @@
 #include <iostream>
 #include <cmath>
 
-#define one_deg_in_rad (2.0 * M_PI) / 360.0f
-
 vec2::vec2() {}
 
 vec2::vec2(float x, float y) {
@@ -45,6 +43,64 @@ mat3 zero_mat3() {
         0.0f, 0.0f, 0.0f,
         0.0f, 0.0f, 0.0f
     );
+}
+
+mat3 identity_mat3() {
+    return mat3(
+        1.0f, 0.0f, 0.0f,
+        0.0f, 1.0f, 0.0f,
+        0.0f, 0.0f, 1.0f
+    );
+}
+
+float length2(const vec3 &v) {
+    return v.v[0] * v.v[0] +  v.v[1] * v.v[1] +  v.v[2] * v.v[2];
+}
+
+float length(const vec3 &v) {
+    return sqrt(length2(v));
+}
+
+float dot(const vec3 &a, const vec3 &b) {
+    return
+        a.v[0] * b.v[0] +
+        a.v[1] * b.v[1] +
+        a.v[2] * b.v[2];
+}
+
+vec3 cross(const vec3 &a, const vec3 &b) {
+    float x = a.v[1] * b.v[2] - a.v[2] * b.v[1];
+    float y = a.v[2] * b.v[0] - a.v[0] * b.v[2];
+    float z = a.v[0] * b.v[1] - a.v[1] * b.v[0];
+    return vec3(x, y, z);
+}
+
+float get_squared_dist(vec3 from, vec3 to) {
+    float x = (to.v[0] - from.v[0]) * (to.v[0] - from.v[0]);
+    float y = (to.v[1] - from.v[1]) * (to.v[1] - from.v[1]);
+    float z = (to.v[2] - from.v[2]) * (to.v[2] - from.v[2]);
+    return x + y + z;
+}
+
+float direction_to_heading(vec3 d) {
+    return atan2(-d.v[0], -d.v[2]) * one_deg_in_rad;
+}
+
+vec3 normalise(const vec3 &v) {
+    vec3 v_n;
+    float l = length(v);
+    if(0.0f == l) {
+        return vec3(0.0f, 0.0f, 0.0f);
+    }
+    v_n.v[0] = v.v[0] / l;
+    v_n.v[1] = v.v[1] / l;
+    v_n.v[2] = v.v[2] / l;
+    return v_n;
+}
+
+vec3 heading_to_direction(float degrees) {
+    float rad = degrees * one_deg_in_rad;
+    return vec3(-sinf(rad), 0.0f, -cosf(rad));
 }
 
 vec4::vec4() {}
@@ -406,5 +462,14 @@ mat4 inverse(const mat4 &mm) {
             mm.m[8] * mm.m[1] * mm.m[6] - mm.m[0] * mm.m[9] * mm.m[6] -
             mm.m[4] * mm.m[1] * mm.m[10] + mm.m[0] * mm.m[5] * mm.m[10]
         )
+    );
+}
+
+mat4 transpose(const mat4 &mm) {
+    return mat4(
+        mm.m[0], mm.m[4], mm.m[8], mm.m[12],
+        mm.m[1], mm.m[5], mm.m[9], mm.m[13],
+        mm.m[2], mm.m[6], mm.m[10], mm.m[14],
+        mm.m[3], mm.m[7], mm.m[11], mm.m[15]
     );
 }
