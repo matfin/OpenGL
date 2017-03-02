@@ -315,6 +315,55 @@ mat4& mat4::operator=(const mat4 &rhs) {
     return *this;
 }
 
+versor::versor() {}
+
+versor versor::operator/(float rhs) {
+    versor result;
+    result.q[0] = q[0] / rhs;
+    result.q[1] = q[1] / rhs;
+    result.q[2] = q[2] / rhs;
+    result.q[3] = q[3] / rhs;
+    return result;
+}
+
+versor versor::operator*(float rhs) {
+    versor result;
+    result.q[0] = q[0] * rhs;
+    result.q[1] = q[1] * rhs;
+    result.q[2] = q[2] * rhs;
+    result.q[3] = q[3] * rhs;
+    return result;
+}
+
+versor versor::operator*(const versor &rhs) {
+    versor result;
+    result.q[0] = rhs.q[0] * q[0] - rhs.q[1] * q[1] - rhs.q[2] * q[2] - rhs.q[3] * q[3];
+    
+    result.q[1] = rhs.q[0] * q[1] + rhs.q[1] * q[0] - rhs.q[2] * q[3] + rhs.q[3] * q[2];
+    
+    result.q[2] = rhs.q[0] * q[2] + rhs.q[1] * q[3] + rhs.q[2] * q[0] - rhs.q[3] * q[1];
+    
+    result.q[3] = rhs.q[0] * q[3] - rhs.q[1] * q[2] + rhs.q[2] * q[1] + rhs.q[3] * q[0];
+    
+    return normalise(result);
+}
+
+versor versor::operator+(const versor &rhs) {
+    return versor();
+}
+
+versor normalise(versor &q) {
+    float sum =
+        q.q[0] * q.q[0] + q.q[1] * q.q[1] +
+        q.q[2] * q.q[2] + q.q[3] * q.q[3];
+    const float thresh = 0.0001f;
+    if(fabs(1.0f) - sum < thresh) {
+        return q;
+    }
+    float mag = sqrt(sum);
+    return q / mag;
+}
+
 mat4 translate(const mat4 &m, const vec3 &v) {
     mat4 m_t = identity_mat4();
     m_t.m[12] = v.v[0];
@@ -472,4 +521,70 @@ mat4 transpose(const mat4 &mm) {
         mm.m[2], mm.m[6], mm.m[10], mm.m[14],
         mm.m[3], mm.m[7], mm.m[11], mm.m[15]
     );
+}
+
+mat4 rotate_x_deg(const mat4 &m, float deg) {
+    float rad = deg * one_deg_in_rad;
+    mat4 m_r = identity_mat4();
+    m_r.m[5] = cosf(rad);
+    m_r.m[9] = -sinf(rad);
+    m_r.m[6] = sinf(rad);
+    m_r.m[10] = cosf(rad);
+    return m_r * m;
+}
+
+mat4 rotate_y_deg(const mat4 &m, float deg) {
+    float rad = deg * one_deg_in_rad;
+    mat4 m_r = identity_mat4();
+    m_r.m[0] = cosf(rad);
+    m_r.m[8] = sinf(rad);
+    m_r.m[2] = -sinf(rad);
+    m_r.m[10] = cosf(rad);
+    return m_r * m;
+}
+
+mat4 rotate_z_deg(const mat4 &m, float deg) {
+    float rad = deg * one_deg_in_rad;
+    mat4 m_r = identity_mat4();
+    m_r.m[0] = cosf(rad);
+    m_r.m[4] = -sinf(rad);
+    m_r.m[1] = sinf(rad);
+    m_r.m[5] = cosf(rad);
+    return m_r * m;
+}
+
+mat4 scale(const mat4 &m, vec3 &v) {
+    mat4 a = identity_mat4();
+    a.m[0] = v.v[0];
+    a.m[5] = v.v[1];
+    a.m[10] = v.v[2];
+    return a * m;
+}
+
+mat4 look_at(const vec3 &cam_pos, vec3 target_pos, const vec3 &up) {
+    mat4 p = identity_mat4();
+    
+    p = translate(p, vec3(-cam_pos.v[0], -cam_pos.v[1], -cam_pos.v[2]));
+    vec3 d = target_pos - cam_pos;
+    vec3 f = normalise(d);
+    vec3 r = normalise(cross(f, up));
+    vec3 u = normalise(cross(r, f));
+    
+    mat4 ori = identity_mat4();
+    
+    ori.m[0] = r.v[0];
+    ori.m[4] = r.v[1];
+    ori.m[8] = r.v[2];
+    ori.m[1] = r.v[0];
+    ori.m[5] = u.v[1];
+    ori.m[9] = u.v[2];
+    ori.m[2] = -f.v[0];
+    ori.m[6] = -f.v[1];
+    ori.m[10] = -f.v[2];
+    
+    return ori * p;
+}
+
+versor quat_from_axis_rad(float radians, float x, float y, float z) {
+    return versor();
 }

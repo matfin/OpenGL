@@ -112,9 +112,24 @@ mat4 zero_mat4();
 mat4 identity_mat4();
 mat4 translate(const mat4 &m, const vec3 &v);
 mat4 perspective(float fovy, float aspect, float near, float far);
+mat4 look_at(const vec3 &cam_pos, vec3 target_pos, const vec3 &up);
 float determinant(const mat4 &mm);
 mat4 inverse(const mat4 &mm);
 mat4 transpose(const mat4 &mm);
+mat4 rotate_x_deg(const mat4 &m, float deg);
+mat4 rotate_y_deg(const mat4 &m, float deg);
+mat4 rotate_z_deg(const mat4 &m, float deg);
+mat4 scale(const mat4 &m, const vec3 &v);
 
+/**
+ *  Functions versors - helpful for Quaternions
+ */
+versor quat_from_axis_rad(float radians, float x, float y, float z);
+versor quat_from_axis_deg(float degress, float x, float y, float z);
+mat4 quat_to_mat4(const versor &q);
+float dot(const versor &q, const versor &r);
+versor slerp(const versor &q, const versor &r);
+versor normalise(versor &q);
+versor slerp(versor &q, versor &r, float t);
 
 #endif /* VecMat_hpp */
