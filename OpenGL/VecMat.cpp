@@ -349,7 +349,12 @@ versor versor::operator*(const versor &rhs) {
 }
 
 versor versor::operator+(const versor &rhs) {
-    return versor();
+    versor result;
+    result.q[0] = rhs.q[0] + q[0];
+    result.q[1] = rhs.q[1] + q[1];
+    result.q[2] = rhs.q[2] + q[2];
+    result.q[3] = rhs.q[3] + q[3];
+    return normalise(result);
 }
 
 versor normalise(versor &q) {
@@ -587,4 +592,76 @@ mat4 look_at(const vec3 &cam_pos, vec3 target_pos, const vec3 &up) {
 
 versor quat_from_axis_rad(float radians, float x, float y, float z) {
     return versor();
+}
+
+mat4 quat_to_mat4(const versor &q) {
+    float w = q.q[0];
+    float x = q.q[1];
+    float y = q.q[2];
+    float z = q.q[3];
+    
+    return mat4(
+        1.0f - 2.0f * y * y - 2.0f * z * z,
+        2.0f * x * y + 2.0f * w * z,
+        2.0f * x * z - 2.0f * w * y,
+        0.0f,
+                
+        2.0f * x * y - 2.0f * w * z,
+        1.0f - 2.0f * x * x - 2.0f * z * z,
+        2.0f * y * z + 2.0f * w * x,
+        0.0f,
+        
+        2.0f * x * z + 2.0f * w * y,
+        2.0f * y * z - 2.0f * w * x,
+        1.0f - 2.0f * x * x -2.0f * y * y,
+        0.0f,
+                
+        0.0f,
+        0.0f,
+        0.0f,
+        1.0f
+    );
+}
+
+float dot(const versor &q, const versor &r) {
+    return
+        q.q[0] * r.q[0] +
+        q.q[1] * r.q[1] +
+        q.q[2] * r.q[2] +
+        q.q[3] * r.q[3];
+}
+
+versor slerp(versor &q, versor &r, float t) {
+    float cos_half_theta = dot(q, r);
+    
+    if(cos_half_theta < 0.0f) {
+        for(int i = 0; i < 4; i++) {
+            q.q[i] *= -1.0f;
+        }
+        cos_half_theta = dot(q, r);
+    }
+    
+    if(fabs(cos_half_theta) >= 1.0f) {
+        return q;
+    }
+    
+    float sin_half_theta = sqrt(1.0f - cos_half_theta * cos_half_theta);
+    
+    versor result;
+    if(fabs(sin_half_theta) < 0.001f) {
+        for(int i = 0; i < 4; i++) {
+            result.q[i] = (1.0f - t) * q.q[i] + t * r.q[i];
+        }
+        return result;
+    }
+    
+    float half_theta = acos(cos_half_theta);
+    float a = sin(1.0f -t) * half_theta / sin_half_theta;
+    float b = sin(t * half_theta) / sin_half_theta;
+    
+    for(int i = 0; i < 4; i++) {
+        result.q[i] = q.q[i] * a * r.q[i] * b;
+    }
+    
+    return result;
 }

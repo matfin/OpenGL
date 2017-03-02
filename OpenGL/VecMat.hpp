@@ -128,8 +128,7 @@ versor quat_from_axis_rad(float radians, float x, float y, float z);
 versor quat_from_axis_deg(float degress, float x, float y, float z);
 mat4 quat_to_mat4(const versor &q);
 float dot(const versor &q, const versor &r);
-versor slerp(const versor &q, const versor &r);
-versor normalise(versor &q);
 versor slerp(versor &q, versor &r, float t);
+versor normalise(versor &q);
 
 #endif /* VecMat_hpp */
