@@ -35,12 +35,6 @@ enum CameraOrientation {
     ROLL_RIGHT
 };
 
-enum RotationAxis {
-    AXIS_X,
-    AXIS_Y,
-    AXIS_Z
-};
-
 class Camera {
 
 private:
@@ -51,6 +45,8 @@ private:
     static Camera& getInstance();
     
     GLuint program;
+    int view_mat_location;
+    int proj_mat_location;
     
     mat4 T;
     mat4 R;
@@ -68,7 +64,7 @@ private:
     int gl_viewport_w;
     float fov = 67.0f;
     
-    float cam_speed = 5.0f;
+    float cam_speed = 0.25f;
     float cam_heading_speed = 100.0f;
     float cam_heading = 0.0f;
     
@@ -76,15 +72,16 @@ private:
     void _quat_to_mat4(float *m, float *q);
     void _applyProgram(GLuint _progam);
     void _updateTranslation(void);
-    void _updateViewportSize(const int _gl_viewport_w, const int gl_viewport_h);
     
     void _pitch(CameraOrientation orientation);
     void _yaw(CameraOrientation orientation);
     void _roll(CameraOrientation orientation);
-    void _move(CameraMovement movement);
+    void _moved(CameraMovement movement);
     
+    void _updateViewportSize(const int _gl_viewport_w, const int gl_viewport_h);
     void _create(void);
-    
+    void _move(vec3 movement);
+
     std::string _repr(void);
     
 public:
@@ -105,8 +102,8 @@ public:
         getInstance()._roll(orientation);
     }
     
-    static void move(CameraMovement movement) {
-        getInstance()._move(movement);
+    static void moved(CameraMovement movement) {
+        getInstance()._moved(movement);
     }
     
     static void updateViewportSize(const int _gl_viewport_w, const int _gl_viewport_h) {

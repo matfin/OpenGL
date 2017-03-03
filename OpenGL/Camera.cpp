@@ -85,27 +85,38 @@ void Camera::_roll(CameraOrientation orientation) {
     }
 }
 
-void Camera::_move(CameraMovement movement) {
+void Camera::_moved(CameraMovement movement) {
+    
+    vec3 move(0.0f, 0.0f, 0.0f);
+    
     switch(movement) {
         case MOVE_FORWARD: {
+            move.v[2] -= cam_speed;
             break;
         }
         case MOVE_BACKWARD: {
+            move.v[2] += cam_speed;
             break;
         }
         case MOVE_LEFT: {
+            move.v[0] -= cam_speed;
             break;
         }
         case MOVE_RIGHT: {
+            move.v[0] += cam_speed;
             break;
         }
         case MOVE_UP: {
+            move.v[1] += cam_speed;
             break;
         }
         case MOVE_DOWN: {
+            move.v[1] -= cam_speed;
             break;
         }
     }
+    
+    _move(move);
 }
 
 string Camera::_repr() {
@@ -117,6 +128,11 @@ string Camera::_repr() {
 
 void Camera::_applyProgram(GLuint _program) {
     program = _program;
+}
+
+void Camera::_updateViewportSize(const int _gl_viewport_w, const int _gl_viewport_h) {
+    gl_viewport_w = _gl_viewport_w;
+    gl_viewport_h = _gl_viewport_h;
 }
 
 void Camera::_create(void) {
@@ -160,14 +176,27 @@ void Camera::_create(void) {
     /**
      *  Apply to the vertex shaders
      */
-    int view_mat_location = glGetUniformLocation(program, "view");
-    int proj_mat_location = glGetUniformLocation(program, "projection");
+    view_mat_location = glGetUniformLocation(program, "view");
+    proj_mat_location = glGetUniformLocation(program, "projection");
     
     glUniformMatrix4fv(proj_mat_location, 1, GL_FALSE, proj_mat.m);
     glUniformMatrix4fv(view_mat_location, 1, GL_FALSE, view_mat.m);
 }
 
-void Camera::_updateViewportSize(const int _gl_viewport_w, const int _gl_viewport_h) {
-    gl_viewport_w = _gl_viewport_w;
-    gl_viewport_h = _gl_viewport_h;
+void Camera::_move(vec3 movement) {
+    
+    _quat_to_mat4(R.m, quaternion);
+    
+    cam_pos = cam_pos + vec3(fwd) * -movement.v[2];
+    cam_pos = cam_pos + vec3(up) * movement.v[1];
+    cam_pos = cam_pos + vec3(rgt) * movement.v[0];
+    
+    mat4 T = translate(identity_mat4(), vec3(cam_pos));
+    view_mat = inverse(R) * inverse(T);
+    
+    glUniformMatrix4fv(view_mat_location, 1, GL_FALSE, view_mat.m);
 }
+
+
+
+

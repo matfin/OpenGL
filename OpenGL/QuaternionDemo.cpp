@@ -77,43 +77,43 @@ void QuaternionDemo::keyActionListener(void) {
     }
     
     if(GLFW_PRESS == glfwGetKey(window, GLFW_KEY_A)) {
-        Camera::yaw(YAW_LEFT);
+        Camera::moved(MOVE_LEFT);
     }
     
     if(GLFW_PRESS == glfwGetKey(window, GLFW_KEY_D)) {
-        Camera::yaw(YAW_RIGHT);
+        Camera::moved(MOVE_RIGHT);
     }
     
     if(GLFW_PRESS == glfwGetKey(window, GLFW_KEY_W)) {
-        Camera::pitch(PITCH_UP);
+        Camera::moved(MOVE_FORWARD);
     }
     
     if(GLFW_PRESS == glfwGetKey(window, GLFW_KEY_S)) {
-        Camera::pitch(PITCH_DOWN);
+        Camera::moved(MOVE_BACKWARD);
     }
     
     if(GLFW_PRESS == glfwGetKey(window, GLFW_KEY_Q)) {
-        Camera::roll(ROLL_LEFT);
+        Camera::moved(MOVE_UP);
     }
     
     if(GLFW_PRESS == glfwGetKey(window, GLFW_KEY_E)) {
-        Camera::roll(ROLL_RIGHT);
+        Camera::moved(MOVE_DOWN);
     }
     
     if(GLFW_PRESS == glfwGetKey(window, GLFW_KEY_UP)) {
-        Camera::move(MOVE_FORWARD);
+//        Camera::move(MOVE_FORWARD);
     }
     
     if(GLFW_PRESS == glfwGetKey(window, GLFW_KEY_DOWN)) {
-        Camera::move(MOVE_BACKWARD);
+//        Camera::move(MOVE_BACKWARD);
     }
     
     if(GLFW_PRESS == glfwGetKey(window, GLFW_KEY_LEFT)) {
-        Camera::move(MOVE_LEFT);
+//        Camera::move(MOVE_LEFT);
     }
     
     if(GLFW_PRESS == glfwGetKey(window, GLFW_KEY_RIGHT)) {
-        Camera::move(MOVE_RIGHT);
+//        Camera::move(MOVE_RIGHT);
     }
 }
 
