@@ -195,12 +195,11 @@ vec3 vec3::operator/(float rhs) {
     return result;
 }
 
-vec3 vec3::operator=(const vec3 &rhs) {
-    vec3 result;
-    result.v[0] = rhs.v[0];
-    result.v[1] = rhs.v[1];
-    result.v[2] = rhs.v[2];
-    return result;
+vec3& vec3::operator=(const vec3 &rhs) {
+    v[0] = rhs.v[0];
+    v[1] = rhs.v[1];
+    v[2] = rhs.v[2];
+    return *this;
 }
 
 mat3::mat3() {}
@@ -242,7 +241,7 @@ mat4::mat4(
     m[12] = mm;
     m[13] = n;
     m[14] = o;
-    m[14] = p;
+    m[15] = p;
 }
 
 mat4 zero_mat4() {
@@ -257,9 +256,9 @@ mat4 zero_mat4() {
 mat4 identity_mat4() {
     return mat4(
         1.0f, 0.0f, 0.0f, 0.0f,
-        1.0f, 1.0f, 0.0f, 0.0f,
-        1.0f, 0.0f, 1.0f, 0.0f,
-        1.0f, 0.0f, 0.0f, 1.0f
+        0.0f, 1.0f, 0.0f, 0.0f,
+        0.0f, 0.0f, 1.0f, 0.0f,
+        0.0f, 0.0f, 0.0f, 1.0f
     );
 }
 
@@ -378,13 +377,13 @@ mat4 translate(const mat4 &m, const vec3 &v) {
 }
 
 mat4 perspective(float fovy, float aspect, float near, float far) {
-    float fov_rads = fovy * one_deg_in_rad;
-    float range = tan(fov_rads / 2.0f) * near;
+    float fov_rad = fovy * one_deg_in_rad;
+    float range = tan (fov_rad / 2.0f) * near;
     float sx = (2.0f * near) / (range * aspect + range * aspect);
     float sy = near / range;
     float sz = -(far + near) / (far - near);
     float pz = -(2.0f * far * near) / (far - near);
-    mat4 m = zero_mat4();
+    mat4 m = zero_mat4 (); // make sure bottom-right corner is zero
     m.m[0] = sx;
     m.m[5] = sy;
     m.m[10] = sz;

@@ -9,7 +9,7 @@
 #ifndef VecMat_hpp
 #define VecMat_hpp
 
-#define one_deg_in_rad (2.0 * M_PI) / 360.0f
+#define one_deg_in_rad (2.0 * M_PI) / 360.0
 #define one_rad_in_deg 360.0f / (2.0 * M_PI)
 
 struct vec2;
@@ -41,7 +41,7 @@ struct vec3 {
     vec3 operator*(float rhs);
     vec3& operator*=(const vec3 &rhs);
     vec3 operator/(float rhs);
-    vec3 operator=(const vec3 &rhs);
+    vec3& operator=(const vec3 &rhs);
     
     float v[3];
 };

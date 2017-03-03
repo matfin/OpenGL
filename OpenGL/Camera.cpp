@@ -7,10 +7,6 @@
 //
 
 #include "Camera.hpp"
-#include <vector>
-#include "Quaternion.hpp"
-#include "Structs.h"
-#include "Matrix.hpp"
 
 using namespace std;
 
@@ -19,6 +15,41 @@ Camera::Camera() {}
 Camera& Camera::getInstance() {
     static Camera instance;
     return instance;
+}
+
+void Camera::_create_versor (float* q, float a, float x, float y, float z) {
+    float rad = one_deg_in_rad * a;
+    q[0] = cosf (rad / 2.0f);
+    q[1] = sinf (rad / 2.0f) * x;
+    q[2] = sinf (rad / 2.0f) * y;
+    q[3] = sinf (rad / 2.0f) * z;
+}
+
+void Camera::_quat_to_mat4(float *m, float *q) {
+    float w = q[0];
+    float x = q[1];
+    float y = q[2];
+    float z = q[3];
+    
+    m[0] = 1.0f - 2.0f * y * y - 2.0f * z * z;
+    m[1] = 2.0f * x * y + 2.0f * w * z;
+    m[2] = 2.0f * x * z - 2.0f * w * y;
+    m[3] = 0.0f;
+    
+    m[4] = 2.0f * x * y - 2.0f * w * z;
+    m[5] = 1.0f - 2.0f * x * x - 2.0f * z * z;
+    m[6] = 2.0f * y * z + 2.0f * w * x;
+    m[7] = 0.0f;
+    
+    m[8] = 2.0f * x * z + 2.0f * w * y;
+    m[9] = 2.0f * y * z - 2.0f * w * x;
+    m[10] = 1.0f - 2.0f * x * x - 2.0f * y * y;
+    m[11] = 0.0f;
+    
+    m[12] = 0.0f;
+    m[13] = 0.0f;
+    m[14] = 0.0f;
+    m[15] = 1.0f;
 }
 
 void Camera::_pitch(CameraOrientation orientation) {
@@ -90,80 +121,53 @@ void Camera::_applyProgram(GLuint _program) {
 
 void Camera::_create(void) {
     
-    m.translateTo(TRANSLATE_X, 0.0f);
-    m.translateTo(TRANSLATE_Y, 0.0f);
-    m.translateTo(TRANSLATE_Z, -15.0f);
+    /**
+     *  Set the camera position and update the 
+     *  translation matrix.
+     */
+    cam_pos = vec3(0.0f, 0.0f, 15.0f);
+    T = translate(identity_mat4(), vec3(-cam_pos.v[0], -cam_pos.v[1], -cam_pos.v[2]));
     
-    rotation_mat4 = m.getMatrixOfType(ZERO_MAT4);
-    Matrix<float> translation_mat4 = m.getMatrixOfType(TRANSLATION);
+    /**
+     *  Set up the projection matrix
+     */
+    float near = 0.1f;
+    float far = 100.0f;
+    float aspect = (float)gl_viewport_w / (float)gl_viewport_h;
+    proj_mat = perspective(fov, aspect, near, far);
     
-    Quaternion::create_versor(quaternion, -cam_heading, 0.0f, 0.0f, 0.0f);
-    Quaternion::quat_to_mat4(rotation_mat4, quaternion);
+    /**
+     *  Create a Quaternion using the initial cam heading,
+     *  then apply it to the rotation mat4.
+     */
+    _create_versor(quaternion, -cam_heading, 0.0f, 1.0f, 0.0f);
+    _quat_to_mat4(R.m, quaternion);
     
-    Matrix<float> view_mat4 = translation_mat4 * rotation_mat4;
-    vector<float> view_mat4_unwound = view_mat4.unwind();
+    /**
+     *  Create the view mat4 by multiplying
+     *  the translation and rotation mat4.
+     */
+    view_mat = R * T;
     
-    fwd = Matrix<float>({
-        Row<float>({0.0f, 0.0f, -1.0f, 0.0f})
-    });
+    /**
+     *  Then we will create these vectors to keep
+     *  track of movement.
+     */
+    fwd = vec4(0.0f, 0.0f, -1.0f, 0.0f);
+    rgt = vec4(1.0f, 0.0f, 0.0f, 0.0f);
+    up = vec4(0.0f, 1.0f, 0.0f, 0.0f);
     
-    rgt = Matrix<float>({
-        Row<float>({1.0f, 0.0f, 0.0f, 0.0f})
-    });
+    /**
+     *  Apply to the vertex shaders
+     */
+    int view_mat_location = glGetUniformLocation(program, "view");
+    int proj_mat_location = glGetUniformLocation(program, "projection");
     
-    up = Matrix<float>({
-        Row<float>({0.0f, 1.0f, 0.0f, 0.0f})
-    });
-    
-    _applyProjection("projection");
-    
-    GLuint view_loc = glGetUniformLocation(program, "view");
-    if(GL_TRUE != view_loc) {
-        glUniformMatrix4fv(view_loc, 1, GL_FALSE, &view_mat4_unwound[0]);
-    }
-    else {
-        cout << "Camera reset was unable to apply the view quaternion matrix." << endl;
-    }
+    glUniformMatrix4fv(proj_mat_location, 1, GL_FALSE, proj_mat.m);
+    glUniformMatrix4fv(view_mat_location, 1, GL_FALSE, view_mat.m);
 }
 
 void Camera::_updateViewportSize(const int _gl_viewport_w, const int _gl_viewport_h) {
     gl_viewport_w = _gl_viewport_w;
     gl_viewport_h = _gl_viewport_h;
-}
-
-Matrix<float> Camera::_calculateProjectionMatrix(void) {
-    float near = 0.1f;
-    float far = 100.0f;
-    float aspect = (float)gl_viewport_w / (float)gl_viewport_h;
-    float range = tan(fov * 0.5f) * near;
-    
-    float Sx = (2.0f * near) / ((range * aspect) + (range * aspect));
-    float Sy = near / range;
-    float Sz = -(far + near) / (far - near);
-    float Pz = -(2.0f * far * near) / (far - near);
-    
-    /**
-     *  With the above calculations completed, we can then put
-     *  this projection matrix together.
-     */
-    Matrix<float> projection_matrix({
-        Row<float>({Sx, 0.0f, 0.0f, 0.0f}),
-        Row<float>({0.0f, Sy, 0.0f, 0.0f}),
-        Row<float>({0.0f, 0.0f, Sz, -1.0f}),
-        Row<float>({0.0f, 0.0f, Pz, 0.0f})
-    });
-    
-    return projection_matrix;
-}
-
-void Camera::_applyProjection(const char *uniform_location_name) {
-    Matrix<GLfloat> projection_matrix = _calculateProjectionMatrix();
-    vector<GLfloat> projection_matrix_unwound = projection_matrix.unwind();
-    GLuint projection_loc = glGetUniformLocation(program, uniform_location_name);
-    if(GL_TRUE != projection_loc) {
-        glUniformMatrix4fv(projection_loc, 1, GL_FALSE, &projection_matrix_unwound[0]);
-    }
-    else {
-        cout << "Projection matrix could not be applied. Could not find the location: " << uniform_location_name << endl;
-    }
 }

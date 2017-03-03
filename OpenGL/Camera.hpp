@@ -15,9 +15,7 @@
 #include <iostream>
 #include <sstream>
 #include <string>
-#include "Matrices.hpp"
-
-#define one_deg_in_rad (2.0 * M_PI) / 360.0f
+#include "VecMat.hpp"
 
 enum CameraMovement {
     MOVE_FORWARD,
@@ -53,31 +51,32 @@ private:
     static Camera& getInstance();
     
     GLuint program;
-    Matrices m;
+    
+    mat4 T;
+    mat4 R;
+    mat4 view_mat;
+    mat4 proj_mat;
+    vec3 cam_pos;
+    
+    vec4 fwd;
+    vec4 rgt;
+    vec4 up;
+    
+    float quaternion[4];
     
     int gl_viewport_h;
     int gl_viewport_w;
-    float fov = 67.0f * one_deg_in_rad;
+    float fov = 67.0f;
     
-    float cam_pitch_speed = 0.4f;
-    float cam_yaw_speed = 0.4f;
-    float cam_roll_speed = 0.4f;
-    float cam_move_speed = 0.4f;
+    float cam_speed = 5.0f;
+    float cam_heading_speed = 100.0f;
     float cam_heading = 0.0f;
     
-    Matrix<float> fwd;
-    Matrix<float> rgt;
-    Matrix<float> up;
-    
-    Matrix<float> rotation_mat4;
-    Matrix<float> quaternion;
-    
-    Matrix<float> _calculateProjectionMatrix(void);
-    
+    void _create_versor(float *q, float a, float x, float y, float z);
+    void _quat_to_mat4(float *m, float *q);
     void _applyProgram(GLuint _progam);
     void _updateTranslation(void);
     void _updateViewportSize(const int _gl_viewport_w, const int gl_viewport_h);
-    void _applyProjection(const char *uniform_location_name);
     
     void _pitch(CameraOrientation orientation);
     void _yaw(CameraOrientation orientation);
