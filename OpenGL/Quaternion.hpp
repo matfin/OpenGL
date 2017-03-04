@@ -12,11 +12,13 @@
 #include "Matrix.hpp"
 
 class Quaternion {
+private:
+    static void normalise_quat(Matrix<float> &q);
+    
 public:
-    static void create_versor(float *q, float a, float x, float y, float z);
-    static void quat_to_mat4(Matrix<float> &m, float *quaternion);
-    static void normalise_quat(float *q);
-    static void mult_quat_quat(float * result, float *r, float *s);
+    static void create_versor(Matrix<float> &m, float a, float x, float y, float z);
+    static void quat_to_mat4(Matrix<float> &m, Matrix<float> q);
+    static void mult_quat_quat(Matrix<float> &result, Matrix<float> r, Matrix<float> s);
 };
 
 #endif /* Quaternion_hpp */

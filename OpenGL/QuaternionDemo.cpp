@@ -16,7 +16,7 @@
 #include "Camera.hpp"
 
 #define gl_viewport_w 1280
-#define gl_viewport_h 960
+#define gl_viewport_h 720
 
 using namespace std;
 
@@ -69,58 +69,66 @@ void QuaternionDemo::keyActionListener(void) {
         return;
     }
     
-    if(GLFW_PRESS == glfwGetKey(window, GLFW_KEY_1)) {
-        Camera::switcRotationType(QUATERNION);
-        glfwSetWindowTitle(window, "Rotating using Quaternions");
-    }
-    
-    if(GLFW_PRESS == glfwGetKey(window, GLFW_KEY_2)) {
-        Camera::switcRotationType(EULER);
-        glfwSetWindowTitle(window, "Rotating using Eulers");
-    }
-    
     if(GLFW_PRESS == glfwGetKey(window, GLFW_KEY_ESCAPE)) {
         glfwSetWindowShouldClose(window, 1);
     }
     
     if(GLFW_PRESS == glfwGetKey(window, GLFW_KEY_A)) {
-        Camera::yaw(ROT_LEFT);
+        Camera::update(MOVE_LEFT);
     }
     
     if(GLFW_PRESS == glfwGetKey(window, GLFW_KEY_D)) {
-        Camera::yaw(ROT_RIGHT);
+        Camera::update(MOVE_RIGHT);
     }
     
     if(GLFW_PRESS == glfwGetKey(window, GLFW_KEY_W)) {
-        Camera::pitch(ROT_UP);
+        Camera::update(MOVE_FORWARD);
     }
     
     if(GLFW_PRESS == glfwGetKey(window, GLFW_KEY_S)) {
-        Camera::pitch(ROT_DOWN);
+        Camera::update(MOVE_BACKWARD);
     }
     
     if(GLFW_PRESS == glfwGetKey(window, GLFW_KEY_Q)) {
-        Camera::roll(ROT_LEFT);
+        Camera::update(MOVE_UP);
     }
     
     if(GLFW_PRESS == glfwGetKey(window, GLFW_KEY_E)) {
-        Camera::roll(ROT_RIGHT);
+        Camera::update(MOVE_DOWN);
     }
     
     if(GLFW_PRESS == glfwGetKey(window, GLFW_KEY_UP)) {
-        Camera::move(MOVE_FORWARD);
+        Camera::update(PITCH_UP);
     }
     
     if(GLFW_PRESS == glfwGetKey(window, GLFW_KEY_DOWN)) {
-        Camera::move(MOVE_BACKWARD);
+        Camera::update(PITCH_DOWN);
     }
     
     if(GLFW_PRESS == glfwGetKey(window, GLFW_KEY_LEFT)) {
-        Camera::move(MOVE_LEFT);
+        Camera::update(YAW_LEFT);
     }
     
     if(GLFW_PRESS == glfwGetKey(window, GLFW_KEY_RIGHT)) {
-        Camera::move(MOVE_RIGHT);
+        Camera::update(YAW_RIGHT);
+    }
+    
+    if(GLFW_PRESS == glfwGetKey(window, GLFW_KEY_Z)) {
+        Camera::update(ROLL_LEFT);
+    }
+    
+    if(GLFW_PRESS == glfwGetKey(window, GLFW_KEY_C)) {
+        Camera::update(ROLL_RIGHT);
+    }
+    
+    if(GLFW_PRESS == glfwGetKey(window, GLFW_KEY_MINUS)) {
+        Camera::updateFov(-0.5f);
+        glfwSetWindowTitle(window, Camera::repr().c_str());
+    }
+    
+    if(GLFW_PRESS == glfwGetKey(window, GLFW_KEY_EQUAL)) {
+        Camera::updateFov(0.5f);
+        glfwSetWindowTitle(window, Camera::repr().c_str());
     }
 }
 
@@ -170,10 +178,9 @@ int QuaternionDemo::start() {
          *      Quaternion view matrix to the world.
          */
         Camera::applyProgram(program);
-        Camera::moveTo(0.0f, 0.0f, 15.0f);
-        cout << Camera::repr() << endl;
-        
-        GLUtilities::applyProjectionMatrix(gl_viewport_w, gl_viewport_h, fov, program, "projection");
+        Camera::updateViewportSize(gl_viewport_w, gl_viewport_h);
+        Camera::create();
+        cout << Camera::repr() << endl;        
     }
     
     while(!glfwWindowShouldClose(window)) {

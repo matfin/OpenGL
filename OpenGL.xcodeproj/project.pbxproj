@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		581C1E981E67619600738B0E /* VecMat.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 581C1E971E67619600738B0E /* VecMat.cpp */; };
 		582FB5B51E32621600C031C6 /* Matrices.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 582FB5B31E32621600C031C6 /* Matrices.cpp */; };
 		582FB5BB1E3567FD00C031C6 /* cup.obj in CopyFiles */ = {isa = PBXBuildFile; fileRef = 582FB5B91E3567EE00C031C6 /* cup.obj */; };
 		582FB5BE1E35E46100C031C6 /* ObjectLoader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 582FB5BC1E35E46100C031C6 /* ObjectLoader.cpp */; };
@@ -81,6 +82,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		581C1E951E675D7700738B0E /* VecMat.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = VecMat.hpp; sourceTree = "<group>"; };
+		581C1E971E67619600738B0E /* VecMat.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = VecMat.cpp; sourceTree = "<group>"; };
 		582FB5B31E32621600C031C6 /* Matrices.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Matrices.cpp; sourceTree = "<group>"; };
 		582FB5B41E32621600C031C6 /* Matrices.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Matrices.hpp; sourceTree = "<group>"; };
 		582FB5B61E32627F00C031C6 /* Enumerations.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Enumerations.h; sourceTree = "<group>"; };
@@ -226,6 +229,8 @@
 				58C8F1B71E4F242B00A7851F /* Quaternion.hpp */,
 				587AE8361E60A4FE00881681 /* Camera.cpp */,
 				587AE8371E60A4FE00881681 /* Camera.hpp */,
+				581C1E951E675D7700738B0E /* VecMat.hpp */,
+				581C1E971E67619600738B0E /* VecMat.cpp */,
 			);
 			path = OpenGL;
 			sourceTree = "<group>";
@@ -321,6 +326,7 @@
 				58C8F1B81E4F242B00A7851F /* Quaternion.cpp in Sources */,
 				58B8F0A11E1CE92B005C5C5F /* Shapes.cpp in Sources */,
 				5869ACBD1E29033A00182916 /* CubeTransformDemo.cpp in Sources */,
+				581C1E981E67619600738B0E /* VecMat.cpp in Sources */,
 				58B8F0BC1E1FA61F005C5C5F /* Logger.cpp in Sources */,
 				587AE8381E60A4FE00881681 /* Camera.cpp in Sources */,
 				58B8F0A71E1CEF0F005C5C5F /* Detect.cpp in Sources */,

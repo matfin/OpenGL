@@ -10,10 +10,13 @@
 #define Matrix_hpp
 
 #include <GLFW/glfw3.h>
+#include <string>
+#include <sstream>
 #include <vector>
 #include <algorithm>
 #include <iostream>
 #include <cassert>
+#include "VecMat.hpp"
 
 /**
  *  Interface
@@ -49,6 +52,10 @@ public:
     std::vector<T> unwind() const;
     void addRow(Row<T> row);
     void adjust(const int _row, const int _column, T value);
+    T getValueAtIndex(int index);
+    T getDeterminant(void);
+    Matrix<T> inverse(void);
+    std::string repr(void);
     
     bool operator==(const Matrix<T> &matrix) const;
     bool operator!=(const Matrix<T> &matrix) const;
@@ -103,6 +110,178 @@ void Matrix<T>::adjust(const int _row, const int _column, T value) {
     catch(std::exception &e) {
         std::cout << "Adjustment failed for row: " << _row << ", column: " << _column << std::endl;
     }
+}
+
+template<typename T>
+T Matrix<T>::getValueAtIndex(int index) {
+    std::vector<T>unwound = unwind();
+    return unwound.at(index);
+}
+
+template<typename T>
+T Matrix<T>::getDeterminant(void) {
+    return
+        getValueAtIndex(12) * getValueAtIndex(9) * getValueAtIndex(6) * getValueAtIndex(3) -
+        getValueAtIndex(8) * getValueAtIndex(13) * getValueAtIndex(6) * getValueAtIndex(3) -
+        getValueAtIndex(12) * getValueAtIndex(5) * getValueAtIndex(10) * getValueAtIndex(3) +
+        getValueAtIndex(4) * getValueAtIndex(13) * getValueAtIndex(10) * getValueAtIndex(3) +
+    
+        getValueAtIndex(8) * getValueAtIndex(5) * getValueAtIndex(14) * getValueAtIndex(3) -
+        getValueAtIndex(4) * getValueAtIndex(9) * getValueAtIndex(14) * getValueAtIndex(3) -
+        getValueAtIndex(12) * getValueAtIndex(9) * getValueAtIndex(2) * getValueAtIndex(7) +
+        getValueAtIndex(8) * getValueAtIndex(13) * getValueAtIndex(2) * getValueAtIndex(7) +
+    
+        getValueAtIndex(12) * getValueAtIndex(1) * getValueAtIndex(10) * getValueAtIndex(7) -
+        getValueAtIndex(0) * getValueAtIndex(13) * getValueAtIndex(10) * getValueAtIndex(7) -
+        getValueAtIndex(8) * getValueAtIndex(1) * getValueAtIndex(14) * getValueAtIndex(7) +
+        getValueAtIndex(0) * getValueAtIndex(9) * getValueAtIndex(14) * getValueAtIndex(7) +
+    
+        getValueAtIndex(12) * getValueAtIndex(5) * getValueAtIndex(2) * getValueAtIndex(11) -
+        getValueAtIndex(4) * getValueAtIndex(13) * getValueAtIndex(2) * getValueAtIndex(11) -
+        getValueAtIndex(12) * getValueAtIndex(1) * getValueAtIndex(6) * getValueAtIndex(11) +
+        getValueAtIndex(0) * getValueAtIndex(13) * getValueAtIndex(6) * getValueAtIndex(11) +
+    
+        getValueAtIndex(4) * getValueAtIndex(1) * getValueAtIndex(14) * getValueAtIndex(11) -
+        getValueAtIndex(0) * getValueAtIndex(5) * getValueAtIndex(14) * getValueAtIndex(11) -
+        getValueAtIndex(8) * getValueAtIndex(5) * getValueAtIndex(2) * getValueAtIndex(15) +
+        getValueAtIndex(4) * getValueAtIndex(9) * getValueAtIndex(2) * getValueAtIndex(15) +
+    
+        getValueAtIndex(8) * getValueAtIndex(1) * getValueAtIndex(6) * getValueAtIndex(15) -
+        getValueAtIndex(0) * getValueAtIndex(9) * getValueAtIndex(6) * getValueAtIndex(15) -
+        getValueAtIndex(4) * getValueAtIndex(1) * getValueAtIndex(10) * getValueAtIndex(15) +
+        getValueAtIndex(0) * getValueAtIndex(5) * getValueAtIndex(10) * getValueAtIndex(15);
+}
+
+template<typename T>
+Matrix<T> Matrix<T>::inverse(void) {
+    /**
+     *  Doing some checks to make sure the matrix is suitable.
+     *  It needs to be a 4x4 matrix.
+     */
+    assert(rows.size() == 4);
+    for(auto &row: rows) {
+        assert(row.items.size() == 4);
+    }
+    
+    Matrix<T> result;
+    float det = getDeterminant();
+    
+    if(0.0f == det) {
+        std::cout << "Warning: This matrix has no determinant so we cannot invert." << std::endl;
+        return *this;
+    }
+    
+    float inv_det = 1.0f / det;
+    
+    Row<T> row_1({
+        inv_det * (
+            getValueAtIndex(9) * getValueAtIndex(14) * getValueAtIndex(7) - getValueAtIndex(13) * getValueAtIndex(10) * getValueAtIndex(7) +
+            getValueAtIndex(13) * getValueAtIndex(6) * getValueAtIndex(11) - getValueAtIndex(5) * getValueAtIndex(14) * getValueAtIndex(11) -
+            getValueAtIndex(9) * getValueAtIndex(6) * getValueAtIndex(15) + getValueAtIndex(5) * getValueAtIndex(10) * getValueAtIndex(15)
+        ),
+        inv_det * (
+            getValueAtIndex(13) * getValueAtIndex(10) * getValueAtIndex(3) - getValueAtIndex(9) * getValueAtIndex(14) * getValueAtIndex(3) -
+            getValueAtIndex(13) * getValueAtIndex(2) * getValueAtIndex(11) + getValueAtIndex(1) * getValueAtIndex(14) * getValueAtIndex(11) +
+            getValueAtIndex(9) * getValueAtIndex(2) * getValueAtIndex(15) - getValueAtIndex(1) * getValueAtIndex(10) * getValueAtIndex(15)
+        ),
+        inv_det * (
+            getValueAtIndex(5) * getValueAtIndex(14) * getValueAtIndex(3) - getValueAtIndex(13) * getValueAtIndex(6) * getValueAtIndex(3) +
+            getValueAtIndex(13) * getValueAtIndex(2) * getValueAtIndex(7) - getValueAtIndex(1) * getValueAtIndex(14) * getValueAtIndex(7) -
+            getValueAtIndex(5) * getValueAtIndex(2) * getValueAtIndex(15) + getValueAtIndex(1) * getValueAtIndex(6) * getValueAtIndex(15)
+        ),
+        inv_det * (
+            getValueAtIndex(9) * getValueAtIndex(6) * getValueAtIndex(3) - getValueAtIndex(5) * getValueAtIndex(10) * getValueAtIndex(3) -
+            getValueAtIndex(9) * getValueAtIndex(2) * getValueAtIndex(7) + getValueAtIndex(1) * getValueAtIndex(10) * getValueAtIndex(7) +
+            getValueAtIndex(5) * getValueAtIndex(2) * getValueAtIndex(11) - getValueAtIndex(1) * getValueAtIndex(6) * getValueAtIndex(11)
+        )
+    });
+    
+    Row<T> row_2({
+        inv_det * (
+            getValueAtIndex(12) * getValueAtIndex(10) * getValueAtIndex(7) - getValueAtIndex(8) * getValueAtIndex(14) * getValueAtIndex(7) -
+            getValueAtIndex(12) * getValueAtIndex(6) * getValueAtIndex(11) + getValueAtIndex(4) * getValueAtIndex(14) * getValueAtIndex(11) +
+            getValueAtIndex(8) * getValueAtIndex(6) * getValueAtIndex(15) - getValueAtIndex(4) * getValueAtIndex(10) * getValueAtIndex(15)
+        ),
+        inv_det * (
+            getValueAtIndex(8) * getValueAtIndex(14) * getValueAtIndex(3) - getValueAtIndex(12) * getValueAtIndex(10) * getValueAtIndex(3) +
+            getValueAtIndex(12) * getValueAtIndex(2) * getValueAtIndex(11) - getValueAtIndex(0) * getValueAtIndex(14) * getValueAtIndex(11) -
+            getValueAtIndex(8) * getValueAtIndex(2) * getValueAtIndex(15) + getValueAtIndex(0) * getValueAtIndex(10) * getValueAtIndex(15)
+        ),
+        inv_det * (
+            getValueAtIndex(12) * getValueAtIndex(6) * getValueAtIndex(3) - getValueAtIndex(4) * getValueAtIndex(14) * getValueAtIndex(3) -
+            getValueAtIndex(12) * getValueAtIndex(2) * getValueAtIndex(7) + getValueAtIndex(0) * getValueAtIndex(14) * getValueAtIndex(7) +
+            getValueAtIndex(4) * getValueAtIndex(2) * getValueAtIndex(15) - getValueAtIndex(0) * getValueAtIndex(6) * getValueAtIndex(15)
+        ),
+        inv_det * (
+            getValueAtIndex(4) * getValueAtIndex(10) * getValueAtIndex(3) - getValueAtIndex(8) * getValueAtIndex(6) * getValueAtIndex(3) +
+            getValueAtIndex(8) * getValueAtIndex(2) * getValueAtIndex(7) - getValueAtIndex(0) * getValueAtIndex(10) * getValueAtIndex(7) -
+            getValueAtIndex(4) * getValueAtIndex(2) * getValueAtIndex(11) + getValueAtIndex(0) * getValueAtIndex(6) * getValueAtIndex(11)
+        )
+    });
+    
+    Row<T> row_3({
+        inv_det * (
+            getValueAtIndex(8) * getValueAtIndex(13) * getValueAtIndex(7) - getValueAtIndex(12) * getValueAtIndex(9) * getValueAtIndex(7) +
+            getValueAtIndex(12) * getValueAtIndex(5) * getValueAtIndex(11) - getValueAtIndex(4) * getValueAtIndex(13) * getValueAtIndex(11) -
+            getValueAtIndex(8) * getValueAtIndex(5) * getValueAtIndex(15) + getValueAtIndex(4) * getValueAtIndex(9) * getValueAtIndex(15)
+        ),
+        inv_det * (
+            getValueAtIndex(12) * getValueAtIndex(9) * getValueAtIndex(3) - getValueAtIndex(8) * getValueAtIndex(13) * getValueAtIndex(3) -
+            getValueAtIndex(12) * getValueAtIndex(1) * getValueAtIndex(11) + getValueAtIndex(0) * getValueAtIndex(13) * getValueAtIndex(11) +
+            getValueAtIndex(8) * getValueAtIndex(1) * getValueAtIndex(15) - getValueAtIndex(0) * getValueAtIndex(9) * getValueAtIndex(15)
+        ),
+        inv_det * (
+            getValueAtIndex(4) * getValueAtIndex(13) * getValueAtIndex(3) - getValueAtIndex(12) * getValueAtIndex(5) * getValueAtIndex(3) +
+            getValueAtIndex(12) * getValueAtIndex(1) * getValueAtIndex(7) - getValueAtIndex(0) * getValueAtIndex(13) * getValueAtIndex(7) -
+            getValueAtIndex(4) * getValueAtIndex(1) * getValueAtIndex(15) + getValueAtIndex(0) * getValueAtIndex(5) * getValueAtIndex(15)
+        ),
+        inv_det * (
+            getValueAtIndex(8) * getValueAtIndex(5) * getValueAtIndex(3) - getValueAtIndex(4) * getValueAtIndex(9) * getValueAtIndex(3) -
+            getValueAtIndex(8) * getValueAtIndex(1) * getValueAtIndex(7) + getValueAtIndex(0) * getValueAtIndex(9) * getValueAtIndex(7) +
+            getValueAtIndex(4) * getValueAtIndex(1) * getValueAtIndex(11) - getValueAtIndex(0) * getValueAtIndex(5) * getValueAtIndex(11)
+        )
+    });
+    
+    Row<T> row_4({
+        inv_det * (
+            getValueAtIndex(12) * getValueAtIndex(9) * getValueAtIndex(6) - getValueAtIndex(8) * getValueAtIndex(13) * getValueAtIndex(6) -
+            getValueAtIndex(12) * getValueAtIndex(5) * getValueAtIndex(10) + getValueAtIndex(4) * getValueAtIndex(13) * getValueAtIndex(10) +
+            getValueAtIndex(8) * getValueAtIndex(5) * getValueAtIndex(14) - getValueAtIndex(4) * getValueAtIndex(9) * getValueAtIndex(14)
+        ),
+        inv_det * (
+            getValueAtIndex(8) * getValueAtIndex(13) * getValueAtIndex(2) - getValueAtIndex(12) * getValueAtIndex(9) * getValueAtIndex(2) +
+            getValueAtIndex(12) * getValueAtIndex(1) * getValueAtIndex(10) - getValueAtIndex(0) * getValueAtIndex(13) * getValueAtIndex(10) -
+            getValueAtIndex(8) * getValueAtIndex(1) * getValueAtIndex(14) + getValueAtIndex(0) * getValueAtIndex(9) * getValueAtIndex(14)
+        ),
+        inv_det * (
+            getValueAtIndex(12) * getValueAtIndex(5) * getValueAtIndex(2) - getValueAtIndex(4) * getValueAtIndex(13) * getValueAtIndex(2) -
+            getValueAtIndex(12) * getValueAtIndex(1) * getValueAtIndex(6) + getValueAtIndex(0) * getValueAtIndex(13) * getValueAtIndex(6) +
+            getValueAtIndex(4) * getValueAtIndex(1) * getValueAtIndex(14) - getValueAtIndex(0) * getValueAtIndex(5) * getValueAtIndex(14)
+        ),
+        inv_det * (
+            getValueAtIndex(4) * getValueAtIndex(9) * getValueAtIndex(2) - getValueAtIndex(8) * getValueAtIndex(5) * getValueAtIndex(2) +
+            getValueAtIndex(8) * getValueAtIndex(1) * getValueAtIndex(6) - getValueAtIndex(0) * getValueAtIndex(9) * getValueAtIndex(6) -
+            getValueAtIndex(4) * getValueAtIndex(1) * getValueAtIndex(10) + getValueAtIndex(0) * getValueAtIndex(5) * getValueAtIndex(10)
+        )
+    });
+    
+    result.addRow(row_1);
+    result.addRow(row_2);
+    result.addRow(row_3);
+    result.addRow(row_4);
+    
+    return result;
+}
+
+template<typename T>
+std::string Matrix<T>::repr(void) {
+    std::stringstream oss;
+    for(auto &row : rows) {
+        for(auto &item : row.items) {
+            oss << item << ",";
+        }
+    }
+    return oss.str();
 }
 
 template<typename T>

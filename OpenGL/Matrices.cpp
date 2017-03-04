@@ -27,11 +27,11 @@ void Matrices::translate(AdjustmentType type, Adjustments adjustment) {
         case TRANSLATE_X: {
             switch(adjustment) {
                 case LEFT: {
-                    translate_x -= 0.025f;
+                    translate_x += 0.25f;
                     break;
                 }
                 case RIGHT: {
-                    translate_x += 0.025f;
+                    translate_x -= 0.25f;
                     break;
                 }
             }
@@ -40,11 +40,11 @@ void Matrices::translate(AdjustmentType type, Adjustments adjustment) {
         case TRANSLATE_Y: {
             switch(adjustment) {
                 case DOWN: {
-                    translate_y -= 0.025f;
+                    translate_y -= 0.25f;
                     break;
                 }
                 case UP: {
-                    translate_y += 0.025f;
+                    translate_y += 0.25f;
                     break;
                 }
             }
@@ -53,11 +53,11 @@ void Matrices::translate(AdjustmentType type, Adjustments adjustment) {
         case TRANSLATE_Z: {
             switch(adjustment) {
                 case CLOSER: {
-                    translate_z += 0.025f;
+                    translate_z += 0.25f;
                     break;
                 }
                 case FURTHER: {
-                    translate_z -= -0.025f;
+                    translate_z -= 0.25f;
                     break;
                 }
             }

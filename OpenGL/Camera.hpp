@@ -15,29 +15,21 @@
 #include <iostream>
 #include <sstream>
 #include <string>
-#include "Matrices.hpp"
+#include "VecMat.hpp"
 
-#define one_deg_in_rad (2.0 * M_PI) / 360.0f
-
-enum CameraMovement {
+enum CameraKey {
     MOVE_FORWARD,
     MOVE_BACKWARD,
     MOVE_LEFT,
     MOVE_RIGHT,
     MOVE_UP,
-    MOVE_DOWN
-};
-
-enum CameraRotation {
-    ROT_UP,
-    ROT_DOWN,
-    ROT_LEFT,
-    ROT_RIGHT
-};
-
-enum RotationType {
-    QUATERNION,
-    EULER
+    MOVE_DOWN,
+    PITCH_UP,
+    PITCH_DOWN,
+    YAW_LEFT,
+    YAW_RIGHT,
+    ROLL_LEFT,
+    ROLL_RIGHT
 };
 
 class Camera {
@@ -50,39 +42,44 @@ private:
     static Camera& getInstance();
     
     GLuint program;
-    Matrices m;
-    RotationType r_type = QUATERNION;
+    int view_mat_location;
+    int proj_mat_location;
     
-    float cam_pos_x = 0.0f;
-    float cam_pos_y = 0.0f;
-    float cam_pos_z = 5.0f;
+    mat4 T;
+    mat4 R;
+    mat4 view_mat;
+    mat4 proj_mat;
+    vec3 cam_pos;
     
-    float cam_pitch = 0.0f;
-    float cam_yaw = 0.0f;
-    float cam_roll = 0.0f;
+    vec4 fwd;
+    vec4 rgt;
+    vec4 up;
     
-    float cam_pitch_speed = 2.0f;
-    float cam_yaw_speed = 2.0f;
-    float cam_roll_speed = 2.0f;
-    float cam_move_speed = 0.1f;
+    float quaternion[4];
     
-    float fov = 67.0f * one_deg_in_rad;
+    int gl_viewport_h;
+    int gl_viewport_w;
+    float fov = 67.0f;
+    float near = 0.1f;
+    float far = 100.0f;
+    float aspect;
+    
+    float cam_speed = 0.25f;
+    float cam_heading_speed = 1.0f;
+    float cam_heading = 0.0f;
+    
+    void _create_versor(float *q, float a, float x, float y, float z);
+    void _quat_to_mat4(float *m, float *q);
+    void _mult_quat_quat(float *result, float *r, float *s);
+    void _normalise_quat(float *q);
     
     void _applyProgram(GLuint _progam);
-    void _switchRotationType(RotationType _r_type);
-    void applyViewQuaternion(void);
-    void applyViewEuler(void);
     
-    void _pitch(CameraRotation rotation);
-    void _yaw(CameraRotation rotation);
-    void _roll(CameraRotation rotation);
-    void _move(CameraMovement movement);
-    
-    void _pitchTo(float deg);
-    void _yawTo(float deg);
-    void _rollTo(float deg);
-    void _moveTo(float _x, float _y, float _z);
-    
+    void _updateViewportSize(const int _gl_viewport_w, const int gl_viewport_h);
+    void _create(void);
+    void _update(CameraKey key);
+    void _updateFov(float _d);
+
     std::string _repr(void);
     
 public:
@@ -91,40 +88,20 @@ public:
         getInstance()._applyProgram(_program);
     }
     
-    static void pitch(CameraRotation rotation) {
-        getInstance()._pitch(rotation);
+    static void updateViewportSize(const int _gl_viewport_w, const int _gl_viewport_h) {
+        getInstance()._updateViewportSize(_gl_viewport_w, _gl_viewport_h);
     }
     
-    static void yaw(CameraRotation rotation) {
-        getInstance()._yaw(rotation);
+    static void create(void) {
+        getInstance()._create();
     }
     
-    static void roll(CameraRotation rotation) {
-        getInstance()._roll(rotation);
+    static void update(CameraKey key) {
+        getInstance()._update(key);
     }
     
-    static void move(CameraMovement movement) {
-        getInstance()._move(movement);
-    }
-    
-    static void pitchTo(float deg) {
-        getInstance()._pitchTo(deg);
-    }
-    
-    static void yawTo(float deg) {
-        getInstance()._yawTo(deg);
-    }
-    
-    static void rollTo(float deg) {
-        getInstance()._rollTo(deg);
-    }
-    
-    static void moveTo(float _x, float _y, float _z) {
-        getInstance()._moveTo(_x, _y, _z);
-    }
-    
-    static void switcRotationType(RotationType _r_type) {
-        getInstance()._switchRotationType(_r_type);
+    static void updateFov(float _d) {
+        getInstance()._updateFov(_d);
     }
     
     static std::string repr(void) {
