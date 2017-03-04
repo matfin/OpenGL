@@ -17,16 +17,13 @@
 #include <string>
 #include "VecMat.hpp"
 
-enum CameraMovement {
+enum CameraKey {
     MOVE_FORWARD,
     MOVE_BACKWARD,
     MOVE_LEFT,
     MOVE_RIGHT,
     MOVE_UP,
-    MOVE_DOWN
-};
-
-enum CameraOrientation {
+    MOVE_DOWN,
     PITCH_UP,
     PITCH_DOWN,
     YAW_LEFT,
@@ -65,22 +62,19 @@ private:
     float fov = 67.0f;
     
     float cam_speed = 0.25f;
-    float cam_heading_speed = 100.0f;
+    float cam_heading_speed = 1.0f;
     float cam_heading = 0.0f;
     
     void _create_versor(float *q, float a, float x, float y, float z);
     void _quat_to_mat4(float *m, float *q);
-    void _applyProgram(GLuint _progam);
-    void _updateTranslation(void);
+    void _mult_quat_quat(float *result, float *r, float *s);
+    void _normalise_quat(float *q);
     
-    void _pitch(CameraOrientation orientation);
-    void _yaw(CameraOrientation orientation);
-    void _roll(CameraOrientation orientation);
-    void _moved(CameraMovement movement);
+    void _applyProgram(GLuint _progam);
     
     void _updateViewportSize(const int _gl_viewport_w, const int gl_viewport_h);
     void _create(void);
-    void _move(vec3 movement);
+    void _update(CameraKey key);
 
     std::string _repr(void);
     
@@ -90,28 +84,16 @@ public:
         getInstance()._applyProgram(_program);
     }
     
-    static void pitch(CameraOrientation orientation) {
-        getInstance()._pitch(orientation);
-    }
-    
-    static void yaw(CameraOrientation orientation) {
-        getInstance()._yaw(orientation);
-    }
-    
-    static void roll(CameraOrientation orientation) {
-        getInstance()._roll(orientation);
-    }
-    
-    static void moved(CameraMovement movement) {
-        getInstance()._moved(movement);
-    }
-    
     static void updateViewportSize(const int _gl_viewport_w, const int _gl_viewport_h) {
         getInstance()._updateViewportSize(_gl_viewport_w, _gl_viewport_h);
     }
     
     static void create(void) {
         getInstance()._create();
+    }
+    
+    static void update(CameraKey key) {
+        getInstance()._update(key);
     }
     
     static std::string repr(void) {

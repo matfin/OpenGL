@@ -52,71 +52,24 @@ void Camera::_quat_to_mat4(float *m, float *q) {
     m[15] = 1.0f;
 }
 
-void Camera::_pitch(CameraOrientation orientation) {
-    switch(orientation) {
-        case PITCH_UP: {
-            break;
-        }
-        case PITCH_DOWN: {
-            break;
-        }
+void Camera::_normalise_quat(float *q) {
+    float sum = q[0] * q[0] + q[1] * q[1] + q[2] * q[2] +  q[3] * q[3];
+    const float thresh = 0.0001f;
+    if(fabs(1.0f - sum) < thresh) {
+        return;
+    }
+    float mag = sqrt(sum);
+    for(int i = 0; i < 4; i++) {
+        q[i] = q[i] / mag;
     }
 }
 
-void Camera::_yaw(CameraOrientation orientation) {
-    switch(orientation) {
-        case YAW_LEFT: {
-            break;
-        }
-        case YAW_RIGHT: {
-            break;
-        }
-    }
-}
-
-void Camera::_roll(CameraOrientation orientation) {
-    switch(orientation) {
-        case ROLL_LEFT: {
-            break;
-        }
-        case ROLL_RIGHT: {
-            break;
-        }
-    }
-}
-
-void Camera::_moved(CameraMovement movement) {
-    
-    vec3 move(0.0f, 0.0f, 0.0f);
-    
-    switch(movement) {
-        case MOVE_FORWARD: {
-            move.v[2] -= cam_speed;
-            break;
-        }
-        case MOVE_BACKWARD: {
-            move.v[2] += cam_speed;
-            break;
-        }
-        case MOVE_LEFT: {
-            move.v[0] -= cam_speed;
-            break;
-        }
-        case MOVE_RIGHT: {
-            move.v[0] += cam_speed;
-            break;
-        }
-        case MOVE_UP: {
-            move.v[1] += cam_speed;
-            break;
-        }
-        case MOVE_DOWN: {
-            move.v[1] -= cam_speed;
-            break;
-        }
-    }
-    
-    _move(move);
+void Camera::_mult_quat_quat(float *result, float *r, float *s) {
+    result[0] = s[0] * r[0] - s[1] * r[1] - s[2] * r[2] - s[3] * r[3];
+    result[1] = s[0] * r[1] + s[1] * r[0] - s[2] * r[3] + s[3] * r[2];
+    result[2] = s[0] * r[2] + s[1] * r[3] + s[2] * r[0] - s[3] * r[1];
+    result[3] = s[0] * r[3] - s[1] * r[2] + s[2] * r[1] - s[3] * r[0];
+    _normalise_quat(result);
 }
 
 string Camera::_repr() {
@@ -183,20 +136,115 @@ void Camera::_create(void) {
     glUniformMatrix4fv(view_mat_location, 1, GL_FALSE, view_mat.m);
 }
 
-void Camera::_move(vec3 movement) {
+void Camera::_update(CameraKey key) {
+    
+    vec3 move(0.0f, 0.0f, 0.0f);
+    float pitch = 0.0f;
+    float yaw = 0.0f;
+    float roll = 0.0f;
+    float q[4];
+    
+    switch(key) {
+        /**
+         *  Movement
+         */
+        case MOVE_FORWARD: {
+            move.v[2] -= cam_speed;
+            break;
+        }
+        case MOVE_BACKWARD: {
+            move.v[2] += cam_speed;
+            break;
+        }
+        case MOVE_LEFT: {
+            move.v[0] -= cam_speed;
+            break;
+        }
+        case MOVE_RIGHT: {
+            move.v[0] += cam_speed;
+            break;
+        }
+        case MOVE_UP: {
+            move.v[1] += cam_speed;
+            break;
+        }
+        case MOVE_DOWN: {
+            move.v[1] -= cam_speed;
+            break;
+        }
+        /**
+         *  Rotation
+         */
+        case PITCH_UP: {
+            pitch += cam_heading_speed;
+            _create_versor(q, pitch, rgt.v[0], rgt.v[1], rgt.v[2]);
+            _mult_quat_quat(quaternion, q, quaternion);
+            _quat_to_mat4(R.m, quaternion);
+            fwd = R * vec4 (0.0, 0.0, -1.0, 0.0);
+            rgt = R * vec4 (1.0, 0.0, 0.0, 0.0);
+            up = R * vec4 (0.0, 1.0, 0.0, 0.0);
+            break;
+        }
+        case PITCH_DOWN: {
+            pitch -= cam_heading_speed;
+            _create_versor(q, pitch, rgt.v[0], rgt.v[1], rgt.v[2]);
+            _mult_quat_quat(quaternion, q, quaternion);
+            _quat_to_mat4(R.m, quaternion);
+            fwd = R * vec4 (0.0, 0.0, -1.0, 0.0);
+            rgt = R * vec4 (1.0, 0.0, 0.0, 0.0);
+            up = R * vec4 (0.0, 1.0, 0.0, 0.0);
+            break;
+        }
+        case YAW_LEFT: {
+            yaw += cam_heading_speed;
+            _create_versor(q, yaw, up.v[0], up.v[1], up.v[2]);
+            _mult_quat_quat(quaternion, q, quaternion);
+            _quat_to_mat4(R.m, quaternion);
+            fwd = R * vec4 (0.0, 0.0, -1.0, 0.0);
+            rgt = R * vec4 (1.0, 0.0, 0.0, 0.0);
+            up = R * vec4 (0.0, 1.0, 0.0, 0.0);
+            break;
+        }
+        case YAW_RIGHT: {
+            yaw -= cam_heading_speed;
+            _create_versor(q, yaw, up.v[0], up.v[1], up.v[2]);
+            _mult_quat_quat(quaternion, q, quaternion);
+            _quat_to_mat4(R.m, quaternion);
+            fwd = R * vec4 (0.0, 0.0, -1.0, 0.0);
+            rgt = R * vec4 (1.0, 0.0, 0.0, 0.0);
+            up = R * vec4 (0.0, 1.0, 0.0, 0.0);
+            break;
+        }
+        case ROLL_LEFT: {
+            roll -= cam_heading_speed;
+            _create_versor(q, roll, fwd.v[0], fwd.v[1], fwd.v[2]);
+            _mult_quat_quat(quaternion, q, quaternion);
+            _quat_to_mat4(R.m, quaternion);
+            fwd = R * vec4 (0.0, 0.0, -1.0, 0.0);
+            rgt = R * vec4 (1.0, 0.0, 0.0, 0.0);
+            up = R * vec4 (0.0, 1.0, 0.0, 0.0);
+            break;
+        }
+        case ROLL_RIGHT: {
+            roll += cam_heading_speed;
+            _create_versor(q, roll, fwd.v[0], fwd.v[1], fwd.v[2]);
+            _mult_quat_quat(quaternion, q, quaternion);
+            _quat_to_mat4(R.m, quaternion);
+            fwd = R * vec4 (0.0, 0.0, -1.0, 0.0);
+            rgt = R * vec4 (1.0, 0.0, 0.0, 0.0);
+            up = R * vec4 (0.0, 1.0, 0.0, 0.0);
+            break;
+        }
+    }
     
     _quat_to_mat4(R.m, quaternion);
     
-    cam_pos = cam_pos + vec3(fwd) * -movement.v[2];
-    cam_pos = cam_pos + vec3(up) * movement.v[1];
-    cam_pos = cam_pos + vec3(rgt) * movement.v[0];
+    cam_pos = cam_pos + vec3(fwd) * -move.v[2];
+    cam_pos = cam_pos + vec3(up) * move.v[1];
+    cam_pos = cam_pos + vec3(rgt) * move.v[0];
     
     mat4 T = translate(identity_mat4(), vec3(cam_pos));
-    view_mat = inverse(R) * inverse(T);
     
+    view_mat = inverse(R) * inverse(T);
     glUniformMatrix4fv(view_mat_location, 1, GL_FALSE, view_mat.m);
 }
-
-
-
-
