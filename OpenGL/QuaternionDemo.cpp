@@ -16,7 +16,7 @@
 #include "Camera.hpp"
 
 #define gl_viewport_w 1280
-#define gl_viewport_h 960
+#define gl_viewport_h 720
 
 using namespace std;
 
@@ -69,9 +69,6 @@ void QuaternionDemo::keyActionListener(void) {
         return;
     }
     
-    if(GLFW_PRESS == glfwGetKey(window, GLFW_KEY_ENTER)) {
-    }
-    
     if(GLFW_PRESS == glfwGetKey(window, GLFW_KEY_ESCAPE)) {
         glfwSetWindowShouldClose(window, 1);
     }
@@ -122,6 +119,16 @@ void QuaternionDemo::keyActionListener(void) {
     
     if(GLFW_PRESS == glfwGetKey(window, GLFW_KEY_C)) {
         Camera::update(ROLL_RIGHT);
+    }
+    
+    if(GLFW_PRESS == glfwGetKey(window, GLFW_KEY_MINUS)) {
+        Camera::updateFov(-0.5f);
+        glfwSetWindowTitle(window, Camera::repr().c_str());
+    }
+    
+    if(GLFW_PRESS == glfwGetKey(window, GLFW_KEY_EQUAL)) {
+        Camera::updateFov(0.5f);
+        glfwSetWindowTitle(window, Camera::repr().c_str());
     }
 }
 

@@ -74,8 +74,7 @@ void Camera::_mult_quat_quat(float *result, float *r, float *s) {
 
 string Camera::_repr() {
     stringstream oss;
-    oss << "Camera program: " << program << endl;
-    oss << "Camera fov: " << fov << endl;
+    oss << "Camera fov: \t" << fov << endl;
     return oss.str();
 }
 
@@ -100,9 +99,7 @@ void Camera::_create(void) {
     /**
      *  Set up the projection matrix
      */
-    float near = 0.1f;
-    float far = 100.0f;
-    float aspect = (float)gl_viewport_w / (float)gl_viewport_h;
+    aspect = (float)gl_viewport_w / (float)gl_viewport_h;
     proj_mat = perspective(fov, aspect, near, far);
     
     /**
@@ -247,4 +244,19 @@ void Camera::_update(CameraKey key) {
     
     view_mat = inverse(R) * inverse(T);
     glUniformMatrix4fv(view_mat_location, 1, GL_FALSE, view_mat.m);
+}
+
+void Camera::_updateFov(float _d) {
+    
+    if(fov + _d <= 20.0f) {
+        return;
+    }
+    else if(fov + _d >= 100.0f) {
+        return;
+    }
+    
+    fov += _d;
+    proj_mat = perspective(fov, aspect, near, far);
+    proj_mat_location = glGetUniformLocation(program, "projection");
+    glUniformMatrix4fv(proj_mat_location, 1, GL_FALSE, proj_mat.m);
 }

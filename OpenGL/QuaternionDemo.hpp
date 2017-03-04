@@ -29,9 +29,7 @@ private:
     GLuint program;
     GLFWwindow *window;
     GLenum drawing_method = GL_TRIANGLES;
-    
-    float fov = 67.0f * one_deg_in_rad;
-    
+        
     std::vector<Mesh> meshes;
     
     void createProgram(void);

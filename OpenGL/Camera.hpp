@@ -60,6 +60,9 @@ private:
     int gl_viewport_h;
     int gl_viewport_w;
     float fov = 67.0f;
+    float near = 0.1f;
+    float far = 100.0f;
+    float aspect;
     
     float cam_speed = 0.25f;
     float cam_heading_speed = 1.0f;
@@ -75,6 +78,7 @@ private:
     void _updateViewportSize(const int _gl_viewport_w, const int gl_viewport_h);
     void _create(void);
     void _update(CameraKey key);
+    void _updateFov(float _d);
 
     std::string _repr(void);
     
@@ -94,6 +98,10 @@ public:
     
     static void update(CameraKey key) {
         getInstance()._update(key);
+    }
+    
+    static void updateFov(float _d) {
+        getInstance()._updateFov(_d);
     }
     
     static std::string repr(void) {
