@@ -130,6 +130,11 @@ void QuaternionDemo::keyActionListener(void) {
         Camera::updateFov(0.5f);
         glfwSetWindowTitle(window, Camera::repr().c_str());
     }
+    
+    if(GLFW_PRESS == glfwGetKey(window, GLFW_KEY_SPACE)) {
+        Camera::toggleNormalised();
+        glfwSetWindowTitle(window, Camera::repr().c_str());
+    }
 }
 
 void QuaternionDemo::addMesh(Mesh mesh, const Position position, const Rotation rotation) {

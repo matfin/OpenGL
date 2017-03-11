@@ -45,6 +45,7 @@ private:
     int view_mat_location;
     int proj_mat_location;
     
+    bool is_normalised = true;
     mat4 T;
     mat4 R;
     mat4 view_mat;
@@ -72,6 +73,7 @@ private:
     void _quat_to_mat4(float *m, float *q);
     void _mult_quat_quat(float *result, float *r, float *s);
     void _normalise_quat(float *q);
+    void _toggleNormalised(void);
     
     void _applyProgram(GLuint _progam);
     
@@ -102,6 +104,10 @@ public:
     
     static void updateFov(float _d) {
         getInstance()._updateFov(_d);
+    }
+    
+    static void toggleNormalised(void) {
+        getInstance()._toggleNormalised();
     }
     
     static std::string repr(void) {

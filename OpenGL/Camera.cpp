@@ -64,17 +64,23 @@ void Camera::_normalise_quat(float *q) {
     }
 }
 
+void Camera::_toggleNormalised(void) {
+    is_normalised = !is_normalised;
+}
+
 void Camera::_mult_quat_quat(float *result, float *r, float *s) {
     result[0] = s[0] * r[0] - s[1] * r[1] - s[2] * r[2] - s[3] * r[3];
     result[1] = s[0] * r[1] + s[1] * r[0] - s[2] * r[3] + s[3] * r[2];
     result[2] = s[0] * r[2] + s[1] * r[3] + s[2] * r[0] - s[3] * r[1];
     result[3] = s[0] * r[3] - s[1] * r[2] + s[2] * r[1] + s[3] * r[0];
-    _normalise_quat(result);
+    if(is_normalised) {
+        _normalise_quat(result);
+    }
 }
 
 string Camera::_repr() {
     stringstream oss;
-    oss << "Camera fov: \t" << fov << endl;
+    oss << "Camera fov: \t" << fov << ", normalised: " << (is_normalised ? "Yes":"No") << endl;
     return oss.str();
 }
 
