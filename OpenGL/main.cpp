@@ -18,6 +18,7 @@
 #include "CubeTransformDemo.hpp"
 #include "CameraPerspectiveDemo.hpp"
 #include "QuaternionDemo.hpp"
+#include "PhongLightingDemo.hpp"
 
 using namespace std;
 
@@ -236,10 +237,24 @@ int runQuaternionDemo(void) {
     QuaternionDemo::addMesh(mesh, {0.0f, 0.0f, 6.0f}, {0.0f, 0.0f, 0.0f});
     QuaternionDemo::addMesh(mesh, {-3.0f, 1.0f, 6.0f}, {45.0f, 0.0f, 0.0f});
     QuaternionDemo::addMesh(mesh, {3.0f, -1.0f, 8.0f}, {0.0f, 0.0f, 45.0f});
-
     
     return QuaternionDemo::run();
-    return 0;
+}
+
+int runPhongLightingDemo(void) {
+    
+    Mesh mesh;
+    
+    mesh.generateCube(1.0f);
+    PhongLightingDemo::addMesh(mesh, {0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f});
+    
+    mesh.generateCube(0.5f);
+    PhongLightingDemo::addMesh(mesh, {-3.0f, 1.0f, 0.0f}, {45.0f, 0.0f, 0.0f});
+    
+    mesh.generateCube(3.0f);
+    PhongLightingDemo::addMesh(mesh, {3.0f, -1.0f, 2.0f}, {0.0f, 0.0f, 45.0f});
+    
+    return PhongLightingDemo::run();
 }
 
 int main(int argc, const char * argv[]) {
@@ -251,5 +266,7 @@ int main(int argc, const char * argv[]) {
 //    int matrix_run = matrixOperations();
 //    int mo_run = distanceCalculatorDemo();
 //    int run = runCameraPerspectiveDemo();
-    int run = runQuaternionDemo();
+//    int run = runQuaternionDemo();
+    int run = runPhongLightingDemo();
+    return run;
 }

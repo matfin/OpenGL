@@ -1,35 +1,33 @@
 //
-//  QuaternionDemo.hpp
+//  PhongLightingDemo.hpp
 //  OpenGL
 //
-//  Created by Matt Finucane on 10/02/2017.
+//  Created by Matt Finucane on 11/03/2017.
 //  Copyright © 2017 Matt Finucane. All rights reserved.
 //
 
-#ifndef QuaternionDemo_hpp
-#define QuaternionDemo_hpp
+#ifndef PhongLightingDemo_hpp
+#define PhongLightingDemo_hpp
 
-#include <OpenGL/gl3.h>
+#include <Opengl/gl3.h>
 #include <GLFW/glfw3.h>
 #include <iostream>
 #include <vector>
 #include "Structs.h"
 #include "Mesh.hpp"
 
-#define one_deg_in_rad (2.0 * M_PI) / 360.0f
-
-class QuaternionDemo {
-
-private:
-    QuaternionDemo();
-    ~QuaternionDemo() {};
-    QuaternionDemo(QuaternionDemo const &);
-    void operator=(QuaternionDemo const &);
+class PhongLightingDemo {
     
-    GLuint program;
+private:
+    PhongLightingDemo();
+    ~PhongLightingDemo() {};
+    PhongLightingDemo(PhongLightingDemo const &);
+    void operator=(PhongLightingDemo const &);
+    
     GLFWwindow *window;
+    GLuint program;
     GLenum drawing_method = GL_TRIANGLES;
-        
+    
     std::vector<Mesh> meshes;
     
     void createProgram(void);
@@ -37,11 +35,11 @@ private:
     void drawLoop(void);
     void keyActionListener(void);
     int start(void);
-
+    
 public:
-    static QuaternionDemo& getInstance();
+    static PhongLightingDemo& getInstance();
     static void addMesh(Mesh mesh, const Position position, const Rotation rotation);
     static int run(void);
 };
 
-#endif /* QuaternionDemo_hpp */
+#endif /* PhongLightingDemo_hpp */

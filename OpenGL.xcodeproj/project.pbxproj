@@ -23,6 +23,9 @@
 		5869ACB91E27F0B000182916 /* vertex_buffer_objects.vert in CopyFiles */ = {isa = PBXBuildFile; fileRef = 5869ACB71E27E58600182916 /* vertex_buffer_objects.vert */; };
 		5869ACBA1E27F0B000182916 /* vertex_buffer_objects.frag in CopyFiles */ = {isa = PBXBuildFile; fileRef = 5869ACB81E27E59D00182916 /* vertex_buffer_objects.frag */; };
 		5869ACBD1E29033A00182916 /* CubeTransformDemo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5869ACBB1E29033A00182916 /* CubeTransformDemo.cpp */; };
+		587A1C1D1E7428DA00DB16A1 /* PhongLightingDemo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 587A1C1B1E7428DA00DB16A1 /* PhongLightingDemo.cpp */; };
+		587A1C201E742CE700DB16A1 /* phong_lighting_demo.vert in CopyFiles */ = {isa = PBXBuildFile; fileRef = 587A1C1E1E742C9800DB16A1 /* phong_lighting_demo.vert */; };
+		587A1C211E742CE700DB16A1 /* phong_lighting_demo.frag in CopyFiles */ = {isa = PBXBuildFile; fileRef = 587A1C1F1E742CA800DB16A1 /* phong_lighting_demo.frag */; };
 		587AE8381E60A4FE00881681 /* Camera.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 587AE8361E60A4FE00881681 /* Camera.cpp */; };
 		58B8F0991E1CE8D1005C5C5F /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 58B8F0981E1CE8D1005C5C5F /* main.cpp */; };
 		58B8F0A11E1CE92B005C5C5F /* Shapes.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 58B8F09F1E1CE92B005C5C5F /* Shapes.cpp */; };
@@ -61,6 +64,8 @@
 			dstPath = "";
 			dstSubfolderSpec = 16;
 			files = (
+				587A1C201E742CE700DB16A1 /* phong_lighting_demo.vert in CopyFiles */,
+				587A1C211E742CE700DB16A1 /* phong_lighting_demo.frag in CopyFiles */,
 				58C8F1B41E4E245B00A7851F /* quaternion_demo.vert in CopyFiles */,
 				58C8F1B51E4E245B00A7851F /* quaternion_demo.frag in CopyFiles */,
 				582FB5C61E36A13600C031C6 /* camera_perspective_demo.vert in CopyFiles */,
@@ -111,6 +116,10 @@
 		5869ACBC1E29033A00182916 /* CubeTransformDemo.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = CubeTransformDemo.hpp; sourceTree = "<group>"; };
 		5869ACD81E316EAD00182916 /* Points.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Points.hpp; sourceTree = "<group>"; };
 		58754FF41E39288F0012AAC7 /* Matrix.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Matrix.hpp; sourceTree = "<group>"; };
+		587A1C1B1E7428DA00DB16A1 /* PhongLightingDemo.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PhongLightingDemo.cpp; sourceTree = "<group>"; };
+		587A1C1C1E7428DA00DB16A1 /* PhongLightingDemo.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = PhongLightingDemo.hpp; sourceTree = "<group>"; };
+		587A1C1E1E742C9800DB16A1 /* phong_lighting_demo.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = phong_lighting_demo.vert; sourceTree = "<group>"; };
+		587A1C1F1E742CA800DB16A1 /* phong_lighting_demo.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = phong_lighting_demo.frag; sourceTree = "<group>"; };
 		587AE8361E60A4FE00881681 /* Camera.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Camera.cpp; sourceTree = "<group>"; };
 		587AE8371E60A4FE00881681 /* Camera.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Camera.hpp; sourceTree = "<group>"; };
 		58B8F0951E1CE8D1005C5C5F /* OpenGL */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = OpenGL; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -231,6 +240,8 @@
 				587AE8371E60A4FE00881681 /* Camera.hpp */,
 				581C1E951E675D7700738B0E /* VecMat.hpp */,
 				581C1E971E67619600738B0E /* VecMat.cpp */,
+				587A1C1B1E7428DA00DB16A1 /* PhongLightingDemo.cpp */,
+				587A1C1C1E7428DA00DB16A1 /* PhongLightingDemo.hpp */,
 			);
 			path = OpenGL;
 			sourceTree = "<group>";
@@ -261,6 +272,8 @@
 				582FB5C51E36A12D00C031C6 /* camera_perspective_demo.frag */,
 				58C8F1B21E4E1E5000A7851F /* quaternion_demo.vert */,
 				58C8F1B31E4E1E6600A7851F /* quaternion_demo.frag */,
+				587A1C1E1E742C9800DB16A1 /* phong_lighting_demo.vert */,
+				587A1C1F1E742CA800DB16A1 /* phong_lighting_demo.frag */,
 			);
 			name = shaders;
 			sourceTree = "<group>";
@@ -328,6 +341,7 @@
 				5869ACBD1E29033A00182916 /* CubeTransformDemo.cpp in Sources */,
 				581C1E981E67619600738B0E /* VecMat.cpp in Sources */,
 				58B8F0BC1E1FA61F005C5C5F /* Logger.cpp in Sources */,
+				587A1C1D1E7428DA00DB16A1 /* PhongLightingDemo.cpp in Sources */,
 				587AE8381E60A4FE00881681 /* Camera.cpp in Sources */,
 				58B8F0A71E1CEF0F005C5C5F /* Detect.cpp in Sources */,
 				582FB5CC1E378BA600C031C6 /* Mesh.cpp in Sources */,

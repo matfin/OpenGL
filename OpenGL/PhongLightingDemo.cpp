@@ -1,12 +1,12 @@
 //
-//  QuaternionDemo.cpp
+//  PhongLightingDemo.cpp
 //  OpenGL
 //
-//  Created by Matt Finucane on 10/02/2017.
+//  Created by Matt Finucane on 11/03/2017.
 //  Copyright © 2017 Matt Finucane. All rights reserved.
 //
 
-#include "QuaternionDemo.hpp"
+#include "PhongLightingDemo.hpp"
 #include <iostream>
 #include <string>
 #include "GLUtilities.hpp"
@@ -19,17 +19,11 @@
 
 using namespace std;
 
-QuaternionDemo::QuaternionDemo() {
-}
+PhongLightingDemo::PhongLightingDemo() {}
 
-QuaternionDemo& QuaternionDemo::getInstance() {
-    static QuaternionDemo instance;
-    return instance;
-}
-
-void QuaternionDemo::createProgram(void) {
-    string vertex_shader_str = ShaderLoader::load("quaternion_demo.vert");
-    string fragment_shader_str = ShaderLoader::load("quaternion_demo.frag");
+void PhongLightingDemo::createProgram(void) {
+    string vertex_shader_str = ShaderLoader::load("phong_lighting_demo.vert");
+    string fragment_shader_str = ShaderLoader::load("phong_lighting_demo.frag");
     
     GLuint vertex_shader = GLUtilities::compileShader(vertex_shader_str, GL_VERTEX_SHADER);
     GLuint fragment_shader = GLUtilities::compileShader(fragment_shader_str, GL_FRAGMENT_SHADER);
@@ -38,17 +32,16 @@ void QuaternionDemo::createProgram(void) {
     GLParams::print_program_info_log(program);
 }
 
-void QuaternionDemo::prepareMeshes(void) {
+void PhongLightingDemo::prepareMeshes(void) {
     for(auto &mesh: meshes) {
         mesh.prepareBuffers();
     }
 }
 
-void QuaternionDemo::drawLoop(void) {
-    
+void PhongLightingDemo::drawLoop(void) {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glViewport(0, 0, gl_viewport_w, gl_viewport_h);
-    glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
     
     if(GL_TRUE == GLUtilities::programReady(program)) {
         for(auto &mesh: meshes) {
@@ -62,7 +55,7 @@ void QuaternionDemo::drawLoop(void) {
     glfwSwapBuffers(window);
 }
 
-void QuaternionDemo::keyActionListener(void) {
+void PhongLightingDemo::keyActionListener(void) {
     
     if(!window) {
         return;
@@ -134,25 +127,12 @@ void QuaternionDemo::keyActionListener(void) {
         Camera::toggleNormalised();
         glfwSetWindowTitle(window, Camera::repr().c_str());
     }
+    
 }
 
-void QuaternionDemo::addMesh(Mesh mesh, const Position position, const Rotation rotation) {
-    
-    mesh.getMatrices()->rotateTo(ROTATE_X, rotation.rx);
-    mesh.getMatrices()->rotateTo(ROTATE_Y, rotation.ry);
-    mesh.getMatrices()->rotateTo(ROTATE_Z, rotation.rz);
-    
-    mesh.getMatrices()->translateTo(TRANSLATE_X, position.px);
-    mesh.getMatrices()->translateTo(TRANSLATE_Y, position.py);
-    mesh.getMatrices()->translateTo(TRANSLATE_Z, position.pz);
-    
-    getInstance().meshes.push_back(mesh);
-}
-
-int QuaternionDemo::start() {
-    
+int PhongLightingDemo::start(void) {
     try {
-        window = GLUtilities::setupWindow(gl_viewport_w, gl_viewport_h, "Quaternion Demo");
+        window = GLUtilities::setupWindow(gl_viewport_w, gl_viewport_h, "Phong Lighting Demo");
     }
     catch(exception &e) {
         cout << e.what();
@@ -184,7 +164,7 @@ int QuaternionDemo::start() {
         Camera::applyProgram(program);
         Camera::updateViewportSize(gl_viewport_w, gl_viewport_h);
         Camera::create();
-        cout << Camera::repr() << endl;        
+        cout << Camera::repr() << endl;
     }
     
     while(!glfwWindowShouldClose(window)) {
@@ -195,6 +175,24 @@ int QuaternionDemo::start() {
     return 0;
 }
 
-int QuaternionDemo::run() {
+PhongLightingDemo& PhongLightingDemo::getInstance() {
+    static PhongLightingDemo instance;
+    return instance;
+}
+
+void PhongLightingDemo::addMesh(Mesh mesh, const Position position, const Rotation rotation) {
+    
+    mesh.getMatrices()->rotateTo(ROTATE_X, rotation.rx);
+    mesh.getMatrices()->rotateTo(ROTATE_Y, rotation.ry);
+    mesh.getMatrices()->rotateTo(ROTATE_Z, rotation.rz);
+    
+    mesh.getMatrices()->translateTo(TRANSLATE_X, position.px);
+    mesh.getMatrices()->translateTo(TRANSLATE_Y, position.py);
+    mesh.getMatrices()->translateTo(TRANSLATE_Z, position.pz);
+    
+    getInstance().meshes.push_back(mesh);
+}
+
+int PhongLightingDemo::run(void) {
     return getInstance().start();
 }
